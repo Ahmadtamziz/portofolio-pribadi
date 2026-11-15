@@ -1,1 +1,660 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faceless AI Studio - Automated Video Production Suite</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- React & ReactDOM UMD -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  
+  <!-- Babel Standalone for JSX in Browser -->
+  <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
+  <!-- PWA Theme & Viewport Config -->
+  <meta name="theme-color" content="#0b0f19">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link id="pwa-manifest" rel="manifest" href="">
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #0b0f19;
+      color: #f8fafc;
+    }
+  </style>
+</head>
+<body class="bg-[#0b0f19] text-slate-100 min-h-screen">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    // Inline SVG Icon Components
+    const SparklesIcon = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+    );
+    const SmartphoneIcon = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path strokeLinecap="round" strokeLinejoin="round" d="M12 18h.01"/></svg>
+    );
+    const KeyIcon = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+    );
+    const SettingsIcon = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
+    );
+    const WandIcon = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 4V2m0 2v2m0-2h2m-2 0H13m9 9h-2m2 0h2m-2 0v-2m0 2v2M3 21l9-9m0 0l-3-3m3 3l3 3"/></svg>
+    );
+    const ClapperboardIcon = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 19.5v-15A2.5 2.5 0 016.5 2H20v20H6.5a2.5 2.5 0 01-2.5-2.5zM4 9h16M8 5v4m8-4v4"/></svg>
+    );
+    const FileTextIcon = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+    );
+    const ImageIcon = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path strokeLinecap="round" strokeLinejoin="round" d="m21 15-3.086-3.086a2 2 0 00-2.828 0L6 21"/></svg>
+    );
+    const VideoIcon = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="m15 10 4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+    );
+    const RefreshCwIcon = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+    );
+    const CheckIcon = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/></svg>
+    );
+    const CopyIcon = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect width="13" height="13" x="9" y="9" rx="2" ry="2"/><path strokeLinecap="round" strokeLinejoin="round" d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+    );
+    const ArrowRightIcon = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+    );
+    const XIcon = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+    );
+    const SaveIcon = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+    );
+    const ExternalLinkIcon = ({ className = "w-4 h-4" }) => (
+      <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"/></svg>
+    );
+
+    const STYLE_PRESETS = [
+      {
+        id: "storytime_white_head",
+        name: "2D Storytime - Minimalist White Head (iCerita Style)",
+        characterLock: "a minimalist cartoon character with a round pure white head, simple dot eyes, wearing a casual hoodie and pants",
+        styleSuffix: "2D storytime animation style, detailed hand-drawn background with clean black outlines, warm pastel color palette, cozy lofi comic aesthetic"
+      },
+      {
+        id: "storytime_npc_interaction",
+        name: "2D Storytime - Classic Webtoon (Interaksi Karakter & NPC)",
+        characterLock: "a minimalist cartoon character with a round pure white head and dot eyes, interacting with local shopkeeper or characters",
+        styleSuffix: "2D storytime animation style, detailed 2D illustrated background, clean line art, warm earthy pastel colors, cozy lofi webcomic aesthetic"
+      },
+      {
+        id: "modern_webtoon_edu",
+        name: "Modern Webtoon - Edu-Business (Karakter Manusia + Whiteboard)",
+        characterLock: "a young Indonesian male character with black hair and glasses wearing a casual t-shirt, expressive educational style",
+        styleSuffix: "Modern 2D webtoon art style, standing in a busy traditional local coffee shop or office background, warm lighting, clean line art, educational comic book aesthetic"
+      },
+      {
+        id: "historical_explainer",
+        name: "Historical / Science Explainer (Dokumenter & Sejarah Kuno)",
+        characterLock: "a simple cartoon character with a round white head and dot eyes pointing at ancient objects or historical timelines",
+        styleSuffix: "Minimalist historical educational 2D animation style, sepia tone parchment background, historical documentary aesthetic, clean black line art, warm earthy colors"
+      }
+    ];
+
+    function App() {
+      const [activeTab, setActiveTab] = useState('narration');
+      const [showApiModal, setShowApiModal] = useState(false);
+      const [claudeApiKey, setClaudeApiKey] = useState('');
+      const [geminiApiKey, setGeminiApiKey] = useState('');
+      const [saveKeyStatus, setSaveKeyStatus] = useState(false);
+      const [installPrompt, setInstallPrompt] = useState(null);
+
+      // QRIS Popup Modal State (10 seconds auto-close)
+      const [showQrisModal, setShowQrisModal] = useState(true);
+      const [qrisTimer, setQrisTimer] = useState(10);
+
+      useEffect(() => {
+        try {
+          const savedClaude = localStorage.getItem('faceless_claude_key');
+          const savedGemini = localStorage.getItem('faceless_gemini_key');
+          if (savedClaude) setClaudeApiKey(savedClaude);
+          if (savedGemini) setGeminiApiKey(savedGemini);
+
+          const manifestData = {
+            name: "Faceless AI Studio",
+            short_name: "FacelessAI",
+            start_url: "./index.html",
+            display: "standalone",
+            background_color: "#0b0f19",
+            theme_color: "#0b0f19",
+            icons: [
+              { src: "https://placehold.co/192x192/7c3aed/ffffff?text=FAI", sizes: "192x192", type: "image/png" },
+              { src: "https://placehold.co/512x512/7c3aed/ffffff?text=FAI", sizes: "512x512", type: "image/png" }
+            ]
+          };
+          const blob = new Blob([JSON.stringify(manifestData)], { type: 'application/json' });
+          const manifestEl = document.getElementById('pwa-manifest');
+          if (manifestEl) manifestEl.href = URL.createObjectURL(blob);
+
+          if ('serviceWorker' in navigator) {
+            const swCode = `self.addEventListener('fetch', (e) => { e.respondWith(fetch(e.request).catch(() => caches.match(e.request))); });`;
+            const swBlob = new Blob([swCode], { type: 'text/javascript' });
+            navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
+          }
+
+          window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            setInstallPrompt(e);
+          });
+        } catch (err) {
+          console.error(err);
+        }
+      }, []);
+
+      // QRIS Countdown Timer Effect
+      useEffect(() => {
+        if (!showQrisModal) return;
+        const interval = setInterval(() => {
+          setQrisTimer((prev) => {
+            if (prev <= 1) {
+              clearInterval(interval);
+              setShowQrisModal(false);
+              return 0;
+            }
+            return prev - 1;
+          });
+        }, 1000);
+        return () => clearInterval(interval);
+      }, [showQrisModal]);
+
+      const handleInstallPWA = async () => {
+        if (!installPrompt) {
+          alert("PWA siap diinstal! Di browser HP Anda (Chrome/Edge), ketuk menu titik tiga di kanan atas lalu pilih 'Tambahkan ke Layar Utama' / 'Install App'.");
+          return;
+        }
+        try {
+          installPrompt.prompt();
+          const { outcome } = await installPrompt.userChoice;
+          if (outcome === 'accepted') {
+            setInstallPrompt(null);
+          }
+        } catch (e) {}
+      };
+
+      const handleSaveKeys = () => {
+        try {
+          localStorage.setItem('faceless_claude_key', claudeApiKey);
+          localStorage.setItem('faceless_gemini_key', geminiApiKey);
+          setSaveKeyStatus(true);
+          setTimeout(() => {
+            setSaveKeyStatus(false);
+            setShowApiModal(false);
+          }, 1200);
+        } catch (e) {}
+      };
+
+      const [geminiModels] = useState([
+        { id: 'gemini-3.5-flash', name: 'Gemini 3.5 Flash (Recommended)' },
+        { id: 'gemini-pro', name: 'Gemini Pro 1.5' },
+        { id: 'gemini-flash-lite', name: 'Gemini Flash Lite' }
+      ]);
+      const [selectedGeminiModel, setSelectedGeminiModel] = useState('gemini-3.5-flash');
+
+      const [videoTopic, setVideoTopic] = useState('Kisah Sukses Anak Muda Mengubah Hidup Lewat AI di 2026');
+      const [videoDuration, setVideoDuration] = useState(1);
+      const [videoAspectRatio, setVideoAspectRatio] = useState('9:16');
+      const [selectedStylePreset, setSelectedStylePreset] = useState(STYLE_PRESETS[0].id);
+
+      const [isGeneratingScript, setIsGeneratingScript] = useState(false);
+      const [fullNarration, setFullNarration] = useState(
+        `Tahukah kamu? Rahasia terbesar di balik jutaan penonton video faceless bukanlah keberuntungan, melainkan teknik hook emosional di 3 detik pertama. Banyak kreator pemula mengira butuh modal besar dan peralatan mahal. Padahal kuncinya ada pada strategi AI automation yang konsisten. Mulai hari ini, terapkan sistem ini dan buktikan sendiri bagaimana kontenmu bekerja otomatis 24 jam non-stop menghasilkan cuan konsisten!`
+      );
+      const [copyNarrationStatus, setCopyNarrationStatus] = useState(false);
+
+      const handleSafeCopy = (text, setStatusFn) => {
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(() => {
+              setStatusFn(true);
+              setTimeout(() => setStatusFn(false), 2000);
+            }).catch(() => fallbackCopy(text, setStatusFn));
+          } else {
+            fallbackCopy(text, setStatusFn);
+          }
+        } catch (e) {
+          fallbackCopy(text, setStatusFn);
+        }
+      };
+
+      const fallbackCopy = (text, setStatusFn) => {
+        try {
+          const ta = document.createElement("textarea");
+          ta.value = text;
+          ta.style.position = "fixed";
+          ta.style.top = "0";
+          ta.style.left = "0";
+          ta.style.opacity = "0";
+          document.body.appendChild(ta);
+          ta.focus();
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          setStatusFn(true);
+          setTimeout(() => setStatusFn(false), 2000);
+        } catch (err) {}
+      };
+
+      const handleGenerateNarration = async () => {
+        setIsGeneratingScript(true);
+        try {
+          const targetWords = Math.round(videoDuration * 130);
+          if (!geminiApiKey) {
+            setTimeout(() => {
+              setFullNarration(`Tahukah kamu? Rahasia terbesar di balik jutaan penonton video faceless adalah hook emosional di 3 detik pertama... ${videoTopic}. Menggunakan pendekatan visual yang dipilih, audiens akan terpaku dari detik pertama hingga akhir video! Mulai hari ini, terapkan sistem otomasi ini.`);
+              setIsGeneratingScript(false);
+            }, 800);
+            return;
+          }
+
+          const systemPrompt = `You are an expert viral scriptwriter skilled in the @narasi-vo method. Output PURE NARRATION TEXT ONLY. Do NOT include markdown headers, no section brackets like [HOOK], no parenthetical directions. Use natural punctuation (periods, commas, ellipses ..., exclamation marks !) for emotional pacing so it is ready for TTS. Target ~${targetWords} words for a ${videoDuration}-minute video.`;
+          const userPrompt = `Topik video: "${videoTopic}". Buatkan naskah narasinya saja secara murni dan bersih.`;
+
+          const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${selectedGeminiModel}:generateContent?key=${geminiApiKey}`;
+          const res = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: userPrompt }] }], systemInstruction: { parts: [{ text: systemPrompt }] } })
+          });
+          const data = await res.json();
+          const txt = data.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (txt) setFullNarration(txt.trim());
+          else setFullNarration("Gagal mendapatkan respons Gemini. Periksa API Key Anda.");
+        } catch (err) {
+          setFullNarration("Error: " + err.message);
+        } finally {
+          setIsGeneratingScript(false);
+        }
+      };
+
+      const totalSeconds = videoDuration * 60;
+      const totalAssetsCount = Math.max(4, Math.round(totalSeconds / 4));
+      const totalVeoCount = Math.max(1, Math.round(totalSeconds / 8));
+      const activeStyleObj = STYLE_PRESETS.find(s => s.id === selectedStylePreset) || STYLE_PRESETS[0];
+
+      const [masterFlowPromptText, setMasterFlowPromptText] = useState('');
+      const [masterVeoPromptText, setMasterVeoPromptText] = useState('');
+      const [isGeneratingFlowPrompt, setIsGeneratingFlowPrompt] = useState(false);
+      const [isGeneratingVeoPrompt, setIsGeneratingVeoPrompt] = useState(false);
+      const [copyFlowStatus, setCopyFlowStatus] = useState(false);
+      const [copyVeoStatus, setCopyVeoStatus] = useState(false);
+
+      const getSegments = (cnt) => {
+        const sents = fullNarration.split(/(?<=[.!?])\s+/).filter(Boolean);
+        const res = [];
+        for (let i = 0; i < cnt; i++) res.push(sents[i % sents.length] || videoTopic);
+        return res;
+      };
+
+      const handleGenerateFlowPrompt = () => {
+        setIsGeneratingFlowPrompt(true);
+        setTimeout(() => {
+          const header = "You are a bulk image generation agent. Please generate the following images sequentially based on the list below, strictly reflecting narrative and style. Name output files sequentially (gambar_1, gambar_2, etc.).";
+          const segs = getSegments(totalAssetsCount);
+          const txt = `${header}\n\n` + segs.map((s, i) => `[gambar_${i+1}]: ${activeStyleObj.characterLock}, visual for "${s}" -- ${activeStyleObj.styleSuffix} --ar ${videoAspectRatio}`).join('\n\n');
+          setMasterFlowPromptText(txt);
+          setIsGeneratingFlowPrompt(false);
+        }, 300);
+      };
+
+      const handleGenerateVeoPrompt = () => {
+        setIsGeneratingVeoPrompt(true);
+        setTimeout(() => {
+          const header = `You are a bulk video generation agent using Veo 3. Each clip is exactly 8 seconds. Generate the following ${totalVeoCount} clips sequentially.`;
+          const segs = getSegments(totalVeoCount);
+          const txt = `${header}\n\n` + segs.map((s, i) => `[video_${i+1}]: ${activeStyleObj.characterLock}, 8-second cinematic clip for "${s}" -- ${activeStyleObj.styleSuffix} --ar ${videoAspectRatio}`).join('\n\n');
+          setMasterVeoPromptText(txt);
+          setIsGeneratingVeoPrompt(false);
+        }, 300);
+      };
+
+      return (
+        <div className="min-h-screen bg-[#0b0f19] text-slate-100 flex flex-col justify-between">
+          <div>
+            {/* Header SuaraAI Style */}
+            <header className="border-b border-slate-800 bg-[#0f1523]/90 sticky top-0 z-40 px-4 sm:px-6 py-3.5 flex items-center justify-between shadow-lg">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center shadow-md shadow-purple-500/30">
+                  <SparklesIcon className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h1 className="text-lg font-black tracking-wide text-white">Faceless<span className="text-purple-400">AI</span></h1>
+                    <span className="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 text-[10px] font-bold border border-purple-500/30">PRO PWA</span>
+                  </div>
+                  <p className="text-[11px] text-slate-400">Automated YouTube & TikTok Studio</p>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-2.5">
+                <button
+                  onClick={handleInstallPWA}
+                  className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-xl flex items-center gap-1.5 border border-slate-700 transition-all"
+                >
+                  <SmartphoneIcon className="w-4 h-4 text-purple-400" />
+                  <span className="hidden sm:inline">Install PWA</span>
+                </button>
+
+                <button
+                  onClick={() => setShowApiModal(true)}
+                  className="px-3.5 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-bold rounded-xl flex items-center gap-2 shadow-md shadow-purple-600/30"
+                >
+                  <KeyIcon className="w-4 h-4 text-purple-200" />
+                  <span>{(claudeApiKey || geminiApiKey) ? 'Key Tersimpan' : 'Atur API Key'}</span>
+                </button>
+              </div>
+            </header>
+
+            {/* QRIS Support Popup Modal (Loads qris.jpeg from public_html) */}
+            {showQrisModal && (
+              <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn">
+                <div className="bg-[#131b2e] border border-purple-500/40 rounded-3xl max-w-sm w-full p-6 shadow-2xl text-center space-y-4 relative">
+                  <button 
+                    onClick={() => setShowQrisModal(false)} 
+                    className="absolute top-4 right-4 text-slate-400 hover:text-white bg-slate-800/80 p-2 rounded-full transition-colors"
+                  >
+                    <XIcon className="w-4 h-4" />
+                  </button>
+
+                  <div>
+                    <h3 className="text-lg font-black text-white">Dukung Aplikasi Ini</h3>
+                    <p className="text-xs text-slate-300 mt-1">Boleh Sawer Uang Kopi Seikhlasnya ☕</p>
+                  </div>
+
+                  {/* QRIS Card Image Container */}
+                  <div className="bg-white p-3 rounded-2xl shadow-inner flex items-center justify-center">
+                    <img 
+                      src="qris.jpeg" 
+                      alt="QRIS AHMAD TAMZIZ ZUHRI" 
+                      className="w-full h-auto rounded-xl object-contain max-h-72"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "https://placehold.co/400x400/ffffff/000000?text=QRIS+AHMAD+TAMZIZ+ZUHRI";
+                      }}
+                    />
+                  </div>
+
+                  <div className="text-[11px] text-purple-300 font-bold">
+                    AHMAD TAMZIZ ZUHRI (NMID: ID1026636894036)
+                  </div>
+
+                  <button
+                    onClick={() => setShowQrisModal(false)}
+                    className="w-full py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 text-white font-bold text-xs rounded-xl shadow-lg transition-all"
+                  >
+                    Tutup ({qrisTimer}s)
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* API Key Modal with Direct Link Buttons */}
+            {showApiModal && (
+              <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+                <div className="bg-[#131b2e] border border-slate-700 rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-6 relative">
+                  <button onClick={() => setShowApiModal(false)} className="absolute top-5 right-5 text-slate-400 hover:text-white bg-slate-800 p-2 rounded-full">
+                    <XIcon className="w-5 h-5" />
+                  </button>
+                  <div>
+                    <h3 className="text-xl font-bold text-white">Konfigurasi Kunci API</h3>
+                    <p className="text-xs text-slate-400 mt-1">Masukkan API Key pribadi Anda (Mode BYOK aman di browser).</p>
+                  </div>
+                  <div className="space-y-4">
+                    <div>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <label className="text-xs font-semibold text-slate-300 uppercase">Claude API Key (Anthropic)</label>
+                        <a 
+                          href="https://console.anthropic.com/settings/keys" 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="text-xs text-purple-400 hover:text-purple-300 flex items-center gap-1 font-medium bg-purple-500/10 px-2 py-0.5 rounded border border-purple-500/30 transition-colors"
+                        >
+                          Buat / Salin Key <ExternalLinkIcon className="w-3 h-3" />
+                        </a>
+                      </div>
+                      <input
+                        type="password"
+                        value={claudeApiKey}
+                        onChange={(e) => setClaudeApiKey(e.target.value)}
+                        placeholder="sk-ant-api03-..."
+                        className="w-full bg-[#0a0e17] border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-purple-500"
+                      />
+                    </div>
+
+                    <div>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <label className="text-xs font-semibold text-slate-300 uppercase">Google Gemini API Key</label>
+                        <a 
+                          href="https://aistudio.google.com/app/apikey" 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="text-xs text-purple-400 hover:text-purple-300 flex items-center gap-1 font-medium bg-purple-500/10 px-2 py-0.5 rounded border border-purple-500/30 transition-colors"
+                        >
+                          Buat / Salin Key <ExternalLinkIcon className="w-3 h-3" />
+                        </a>
+                      </div>
+                      <input
+                        type="password"
+                        value={geminiApiKey}
+                        onChange={(e) => setGeminiApiKey(e.target.value)}
+                        placeholder="AIzaSy..."
+                        className="w-full bg-[#0a0e17] border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-purple-500"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-300 uppercase mb-1">Gemini Model</label>
+                      <select
+                        value={selectedGeminiModel}
+                        onChange={(e) => setSelectedGeminiModel(e.target.value)}
+                        className="w-full bg-[#0a0e17] border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-purple-500"
+                      >
+                        {geminiModels.map(m => <option key={m.id} value={m.id}>{m.name}</option>)}
+                      </select>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-end space-x-3 pt-2">
+                    {saveKeyStatus && <span className="text-xs text-emerald-400 font-semibold">Berhasil Disimpan!</span>}
+                    <button onClick={handleSaveKeys} className="px-6 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-purple-600/30 flex items-center gap-2">
+                      <SaveIcon className="w-4 h-4" /> Simpan & Tutup
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Main Content */}
+            <main className="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-6 flex flex-col space-y-6">
+              {/* Banner */}
+              <div className="bg-gradient-to-r from-purple-900/30 via-[#131b2e] to-indigo-900/30 border border-purple-500/20 p-5 sm:p-6 rounded-3xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl">
+                <div>
+                  <span className="text-xs font-extrabold tracking-widest text-purple-400 uppercase">🚀 Semangat Berkarya Tanpa Batas</span>
+                  <h2 className="text-xl sm:text-2xl font-black text-white mt-1">Rakit Konten Viral Otomatis & Cuan Mengalir!</h2>
+                  <p className="text-slate-300 text-xs sm:text-sm mt-1 max-w-2xl">Ubah ide jadi narasi super memikat berteknologi tinggi dalam hitungan detik.</p>
+                </div>
+                <div className="flex items-center bg-[#0a0e17] p-1.5 rounded-2xl border border-slate-800 self-stretch sm:self-auto">
+                  <button
+                    onClick={() => setActiveTab('narration')}
+                    className={`flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${activeTab === 'narration' ? 'bg-purple-600 text-white shadow-md' : 'text-slate-400'}`}
+                  >
+                    <WandIcon className="w-4 h-4" /> 1. Generator Narasi
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('prompts')}
+                    className={`flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${activeTab === 'prompts' ? 'bg-purple-600 text-white shadow-md' : 'text-slate-400'}`}
+                  >
+                    <ClapperboardIcon className="w-4 h-4" /> 2. Master Flow & Veo
+                  </button>
+                </div>
+              </div>
+
+              {/* TAB 1 */}
+              {activeTab === 'narration' && (
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  <div className="bg-[#121929] border border-slate-800 p-6 rounded-3xl space-y-5 shadow-xl">
+                    <h3 className="text-base font-bold text-white flex items-center gap-2 border-b border-slate-800 pb-3">
+                      <SettingsIcon className="w-4 h-4 text-purple-400" /> Parameter Narasi (@narasi-vo)
+                    </h3>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase">Topik & Konsep Video</label>
+                      <textarea
+                        rows={4}
+                        value={videoTopic}
+                        onChange={(e) => setVideoTopic(e.target.value)}
+                        className="w-full bg-[#0a0e17] border border-slate-700 rounded-2xl p-3.5 text-sm text-slate-200 focus:outline-none focus:border-purple-500"
+                      />
+                    </div>
+                    <div className="grid grid-cols-1 gap-4">
+                      <div>
+                        <div className="flex justify-between items-center mb-1.5">
+                          <label className="text-xs font-semibold text-slate-300 uppercase">Durasi Video</label>
+                          <span className="text-xs font-bold text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded border border-purple-500/30">{videoDuration} Menit</span>
+                        </div>
+                        <input 
+                          type="range" 
+                          min="0.5" 
+                          max="10" 
+                          step="0.5" 
+                          value={videoDuration} 
+                          onChange={(e) => setVideoDuration(parseFloat(e.target.value))} 
+                          className="w-full accent-purple-500 mt-1 cursor-pointer" 
+                        />
+                        <div className="flex justify-between text-[10px] text-slate-400 mt-1">
+                          <span>30 Detik</span>
+                          <span>5 Menit</span>
+                          <span>10 Menit</span>
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase">Rasio Video</label>
+                        <select value={videoAspectRatio} onChange={(e) => setVideoAspectRatio(e.target.value)} className="w-full bg-[#0a0e17] border border-slate-700 rounded-2xl px-3 py-2.5 text-xs text-slate-200">
+                          <option value="9:16">9:16 (Reels/TikTok)</option>
+                          <option value="16:9">16:9 (YouTube)</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase">Pilih Gaya Visual</label>
+                      <select value={selectedStylePreset} onChange={(e) => setSelectedStylePreset(e.target.value)} className="w-full bg-[#0a0e17] border border-slate-700 rounded-2xl px-4 py-3 text-xs text-slate-200">
+                        {STYLE_PRESETS.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+                      </select>
+                    </div>
+                    <button
+                      onClick={handleGenerateNarration}
+                      disabled={isGeneratingScript}
+                      className="w-full py-4 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 text-white font-bold rounded-2xl shadow-lg shadow-purple-600/30 flex items-center justify-center gap-2 transition-all"
+                    >
+                      {isGeneratingScript ? <RefreshCwIcon className="w-5 h-5 animate-spin" /> : <SparklesIcon className="w-5 h-5" />}
+                      {isGeneratingScript ? 'Meracik Narasi...' : 'Buat Narasi Bersih (@narasi-vo)'}
+                    </button>
+                  </div>
+
+                  <div className="bg-[#121929] border border-slate-800 p-6 rounded-3xl space-y-4 lg:col-span-2 flex flex-col shadow-xl">
+                    <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                      <div>
+                        <h3 className="text-base font-bold text-white flex items-center gap-2"><FileTextIcon className="w-5 h-5 text-purple-400" /> Hasil Naskah Narasi Siap TTS</h3>
+                        <p className="text-xs text-slate-400">Estimasi ~{Math.round(videoDuration * 130)} kata dengan tanda baca natural.</p>
+                      </div>
+                      <button
+                        onClick={() => handleSafeCopy(fullNarration, setCopyNarrationStatus)}
+                        className="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 text-white text-xs font-bold rounded-xl shadow-md flex items-center gap-2"
+                      >
+                        {copyNarrationStatus ? <CheckIcon className="w-4 h-4" /> : <CopyIcon className="w-4 h-4" />}
+                        {copyNarrationStatus ? 'Tersalin!' : '📋 Salin Narasi'}
+                      </button>
+                    </div>
+                    <textarea
+                      value={fullNarration}
+                      onChange={(e) => setFullNarration(e.target.value)}
+                      rows={12}
+                      className="w-full flex-1 bg-[#0a0e17] border border-slate-700 rounded-2xl p-4 text-sm text-slate-200 leading-relaxed focus:outline-none focus:border-purple-500 resize-none"
+                    />
+                    <div className="flex justify-end pt-2">
+                      <button onClick={() => setActiveTab('prompts')} className="px-6 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold text-sm rounded-2xl flex items-center gap-2 shadow-lg">
+                        Lanjut ke Master Prompts Hub <ArrowRightIcon className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 2 */}
+              {activeTab === 'prompts' && (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div className="bg-[#121929] border border-slate-800 p-6 rounded-3xl space-y-4 flex flex-col shadow-xl">
+                    <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                      <div>
+                        <h3 className="text-base font-bold text-white flex items-center gap-2"><ImageIcon className="w-5 h-5 text-purple-400" /> Google Flow (Gambar)</h3>
+                        <p className="text-xs text-slate-400">Total {totalAssetsCount} aset gambar (@3-5s).</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button onClick={handleGenerateFlowPrompt} disabled={isGeneratingFlowPrompt} className="px-3 py-2 bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold rounded-xl flex items-center gap-1">
+                          <SparklesIcon className="w-3.5 h-3.5" /> Buat Prompt
+                        </button>
+                        {masterFlowPromptText && (
+                          <button onClick={() => handleSafeCopy(masterFlowPromptText, setCopyFlowStatus)} className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-purple-300 text-xs font-bold rounded-xl border border-slate-700 flex items-center gap-1">
+                            {copyFlowStatus ? <CheckIcon className="w-3.5 h-3.5" /> : <CopyIcon className="w-3.5 h-3.5" />} {copyFlowStatus ? 'Tersalin' : 'Salin'}
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                    <textarea readOnly placeholder="Klik 'Buat Prompt'..." value={masterFlowPromptText} rows={12} className="w-full bg-[#0a0e17] border border-slate-700 rounded-2xl p-4 text-xs font-mono text-slate-300 focus:outline-none" />
+                  </div>
+
+                  <div className="bg-[#121929] border border-slate-800 p-6 rounded-3xl space-y-4 flex flex-col shadow-xl">
+                    <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                      <div>
+                        <h3 className="text-base font-bold text-white flex items-center gap-2"><VideoIcon className="w-5 h-5 text-indigo-400" /> Veo 3 (Video Footage)</h3>
+                        <p className="text-xs text-slate-400">Total {totalVeoCount} klip video (@8s).</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button onClick={handleGenerateVeoPrompt} disabled={isGeneratingVeoPrompt} className="px-3 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl flex items-center gap-1">
+                          <SparklesIcon className="w-3.5 h-3.5" /> Buat Prompt
+                        </button>
+                        {masterVeoPromptText && (
+                          <button onClick={() => handleSafeCopy(masterVeoPromptText, setCopyVeoStatus)} className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-indigo-300 text-xs font-bold rounded-xl border border-slate-700 flex items-center gap-1">
+                            {copyVeoStatus ? <CheckIcon className="w-3.5 h-3.5" /> : <CopyIcon className="w-3.5 h-3.5" />} {copyVeoStatus ? 'Tersalin' : 'Salin'}
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                    <textarea readOnly placeholder="Klik 'Buat Prompt'..." value={masterVeoPromptText} rows={12} className="w-full bg-[#0a0e17] border border-slate-700 rounded-2xl p-4 text-xs font-mono text-slate-300 focus:outline-none" />
+                  </div>
+                </div>
+              )}
+            </main>
+          </div>
+
+          {/* Footer Watermark */}
+          <footer className="w-full text-center py-4 border-t border-slate-800/80 bg-[#0f1523]/50 text-xs text-slate-400 mt-8">
+            Faceless AI Studio • Crafted with ❤️ <a href="https://www.instagram.com/tamziz_pb" target="_blank" rel="noopener noreferrer" className="text-purple-400 font-bold hover:underline">by @tamziz_pb</a>
+          </footer>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
