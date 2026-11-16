@@ -1,26 +1,29 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="id" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SobatKarya.my.id - Pusat Tools Gratis, Produk Digital & Kolaborasi Komunitas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>SuaraAI Studio — SobatKarya</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Inter & FontAwesome Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
                     colors: {
                         brand: {
                             50: '#eef2ff',
                             100: '#e0e7ff',
+                            400: '#818cf8',
                             500: '#6366f1',
                             600: '#4f46e5',
                             700: '#4338ca',
@@ -30,428 +33,1078 @@
             }
         }
     </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #090d16;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+        @keyframes pulse-bar {
+            0%, 100% { transform: scaleY(0.25); }
+            50% { transform: scaleY(1); }
+        }
+        .visualizer-bar {
+            animation: pulse-bar 1s ease-in-out infinite;
+            transform-origin: bottom;
+        }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-brand-500 selection:text-white">
+<body class="min-h-screen flex flex-col justify-between selection:bg-brand-500 selection:text-white">
 
-    <!-- Navbar -->
-    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-400 flex items-center justify-center text-white font-bold text-xl shadow-md shadow-brand-500/20">
-                    S
-                </div>
-                <div>
-                    <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-brand-600 to-indigo-500 bg-clip-text text-transparent">SobatKarya</span>
-                    <span class="text-xs block text-slate-400 font-medium">.my.id</span>
-                </div>
-            </div>
-
-            <!-- Desktop Nav -->
-            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-600">
-                <a href="#tools" class="hover:text-brand-600 transition">Tools Gratis</a>
-                <a href="#marketplace" class="hover:text-brand-600 transition">Etalase Produk</a>
-                <a href="#komunitas" class="hover:text-brand-600 transition">Kontribusi & Ide</a>
-                <a href="#sosmed" class="hover:text-brand-600 transition">Sosial Media</a>
-                <a href="#sawer" class="hover:text-brand-600 transition">Sawer Seikhlasnya</a>
-            </nav>
-
-            <div class="hidden md:flex items-center space-x-4">
-                <a href="#komunitas" class="bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl font-medium text-sm shadow-lg shadow-brand-500/25 transition transform hover:-translate-y-0.5">
-                    <i class="fa-solid fa-plus-circle mr-2"></i> Kirim Karya
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-30 backdrop-blur-xl bg-slate-900/85 border-b border-slate-800/80">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <!-- Tombol Kembali ke Website Utama sobatkarya.my.id -->
+                <a href="https://sobatkarya.my.id" class="flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700 transition shadow-sm" title="Kembali ke sobatkarya.my.id">
+                    <i data-lucide="arrow-left" class="w-4 h-4 text-brand-400"></i>
+                    <span class="hidden sm:inline">Web Utama</span>
                 </a>
+
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center shadow-lg shadow-brand-500/25">
+                        <i data-lucide="audio-waveform" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h1 class="font-bold text-sm sm:text-base tracking-tight text-white">SuaraAI <span class="text-brand-400">Studio</span></h1>
+                            <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-brand-500/15 text-brand-400 border border-brand-500/30 hidden md:inline-block">Gemini 2.5 TTS</span>
+                        </div>
+                        <p class="text-[11px] text-slate-400 hidden sm:block">Konversi Teks ke Suara Natural • SobatKarya</p>
+                    </div>
+                </div>
             </div>
 
-            <!-- Mobile Menu Button -->
-            <button id="menu-btn" class="md:hidden text-slate-600 hover:text-slate-900 focus:outline-none text-2xl">
-                <i class="fa-solid fa-bars"></i>
-            </button>
-        </div>
+            <!-- Action Buttons Kanan -->
+            <div class="flex items-center gap-2">
+                <!-- Menu Sawer Seikhlasnya -->
+                <button onclick="toggleModal('sawerModal')" class="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl bg-gradient-to-r from-pink-600/20 to-amber-500/20 hover:from-pink-600/30 hover:to-amber-500/30 text-amber-300 border border-amber-500/30 transition shadow-sm">
+                    <i data-lucide="heart-handshake" class="w-4 h-4 text-pink-400"></i>
+                    <span>Sawer Seikhlasnya</span>
+                </button>
 
-        <!-- Mobile Menu Dropdown -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-4 space-y-3">
-            <a href="#tools" class="block py-2 text-slate-600 hover:text-brand-600 font-medium">Tools Gratis</a>
-            <a href="#marketplace" class="block py-2 text-slate-600 hover:text-brand-600 font-medium">Etalase Produk</a>
-            <a href="#komunitas" class="block py-2 text-slate-600 hover:text-brand-600 font-medium">Kontribusi & Ide</a>
-            <a href="#sosmed" class="block py-2 text-slate-600 hover:text-brand-600 font-medium">Sosial Media</a>
-            <a href="#sawer" class="block py-2 text-slate-600 hover:text-brand-600 font-medium">Sawer Seikhlasnya</a>
-            <a href="#komunitas" class="block text-center bg-brand-600 text-white py-2.5 rounded-xl font-medium text-sm">Kirim Karya Kamu</a>
+                <!-- Tombol Instal Android -->
+                <button onclick="toggleModal('androidModal')" class="flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition" title="Cara Instal di Android">
+                    <i data-lucide="smartphone" class="w-4 h-4 text-emerald-400"></i>
+                    <span class="hidden md:inline">Instal App</span>
+                </button>
+
+                <!-- Tombol API Key -->
+                <button onclick="toggleModal('apiModal')" class="flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
+                    <i data-lucide="key-round" class="w-4 h-4 text-amber-400"></i>
+                    <span id="apiKeyStatusBadge">API Key</span>
+                </button>
+            </div>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="relative overflow-hidden pt-16 pb-24 lg:pt-24 lg:pb-32 bg-gradient-to-b from-indigo-50/50 via-white to-white">
-        <div class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"></div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            <div class="inline-flex items-center space-x-2 bg-brand-50 border border-brand-100 px-3.5 py-1.5 rounded-full text-brand-700 text-xs font-semibold mb-6 shadow-sm">
-                <span class="flex h-2 w-2 rounded-full bg-brand-600 animate-pulse"></span>
-                <span>Wadah Kolaborasi, Tools & Produk Kreator Indonesia</span>
-            </div>
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight max-w-4xl mx-auto leading-tight">
-                Satu Tempat untuk <span class="bg-gradient-to-r from-brand-600 to-indigo-500 bg-clip-text text-transparent">Berkarya, Berbagi & Tumbuh</span> Bersama.
-            </h1>
-            <p class="mt-6 text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
-                Nikmati *tools* gratis siap pakai, temukan produk digital berkualitas, bagikan ide atau karyamu, dan dukung kreator lokal sepenuh hati.
-            </p>
-            <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="#tools" class="w-full sm:w-auto bg-brand-600 hover:bg-brand-700 text-white font-semibold px-8 py-4 rounded-2xl shadow-xl shadow-brand-500/25 transition transform hover:-translate-y-1">
-                    <i class="fa-solid fa-toolbox mr-2"></i> Jelajahi Tools Gratis
-                </a>
-                <a href="#komunitas" class="w-full sm:w-auto bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-semibold px-8 py-4 rounded-2xl shadow-sm transition transform hover:-translate-y-1">
-                    <i class="fa-solid fa-lightbulb mr-2 text-amber-500"></i> Kirim Ide / Karya
-                </a>
+    <!-- Main Content -->
+    <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Left Column: Konfigurasi Suara & Input Teks (7 Cols) -->
+        <div class="lg:col-span-7 space-y-5">
+
+            <!-- Mode Selector: Single Speaker vs Multi-Speaker Podcast -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-1.5 flex gap-1.5">
+                <button id="modeSingleBtn" onclick="switchMode('single')" class="flex-1 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition bg-brand-600 text-white shadow-md shadow-brand-600/25">
+                    <i data-lucide="mic" class="w-4 h-4"></i>
+                    Suara Tunggal (Narator)
+                </button>
+                <button id="modeMultiBtn" onclick="switchMode('multi')" class="flex-1 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition text-slate-400 hover:text-white hover:bg-slate-800/60">
+                    <i data-lucide="users" class="w-4 h-4"></i>
+                    Dialog 2 Pembicara (Podcast)
+                </button>
             </div>
 
-            <!-- Stats Bar -->
-            <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto pt-10 border-t border-slate-200/80">
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                    <div class="text-3xl font-extrabold text-brand-600">10+</div>
-                    <div class="text-xs text-slate-500 mt-1 font-medium">Tools Gratis Aktif</div>
+            <!-- Panel Pengaturan Karakter Suara -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-4 shadow-xl">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-sm font-semibold text-slate-200 flex items-center gap-2">
+                        <i data-lucide="sliders-horizontal" class="w-4 h-4 text-brand-400"></i>
+                        Pilih Karakter Vokal Indonesia & Intonasi
+                    </h2>
+                    <span class="text-xs text-slate-400">24kHz Neural Audio</span>
                 </div>
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                    <div class="text-3xl font-extrabold text-indigo-600">100%</div>
-                    <div class="text-xs text-slate-500 mt-1 font-medium">Akses Tanpa Biaya Tersembunyi</div>
+
+                <!-- Pilihan Suara Single Mode (Nama Lokal Indonesia) -->
+                <div id="singleVoiceConfig" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1.5">Karakter Suara (Nama Indonesia)</label>
+                        <select id="voiceSelect" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500 transition">
+                            <!-- Pria -->
+                            <option value="Dimas">👦 Dimas (Pria) — Tegas, Jelas & Profesional</option>
+                            <option value="Rian">👦 Rian (Pria) — Ceria, Energik & Antusias</option>
+                            <option value="Bayu">👦 Bayu (Pria) — Informatif, Dalam & Tenang</option>
+                            <option value="Galang">👦 Galang (Pria) — Ekspresif & Bersemangat</option>
+                            <option value="Satrio">👦 Satrio (Pria) — Berwibawa & Kokoh</option>
+                            <option value="Reza">👦 Reza (Pria) — Edukatif & Akademis</option>
+                            <!-- Wanita -->
+                            <option value="Putri">👧 Putri (Wanita) — Cerah, Ramah & Modern</option>
+                            <option value="Siti">👧 Siti (Wanita) — Mengalir, Natural & Hangat</option>
+                            <option value="Ayu">👧 Ayu (Wanita) — Muda, Segar & Bersahabat</option>
+                            <option value="Dewi">👧 Dewi (Wanita) — Hangat & Empatik (Storytelling)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1.5">Gaya Emosi & Intonasi</label>
+                        <select id="styleSelect" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500 transition">
+                            <option value="natural dan jelas">Natural & Jelas (Default)</option>
+                            <option value="ceria, antusias, dan penuh semangat seperti kreator konten TikTok atau Reels">Kreator Konten (Ceria & Antusias)</option>
+                            <option value="tenang, artikulatif, dan profesional seperti pembawa berita TV">Pembawa Berita (Formal & Jelas)</option>
+                            <option value="hangat, perlahan, dan penuh penghayatan seperti pendongeng cerita">Storyteller / Pendongeng (Hangat)</option>
+                            <option value="santai, akrab, dan kasual seperti mengobrol santai dengan teman">Santai & Kasual (Ngobrol)</option>
+                            <option value="berbisik pelan, intim, dan misterius">Berbisik & Misterius</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                    <div class="text-3xl font-extrabold text-emerald-600">Open</div>
-                    <div class="text-xs text-slate-500 mt-1 font-medium">Kontribusi Publik</div>
+
+                <!-- Pilihan Suara Multi-Speaker Mode (Hidden by default) -->
+                <div id="multiVoiceConfig" class="hidden grid-cols-1 sm:grid-cols-2 gap-4 p-3.5 rounded-xl bg-slate-950/80 border border-slate-800/80">
+                    <div class="space-y-2">
+                        <label class="block text-xs font-semibold text-indigo-400">Pembicara 1 (Pria/Wanita)</label>
+                        <input id="speaker1Name" type="text" value="Rian" placeholder="Nama Pembicara 1" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white">
+                        <select id="speaker1Voice" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white">
+                            <option value="Rian" selected>Rian (Pria - Energik)</option>
+                            <option value="Dimas">Dimas (Pria - Profesional)</option>
+                            <option value="Bayu">Bayu (Pria - Tenang)</option>
+                            <option value="Putri">Putri (Wanita - Cerah)</option>
+                        </select>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="block text-xs font-semibold text-purple-400">Pembicara 2 (Pria/Wanita)</label>
+                        <input id="speaker2Name" type="text" value="Putri" placeholder="Nama Pembicara 2" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white">
+                        <select id="speaker2Voice" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white">
+                            <option value="Putri" selected>Putri (Wanita - Ramah)</option>
+                            <option value="Siti">Siti (Wanita - Hangat)</option>
+                            <option value="Ayu">Ayu (Wanita - Segar)</option>
+                            <option value="Dewi">Dewi (Wanita - Empatik)</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                    <div class="text-3xl font-extrabold text-amber-600">24/7</div>
-                    <div class="text-xs text-slate-500 mt-1 font-medium">Dukungan Komunitas</div>
+
+                <!-- Pengaturan Kecepatan & Bahasa -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1.5">Aksen / Bahasa Prioritas</label>
+                        <select id="langSelect" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500 transition">
+                            <option value="Bahasa Indonesia dengan pelafalan natural khas Indonesia">🇮🇩 Bahasa Indonesia (id-ID)</option>
+                            <option value="English (US) with native pronunciation">🇺🇸 English - US (en-US)</option>
+                            <option value="Japanese with natural intonation">🇯🇵 Bahasa Jepang (ja-JP)</option>
+                            <option value="Arabic with clear pronunciation">🇸🇦 Bahasa Arab (ar-EG)</option>
+                            <option value="Korean with natural tone">🇰🇷 Bahasa Korea (ko-KR)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between text-xs mb-1.5">
+                            <span class="font-medium text-slate-400">Kecepatan Bicara (Tempo)</span>
+                            <span id="speedLabel" class="font-semibold text-brand-400">1.0x (Normal)</span>
+                        </div>
+                        <input id="speedRange" type="range" min="0.75" max="1.5" step="0.05" value="1.0" oninput="updateSpeedLabel(this.value)" class="w-full accent-brand-500 bg-slate-800 h-2 rounded-lg cursor-pointer mt-2">
+                        <div class="flex justify-between text-[10px] text-slate-500 mt-1">
+                            <span>0.75x Lambat</span>
+                            <span>1.0x Normal</span>
+                            <span>1.5x Cepat</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel Input Teks & Template Cepat -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-4 shadow-xl">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <label for="textInput" class="text-sm font-semibold text-slate-200 flex items-center gap-2">
+                        <i data-lucide="file-text" class="w-4 h-4 text-brand-400"></i>
+                        Naskah Teks ke Suara
+                    </label>
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                        <span class="text-[11px] text-slate-500 mr-1">Contoh Cepat:</span>
+                        <button onclick="loadPreset('konten')" class="text-[11px] px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition">Kreator TikTok/Reels</button>
+                        <button onclick="loadPreset('edukasi')" class="text-[11px] px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition">Ringkasan Materi</button>
+                        <button onclick="loadPreset('podcast')" class="text-[11px] px-2.5 py-1 rounded-lg bg-indigo-950/80 hover:bg-indigo-900/70 text-indigo-300 border border-indigo-800/50 transition">Podcast 2 Orang</button>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <textarea
+                        id="textInput"
+                        rows="6"
+                        maxlength="2500"
+                        oninput="updateCharCount()"
+                        placeholder="Ketik atau tempel naskah yang ingin diubah menjadi suara di sini..."
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/50 leading-relaxed resize-y"
+                    >Halo semuanya! Selamat datang di SuaraAI Studio dari SobatKarya. Sekarang kamu bisa mengubah teks catatan belajar, naskah video kreator, atau artikel panjang menjadi suara manusia yang sangat ekspresif hanya dalam hitungan detik.</textarea>
+                </div>
+
+                <!-- Baris Status Karakter, Estimasi Durasi, & Tombol Aksi -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+                    <div class="flex items-center gap-3 text-xs text-slate-400 flex-wrap">
+                        <span id="charCount">229 / 2500 karakter</span>
+                        <span>•</span>
+                        <span id="estDuration" class="text-brand-300 font-medium">Est. Durasi: ~14 detik</span>
+                        <span>•</span>
+                        <button onclick="clearText()" class="text-slate-400 hover:text-rose-400 flex items-center gap-1 transition">
+                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Bersihkan
+                        </button>
+                    </div>
+
+                    <button
+                        id="generateBtn"
+                        onclick="handleGenerateAudio()"
+                        class="w-full sm:w-auto px-6 py-3 rounded-xl font-semibold text-sm text-white bg-gradient-to-r from-brand-600 to-purple-600 hover:from-brand-500 hover:to-purple-500 active:scale-[0.99] transition shadow-lg shadow-brand-600/25 flex items-center justify-center gap-2"
+                    >
+                        <i data-lucide="sparkles" class="w-4 h-4"></i>
+                        <span>Konversi ke Suara Sekarang</span>
+                    </button>
+                </div>
+
+                <!-- Kotak Pesan Error / Peringatan -->
+                <div id="statusAlert" class="hidden rounded-xl p-3.5 text-xs border flex items-start gap-2.5">
+                    <i id="statusAlertIcon" data-lucide="info" class="w-4 h-4 shrink-0 mt-0.5"></i>
+                    <div id="statusAlertText" class="flex-1 leading-relaxed"></div>
                 </div>
             </div>
         </div>
-    </section>
 
-    <!-- Section: Tools Gratis -->
-    <section id="tools" class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <h2 class="text-xs font-bold uppercase tracking-widest text-brand-600 mb-3">Utility Hub</h2>
-                <p class="text-3xl font-bold text-slate-900">Tools Gratis yang Bisa Langsung Dipakai</p>
-                <p class="text-slate-600 mt-3">Hemat waktu pekerjaan harianmu dengan deretan utilitas ringkas dan cepat tanpa perlu instalasi rumit.</p>
-            </div>
+        <!-- Right Column: Studio Audio Player & Riwayat Konversi (5 Cols) -->
+        <div class="lg:col-span-5 space-y-5">
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Tool Card 1 -->
-                <div class="bg-slate-50 rounded-3xl p-8 border border-slate-200/80 hover:shadow-xl hover:border-brand-200 transition duration-300 flex flex-col justify-between group">
+            <!-- Kartu Pemutar Audio (Master Player) -->
+            <div class="bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-5 shadow-2xl space-y-5 relative overflow-hidden">
+                <div class="flex items-center justify-between">
                     <div>
-                        <div class="w-14 h-14 rounded-2xl bg-brand-100 text-brand-600 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition">
-                            <i class="fa-solid fa-file-lines"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-2">Faceless AI</h3>
-                        <p class="text-slate-600 text-sm leading-relaxed">Ubah ide jadi narasi super memikat berteknologi tinggi dalam hitungan detik.</p>
+                        <span class="text-[11px] font-semibold uppercase tracking-wider text-brand-400">Output Audio Studio</span>
+                        <h3 id="playerTitle" class="text-base font-bold text-white mt-0.5 truncate max-w-[240px]">Belum Ada Audio Aktif</h3>
                     </div>
-                    <div class="mt-8 pt-4 border-t border-slate-200 flex items-center justify-between">
-                        <span class="text-xs font-semibold px-2.5 py-1 bg-emerald-100 text-emerald-700 rounded-full">Gratis Selamanya</span>
-                        <button onclick="window.location.href=('https://sobatkarya.my.id/facelessai')" class="text-brand-600 font-semibold text-sm hover:text-brand-700 inline-flex items-center">
-                            Gunakan Tools <i class="fa-solid fa-arrow-right ml-1.5 text-xs"></i>
-                        </button>
+                    <span id="playerVoiceBadge" class="text-xs px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 border border-slate-700">
+                        Siap Memproses
+                    </span>
+                </div>
+
+                <!-- Visualizer Waveform Interaktif -->
+                <div class="h-24 bg-slate-950/90 border border-slate-800/80 rounded-xl p-4 flex items-center justify-center gap-1.5 relative overflow-hidden" id="visualizerContainer">
+                    <!-- Animasi Loading Saat Request Berjalan -->
+                    <div id="loadingOverlay" class="hidden absolute inset-0 bg-slate-950/95 z-10 flex flex-col items-center justify-center gap-2">
+                        <div class="w-7 h-7 border-2 border-brand-500 border-t-transparent rounded-full animate-spin"></div>
+                        <p id="loadingStepText" class="text-xs text-brand-300 font-medium animate-pulse">Menghubungi Gemini 2.5 TTS API...</p>
+                    </div>
+
+                    <!-- Bar Visualizer -->
+                    <div id="waveBars" class="flex items-end justify-center gap-1 h-12 w-full">
+                        <!-- Dibuat dinamis oleh JS -->
                     </div>
                 </div>
 
-                <!-- Tool Card 2 -->
-                <div class="bg-slate-50 rounded-3xl p-8 border border-slate-200/80 hover:shadow-xl hover:border-brand-200 transition duration-300 flex flex-col justify-between group">
-                    <div>
-                        <div class="w-14 h-14 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition">
-                            <i class="fa-solid fa-qrcode"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-2">SuaraAI Studio</h3>
-                        <p class="text-slate-600 text-sm leading-relaxed">Konversi Teks ke Suara Natural •TTS SobatKarya.</p>
-                    </div>
-                    <div class="mt-8 pt-4 border-t border-slate-200 flex items-center justify-between">
-                        <span class="text-xs font-semibold px-2.5 py-1 bg-emerald-100 text-emerald-700 rounded-full">Gratis Selamanya</span>
-                        <button onclick="window.location.href=('https://sobatkarya.my.id/tts')" class="text-brand-600 font-semibold text-sm hover:text-brand-700 inline-flex items-center">
-                            Gunakan Tools <i class="fa-solid fa-arrow-right ml-1.5 text-xs"></i>
-                        </button>
+                <!-- Elemen Audio Native Tersembunyi + Kontrol Kustom -->
+                <audio id="mainAudioElement" class="hidden"></audio>
+
+                <!-- Progress Scrubber -->
+                <div class="space-y-1.5">
+                    <input
+                        id="audioSeek"
+                        type="range"
+                        min="0"
+                        max="100"
+                        value="0"
+                        disabled
+                        class="w-full accent-brand-500 bg-slate-800 h-1.5 rounded-lg cursor-pointer disabled:opacity-40"
+                    >
+                    <div class="flex justify-between text-[11px] font-mono text-slate-400">
+                        <span id="currentTimeLabel">00:00</span>
+                        <span id="durationTimeLabel">00:00</span>
                     </div>
                 </div>
 
-                <!-- Tool Card 3 -->
-                <div class="bg-slate-50 rounded-3xl p-8 border border-slate-200/80 hover:shadow-xl hover:border-brand-200 transition duration-300 flex flex-col justify-between group">
-                    <div>
-                        <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition">
-                            <i class="fa-solid fa-palette"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-2">Color Palette Inspector</h3>
-                        <p class="text-slate-600 text-sm leading-relaxed">Eksplorasi kombinasi warna hex, rgb, dan gradasi modern yang estetik untuk keperluan desain UI/UX maupun konten kreatif.</p>
-                    </div>
-                    <div class="mt-8 pt-4 border-t border-slate-200 flex items-center justify-between">
-                        <span class="text-xs font-semibold px-2.5 py-1 bg-emerald-100 text-emerald-700 rounded-full">Gratis Selamanya</span>
-                        <button onclick="openToolModal('Color Palette')" class="text-brand-600 font-semibold text-sm hover:text-brand-700 inline-flex items-center">
-                            Gunakan Tools <i class="fa-solid fa-arrow-right ml-1.5 text-xs"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+                <!-- Tombol Play/Pause & Download WAV -->
+                <div class="flex items-center gap-3">
+                    <button
+                        id="playPauseBtn"
+                        onclick="togglePlayPause()"
+                        disabled
+                        class="flex-1 py-3 px-4 rounded-xl font-semibold text-sm bg-brand-600 hover:bg-brand-500 disabled:bg-slate-800 disabled:text-slate-500 text-white transition flex items-center justify-center gap-2 shadow-lg shadow-brand-600/20 disabled:shadow-none"
+                    >
+                        <i id="playPauseIcon" data-lucide="play" class="w-4 h-4"></i>
+                        <span id="playPauseText">Putar Suara</span>
+                    </button>
 
-    <!-- Section: Marketplace Produk Digital -->
-    <section id="marketplace" class="py-20 bg-slate-100/70 border-y border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row md:items-end justify-between mb-16">
-                <div>
-                    <h2 class="text-xs font-bold uppercase tracking-widest text-brand-600 mb-3">Etalase Sobat</h2>
-                    <p class="text-3xl font-bold text-slate-900">Skill & Produk Digital Pilihan</p>
-                    <p class="text-slate-600 mt-2 max-w-xl">Dukung kreator lokal dengan memiliki template, e-book panduan, atau jasa profesional langsung dari para sobat.</p>
-                </div>
-                <div class="mt-6 md:mt-0">
-                    <a href="#komunitas" class="inline-flex items-center text-sm font-semibold text-brand-600 hover:text-brand-700">
-                        Ingin jual produkmu di sini? Hubungi kami <i class="fa-solid fa-arrow-right ml-2"></i>
+                    <a
+                        id="downloadBtn"
+                        href="#"
+                        download="suara-ai-gemini.wav"
+                        class="pointer-events-none opacity-40 py-3 px-4 rounded-xl font-semibold text-sm bg-emerald-600 hover:bg-emerald-500 text-white transition flex items-center justify-center gap-2"
+                    >
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        <span>Unduh .WAV</span>
                     </a>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Product 1 -->
-                <div class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition border border-slate-200 flex flex-col justify-between">
+            <!-- Riwayat Konversi Sesi Ini (Tersimpan LocalStorage) -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-3 shadow-xl">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-sm font-semibold text-slate-200 flex items-center gap-2">
+                        <i data-lucide="history" class="w-4 h-4 text-brand-400"></i>
+                        Riwayat Audio Tersimpan
+                    </h3>
+                    <div class="flex items-center gap-2">
+                        <span id="historyCountBadge" class="text-[11px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-400">0 File</span>
+                        <button onclick="clearHistory()" class="text-[11px] text-slate-400 hover:text-rose-400 transition" title="Hapus Riwayat">Reset</button>
+                    </div>
+                </div>
+
+                <div id="historyList" class="space-y-2.5 max-h-[260px] overflow-y-auto pr-1">
+                    <div class="text-center py-8 px-4 border border-dashed border-slate-800 rounded-xl">
+                        <i data-lucide="disc" class="w-7 h-7 text-slate-600 mx-auto mb-2"></i>
+                        <p class="text-xs text-slate-400">Belum ada riwayat konversi suara.</p>
+                        <p class="text-[11px] text-slate-500 mt-0.5">Hasil suara otomatis tersimpan di memori browser Anda.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Dukungan Cepat & Web Utama -->
+            <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <div class="p-2.5 rounded-xl bg-pink-500/10 text-pink-400 border border-pink-500/20">
+                        <i data-lucide="coffee" class="w-5 h-5"></i>
+                    </div>
                     <div>
-                        <div class="h-48 bg-gradient-to-tr from-brand-600 to-indigo-500 p-6 flex flex-col justify-between text-white relative">
-                            <span class="absolute top-4 right-4 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-medium">E-Book</span>
-                            <div>
-                                <h3 class="text-xl font-bold">Panduan Freelancer Pemula dari Nol</h3>
-                                <p class="text-xs text-indigo-100 mt-1">Oleh: Sobat Rizki</p>
-                            </div>
-                        </div>
-                        <div class="p-6">
-                            <p class="text-slate-600 text-sm">Strategi lengkap mendapatkan klien pertama di platform global, menyusun portofolio, dan manajemen tarif.</p>
-                        </div>
-                    </div>
-                    <div class="p-6 pt-0 flex items-center justify-between border-t border-slate-100 mt-4 pt-4">
-                        <span class="text-lg font-extrabold text-slate-900">Rp 49.000</span>
-                        <button onclick="showModalMessage('Terima kasih! Produk ini akan segera terhubung ke sistem pembayaran.')" class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-xl text-sm font-medium shadow-sm transition">
-                            Beli Produk
-                        </button>
+                        <h4 class="text-xs font-semibold text-white">Suka dengan aplikasi ini?</h4>
+                        <p class="text-[11px] text-slate-400">Dukung pengembangan fitur baru SobatKarya</p>
                     </div>
                 </div>
+                <button onclick="toggleModal('sawerModal')" class="w-full sm:w-auto text-xs font-semibold px-4 py-2 rounded-xl bg-pink-600 hover:bg-pink-500 text-white transition flex items-center justify-center gap-1.5 shrink-0">
+                    <i data-lucide="qr-code" class="w-3.5 h-3.5"></i>
+                    Sawer QRIS
+                </button>
+            </div>
 
-                <!-- Product 2 -->
-                <div class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition border border-slate-200 flex flex-col justify-between">
+        </div>
+    </main>
+
+    <!-- Modal 1: Menu API Key -->
+    <div id="apiModal" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-5 space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-2.5">
+                    <div class="p-2 rounded-lg bg-amber-500/10 text-amber-400">
+                        <i data-lucide="key-round" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="font-bold text-base text-white">Pengaturan Gemini API Key</h3>
+                </div>
+                <button onclick="toggleModal('apiModal')" class="text-slate-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4 text-xs text-slate-300 leading-relaxed">
+                <p class="text-slate-400">
+                    Masukkan <strong>Gemini API Key</strong> Anda agar dapat mengonversi teks menjadi suara tanpa batas. API Key akan disimpan dengan aman di browser perangkat Anda.
+                </p>
+
+                <!-- Tombol Langsung Get API Key Gemini -->
+                <a
+                    href="https://aistudio.google.com/app/apikey"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-brand-300 font-semibold text-xs transition flex items-center justify-center gap-2"
+                >
+                    <i data-lucide="external-link" class="w-4 h-4 text-brand-400"></i>
+                    <span>Ambil / Buat API Key Gemini Gratis di Sini</span>
+                </a>
+
+                <div>
+                    <label for="customApiKeyInput" class="block text-slate-300 mb-1.5 font-semibold">Masukkan Gemini API Key:</label>
+                    <input
+                        id="customApiKeyInput"
+                        type="password"
+                        placeholder="Tempel kode API Key Anda (AIzaSy...)"
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-500"
+                    >
+                </div>
+            </div>
+
+            <div class="flex gap-2 pt-1">
+                <button onclick="saveCustomApiKey()" class="flex-1 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5">
+                    <i data-lucide="check" class="w-4 h-4"></i>
+                    Simpan API Key
+                </button>
+                <button onclick="toggleModal('apiModal')" class="py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs transition">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: Menu Sawer Seikhlasnya -->
+    <div id="sawerModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-2xl text-center">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3 text-left">
+                <div class="flex items-center gap-2.5">
+                    <div class="p-2 rounded-lg bg-pink-500/10 text-pink-400">
+                        <i data-lucide="heart-handshake" class="w-5 h-5"></i>
+                    </div>
                     <div>
-                        <div class="h-48 bg-gradient-to-tr from-emerald-600 to-teal-500 p-6 flex flex-col justify-between text-white relative">
-                            <span class="absolute top-4 right-4 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-medium">Template</span>
-                            <div>
-                                <h3 class="text-xl font-bold">Notion Dashboard Produktif & Keuangan</h3>
-                                <p class="text-xs text-emerald-100 mt-1">Oleh: Sobat Dian</p>
-                            </div>
-                        </div>
-                        <div class="p-6">
-                            <p class="text-slate-600 text-sm">Template Notion siap pakai untuk mengatur tugas harian, pelacak habit, dan pencatatan finansial pribadi.</p>
-                        </div>
-                    </div>
-                    <div class="p-6 pt-0 flex items-center justify-between border-t border-slate-100 mt-4 pt-4">
-                        <span class="text-lg font-extrabold text-slate-900">Rp 25.000</span>
-                        <button onclick="showModalMessage('Terima kasih! Produk ini akan segera terhubung ke sistem pembayaran.')" class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-xl text-sm font-medium shadow-sm transition">
-                            Beli Produk
-                        </button>
+                        <h3 class="font-bold text-base text-white">Sawer Seikhlasnya</h3>
+                        <p class="text-[11px] text-slate-400">Terima kasih atas dukungan Anda!</p>
                     </div>
                 </div>
+                <button onclick="toggleModal('sawerModal')" class="text-slate-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
 
-                <!-- Product 3 -->
-                <div class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition border border-slate-200 flex flex-col justify-between">
-                    <div>
-                        <div class="h-48 bg-gradient-to-tr from-amber-500 to-orange-500 p-6 flex flex-col justify-between text-white relative">
-                            <span class="absolute top-4 right-4 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-medium">Jasa / Skill</span>
-                            <div>
-                                <h3 class="text-xl font-bold">Jasa Desain Landing Page Cepat</h3>
-                                <p class="text-xs text-amber-100 mt-1">Oleh: Sobat Bayu</p>
-                            </div>
-                        </div>
-                        <div class="p-6">
-                            <p class="text-slate-600 text-sm">Pembuatan landing page responsif menggunakan HTML/Tailwind untuk UMKM, portofolio, atau produk digital kamu.</p>
-                        </div>
-                    </div>
-                    <div class="p-6 pt-0 flex items-center justify-between border-t border-slate-100 mt-4 pt-4">
-                        <span class="text-lg font-extrabold text-slate-900">Mulai Rp 150rb</span>
-                        <button onclick="showModalMessage('Terima kasih! Silakan hubungi kontak kreator untuk konsultasi.')" class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-xl text-sm font-medium shadow-sm transition">
-                            Pesan Jasa
-                        </button>
-                    </div>
+            <div class="space-y-3">
+                <p class="text-xs text-slate-300">
+                    Scan kode <strong>QRIS</strong> di bawah ini menggunakan aplikasi e-Wallet atau Mobile Banking Anda:
+                </p>
+
+                <!-- Container Gambar QRIS dari direktori tts/qris.jpeg -->
+                <div class="bg-white p-3 rounded-2xl mx-auto max-w-[260px] shadow-inner border border-slate-700 flex flex-col items-center justify-center">
+                    <img
+                        id="qrisImage"
+                        src="facelessai/qris.jpeg"
+                        alt="QRIS Donasi SobatKarya"
+                        onerror="if(this.src.includes('tts/qris.jpeg')){this.src='qris.jpeg';}else{this.onerror=null;this.parentElement.innerHTML='<div class=\'py-8 px-3 text-slate-700 text-xs\'><p class=\'font-bold mb-1\'>Gambar QRIS (facelessai/qris.jpeg)</p><p>Pastikan file qris.jpeg sudah diupload ke dalam folder facelessai/qris.jpeg</p></div>';}"
+                        class="w-full h-auto rounded-xl object-contain"
+                    >
+                </div>
+
+                <div class="pt-1 flex items-center justify-center gap-2">
+                    <a
+                        href="facelessai/qris.jpeg"
+                        target="_blank"
+                        class="text-xs font-medium text-brand-400 hover:text-brand-300 underline flex items-center gap-1"
+                    >
+                        <i data-lucide="image" class="w-3.5 h-3.5"></i>
+                        Buka Gambar QRIS Ukuran Penuh
+                    </a>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Section: Kontribusi & Komunitas (Form) -->
-    <section id="komunitas" class="py-20 bg-white">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-gradient-to-br from-brand-600 to-indigo-700 rounded-3xl p-8 sm:p-12 text-white shadow-xl relative overflow-hidden">
-                <div class="absolute -right-10 -bottom-10 w-60 h-60 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
-                <div class="relative z-10">
-                    <h2 class="text-xs font-bold uppercase tracking-widest text-indigo-200 mb-2">Ruang Aspirasi & Karya</h2>
-                    <p class="text-3xl font-bold">Punya Kritik, Ide Tools, atau Mau Unggah Produkmu?</p>
-                    <p class="text-indigo-100 mt-2 mb-8 text-sm leading-relaxed">
-                        Website ini dibangun bersama. Sampaikan masukan agar kami makin berkembang, atau daftarkan karya/produkmu agar bisa dimanfaatkan oleh pengunjung lainnya!
-                    </p>
-
-                    <form id="submission-form" onsubmit="handleSubmission(event)" class="space-y-4">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-semibold text-indigo-100 mb-1">Nama Sobat</label>
-                                <input type="text" id="sub-name" required class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-indigo-300 focus:outline-none focus:border-white text-sm" placeholder="Nama lengkap atau panggilan">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-indigo-100 mb-1">Kategori Kontribusi</label>
-                                <select id="sub-category" class="w-full bg-indigo-900 border border-white/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white text-sm">
-                                    <option value="Kritik & Saran" class="bg-slate-800 text-white">Kritik & Saran</option>
-                                    <option value="Ide Fitur / Tools" class="bg-slate-800 text-white">Ide Fitur / Tools Baru</option>
-                                    <option value="Upload Produk / Karya" class="bg-slate-800 text-white">Ajukan Produk / Karya Saya</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-indigo-100 mb-1">Pesan / Detail Tautan Produk</label>
-                            <textarea id="sub-message" required rows="4" class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-indigo-300 focus:outline-none focus:border-white text-sm" placeholder="Tuliskan masukanmu atau deskripsi & link karya yang ingin dibagikan..."></textarea>
-                        </div>
-                        <button type="submit" class="w-full bg-white text-brand-700 font-bold py-3.5 rounded-xl shadow-lg hover:bg-indigo-50 transition text-sm">
-                            <i class="fa-solid fa-paper-plane mr-2"></i> Kirim Kontribusi Sobat
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Section: Sosial Media -->
-    <section id="sosmed" class="py-20 bg-slate-50 border-t border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-xs font-bold uppercase tracking-widest text-brand-600 mb-3">Tetap Terhubung</h2>
-            <p class="text-3xl font-bold text-slate-900">Ikuti Sosial Media SobatKarya</p>
-            <p class="text-slate-600 mt-2 max-w-xl mx-auto">Dapatkan update tools terbaru, tips seputar digital, dan behind the scenes pengembangan platform.</p>
-
-            <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-                <a href="https://tiktok.com" target="_blank" class="bg-white p-6 rounded-2xl border border-slate-200 hover:border-brand-500 hover:shadow-lg transition flex flex-col items-center group">
-                    <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-900 flex items-center justify-center text-xl mb-3 group-hover:bg-black group-hover:text-white transition">
-                        <i class="fa-brands fa-tiktok"></i>
-                    </div>
-                    <span class="font-bold text-slate-900">TikTok</span>
-                    <span class="text-xs text-slate-500 mt-0.5">@sobatkarya</span>
-                </a>
-
-                <a href="https://instagram.com" target="_blank" class="bg-white p-6 rounded-2xl border border-slate-200 hover:border-pink-500 hover:shadow-lg transition flex flex-col items-center group">
-                    <div class="w-12 h-12 rounded-full bg-pink-50 text-pink-600 flex items-center justify-center text-xl mb-3 group-hover:bg-pink-600 group-hover:text-white transition">
-                        <i class="fa-brands fa-instagram"></i>
-                    </div>
-                    <span class="font-bold text-slate-900">Instagram</span>
-                    <span class="text-xs text-slate-500 mt-0.5">@sobatkarya.id</span>
-                </a>
-
-                <a href="https://youtube.com" target="_blank" class="bg-white p-6 rounded-2xl border border-slate-200 hover:border-red-500 hover:shadow-lg transition flex flex-col items-center group">
-                    <div class="w-12 h-12 rounded-full bg-red-50 text-red-600 flex items-center justify-center text-xl mb-3 group-hover:bg-red-600 group-hover:text-white transition">
-                        <i class="fa-brands fa-youtube"></i>
-                    </div>
-                    <span class="font-bold text-slate-900">YouTube</span>
-                    <span class="text-xs text-slate-500 mt-0.5">Sobat Karya</span>
-                </a>
-
-                <a href="https://t.me" target="_blank" class="bg-white p-6 rounded-2xl border border-slate-200 hover:border-sky-500 hover:shadow-lg transition flex flex-col items-center group">
-                    <div class="w-12 h-12 rounded-full bg-sky-50 text-sky-600 flex items-center justify-center text-xl mb-3 group-hover:bg-sky-600 group-hover:text-white transition">
-                        <i class="fa-brands fa-telegram"></i>
-                    </div>
-                    <span class="font-bold text-slate-900">Telegram</span>
-                    <span class="text-xs text-slate-500 mt-0.5">Komunitas Sobat</span>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Section: Sawer Seikhlasnya -->
-    <section id="sawer" class="py-20 bg-white border-t border-slate-200">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div class="inline-flex items-center space-x-2 bg-amber-50 text-amber-800 px-4 py-1.5 rounded-full text-xs font-semibold mb-4 border border-amber-200">
-                <i class="fa-solid fa-mug-hot"></i>
-                <span>Dukungan Sukarela</span>
-            </div>
-            <h2 class="text-3xl font-bold text-slate-900">Sawer Seikhlasnya untuk Kopi & Server</h2>
-            <p class="text-slate-600 mt-3 max-w-xl mx-auto">
-                Jika *tools* gratis atau konten di `sobatkarya.my.id` bermanfaat untukmu, kamu bisa mendukung kelangsungan website ini dengan saweran seikhlasnya melalui QRIS atau Trakteer.
-            </p>
-
-            <div class="mt-10 bg-slate-50 border border-slate-200 rounded-3xl p-8 max-w-md mx-auto shadow-sm">
-                <div class="bg-white p-4 rounded-2xl border border-slate-200 inline-block shadow-sm mb-4">
-                    <!-- Placeholder QRIS Code Mockup -->
-                    <img src="https://sobatkarya.my.id/facelessai/qris.jpeg" alt="QRIS AHMAD TAMZIZ ZUHRI" class="w-48 h-48 object-contain rounded-xl shadow-sm">
-                </div>
-                <div class="text-sm font-semibold text-slate-800">A/N Komunitas SobatKarya</div>
-                <p class="text-xs text-slate-500 mt-1">Terima kasih banyak atas apresiasi dan dukungan tulusmu!</p>
-
-                <div class="mt-6 flex justify-center gap-3">
-                    <button onclick="showModalMessage('Terima kasih banyak atas dukunganmu! Kebaikanmu sangat berarti bagi perkembangan sobatkarya.my.id')" class="bg-brand-600 hover:bg-brand-700 text-white px-6 py-2.5 rounded-xl font-medium text-sm shadow-sm transition">
-                        <i class="fa-solid fa-heart mr-2 text-rose-300"></i> Sawer via Trakteer / Saweria
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center text-white font-bold text-sm">
-                    S
-                </div>
-                <span class="text-white font-bold tracking-tight">SobatKarya.my.id</span>
-            </div>
-            <p class="text-xs text-slate-500 text-center md:text-left">
-                &copy; 2026 SobatKarya.my.id. Dibuat dengan penuh semangat untuk kemanfaatan bersama.
-            </p>
-            <div class="flex space-x-6 text-sm">
-                <a href="#tools" class="hover:text-white transition">Tools</a>
-                <a href="#marketplace" class="hover:text-white transition">Etalase</a>
-                <a href="#komunitas" class="hover:text-white transition">Kontribusi</a>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Custom Modal for Notifications / Tools -->
-    <div id="custom-modal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl transform transition-all text-center">
-            <div id="modal-icon" class="w-16 h-16 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
-                <i class="fa-solid fa-circle-check"></i>
-            </div>
-            <h3 id="modal-title" class="text-xl font-bold text-slate-900 mb-2">Informasi SobatKarya</h3>
-            <p id="modal-desc" class="text-slate-600 text-sm leading-relaxed mb-6">Pesan atau keterangan fitur.</p>
-            <button onclick="closeModal()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-xl text-sm transition">
-                Tutup / Mengerti
+            <button onclick="toggleModal('sawerModal')" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs transition">
+                Selesai / Tutup
             </button>
         </div>
     </div>
 
-    <!-- JavaScript Interactivity -->
-    <script>
-        // Mobile menu toggle
-        const menuBtn = document.getElementById('menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
+    <!-- Modal 3: Panduan Instal di HP Android (PWA) -->
+    <div id="androidModal" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-5 space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-2.5">
+                    <div class="p-2 rounded-lg bg-emerald-500/10 text-emerald-400">
+                        <i data-lucide="smartphone" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="font-bold text-base text-white">Instal Aplikasi di HP Android</h3>
+                </div>
+                <button onclick="toggleModal('androidModal')" class="text-slate-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="space-y-3 text-xs text-slate-300 leading-relaxed">
+                <p>Anda dapat memasang aplikasi ini ke layar utama ponsel Android Anda:</p>
+                <ol class="list-decimal list-inside space-y-2 bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+                    <li>Buka halaman ini menggunakan browser <strong>Google Chrome</strong> di HP Android Anda.</li>
+                    <li>Ketuk ikon <strong>Titik Tiga (⋮)</strong> di pojok kanan atas Chrome.</li>
+                    <li>Pilih menu <strong>"Tambahkan ke Layar Utama" (Add to Home screen / Install App)</strong>.</li>
+                    <li>Ketuk <strong>Instal / Tambahkan</strong>, maka aplikasi siap dibuka kapan saja dari menu HP Anda.</li>
+                </ol>
+            </div>
+            <button onclick="toggleModal('androidModal')" class="w-full py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold text-xs transition">
+                Mengerti, Tutup Panduan
+            </button>
+        </div>
+    </div>
 
-        menuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
+    <!-- Footer dengan Link Kembali ke sobatkarya.my.id -->
+    <footer class="border-t border-slate-900 bg-slate-950/60 py-5 px-4">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
+            <div class="flex items-center gap-2">
+                <span>© 2026 <strong>SuaraAI Studio</strong> • Bagian dari</span>
+                <a href="https://sobatkarya.my.id" class="text-brand-400 hover:text-brand-300 font-semibold underline underline-offset-4">sobatkarya.my.id</a>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="toggleModal('sawerModal')" class="text-pink-400 hover:text-pink-300 font-medium flex items-center gap-1 transition">
+                    <i data-lucide="heart" class="w-3.5 h-3.5"></i> Sawer Seikhlasnya
+                </button>
+                <span>•</span>
+                <a href="https://sobatkarya.my.id" class="text-slate-300 hover:text-white font-medium flex items-center gap-1 transition">
+                    <i data-lucide="home" class="w-3.5 h-3.5"></i> Kembali ke Website Utama
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Application Script -->
+    <script>
+        // ============================================================================
+        // 1. MAPPING NAMA LOKAL KE GEMINI SYSTEM VOICE (PREBUILT VOICE)
+        // ============================================================================
+        const voiceMapping = {
+            // Pria
+            "Dimas": "Kore",
+            "Rian": "Puck",
+            "Bayu": "Charon",
+            "Galang": "Fenrir",
+            "Satrio": "Orus",
+            "Reza": "Sadaltager",
+            // Wanita
+            "Putri": "Zephyr",
+            "Siti": "Aoede",
+            "Ayu": "Leda",
+            "Dewi": "Sulafat"
+        };
+
+        const apiKey = ""; 
+        let customUserKey = localStorage.getItem('SUARAAI_API_KEY') || "";
+        let currentMode = 'single'; 
+        let conversionHistory = JSON.parse(localStorage.getItem('SUARAAI_HISTORY') || "[]");
+        let isPlaying = false;
+
+        const audioEl = document.getElementById('mainAudioElement');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const audioSeek = document.getElementById('audioSeek');
+
+        window.onload = function () {
+            lucide.createIcons();
+            initVisualizerBars();
+            updateCharCount();
+            renderHistory();
+            if (customUserKey) {
+                document.getElementById('customApiKeyInput').value = customUserKey;
+                document.getElementById('apiKeyStatusBadge').textContent = "Key Aktif";
+            }
+            setupPWAManifest();
+        };
+
+        function setupPWAManifest() {
+            const manifest = {
+                name: "SuaraAI Studio - SobatKarya",
+                short_name: "SuaraAI",
+                start_url: ".",
+                display: "standalone",
+                background_color: "#090d16",
+                theme_color: "#4f46e5",
+                description: "Aplikasi Pengubah Teks ke Suara berbasis Google Gemini TTS oleh SobatKarya",
+                icons: [
+                    { src: "https://placehold.co/192x192/4f46e5/ffffff.png?text=AI", sizes: "192x192", type: "image/png" },
+                    { src: "https://placehold.co/512x512/4f46e5/ffffff.png?text=SuaraAI", sizes: "512x512", type: "image/png" }
+                ]
+            };
+            const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+            const manifestURL = URL.createObjectURL(blob);
+            const link = document.createElement('link');
+            link.rel = 'manifest';
+            link.href = manifestURL;
+            document.head.appendChild(link);
+        }
+
+        function initVisualizerBars() {
+            const container = document.getElementById('waveBars');
+            container.innerHTML = '';
+            for (let i = 0; i < 32; i++) {
+                const bar = document.createElement('div');
+                const randomHeight = Math.floor(Math.random() * 65) + 20;
+                bar.className = 'w-1.5 bg-slate-700 rounded-full transition-all duration-300';
+                bar.style.height = `${randomHeight}%`;
+                bar.style.animationDelay = `${(i * 0.05).toFixed(2)}s`;
+                container.appendChild(bar);
+            }
+        }
+
+        function setVisualizerActive(active) {
+            const bars = document.querySelectorAll('#waveBars > div');
+            bars.forEach(bar => {
+                if (active) {
+                    bar.classList.remove('bg-slate-700');
+                    bar.classList.add('bg-brand-400', 'visualizer-bar');
+                } else {
+                    bar.classList.add('bg-slate-700');
+                    bar.classList.remove('bg-brand-400', 'visualizer-bar');
+                }
+            });
+        }
+
+        // ============================================================================
+        // 2. KONTROL UI & ESTIMASI DURASI OTOMATIS
+        // ============================================================================
+        function switchMode(mode) {
+            currentMode = mode;
+            const singleBtn = document.getElementById('modeSingleBtn');
+            const multiBtn = document.getElementById('modeMultiBtn');
+            const singleConfig = document.getElementById('singleVoiceConfig');
+            const multiConfig = document.getElementById('multiVoiceConfig');
+
+            if (mode === 'single') {
+                singleBtn.className = "flex-1 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition bg-brand-600 text-white shadow-md shadow-brand-600/25";
+                multiBtn.className = "flex-1 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition text-slate-400 hover:text-white hover:bg-slate-800/60";
+                singleConfig.classList.remove('hidden');
+                singleConfig.classList.add('grid');
+                multiConfig.classList.add('hidden');
+                multiConfig.classList.remove('grid');
+            } else {
+                multiBtn.className = "flex-1 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition bg-brand-600 text-white shadow-md shadow-brand-600/25";
+                singleBtn.className = "flex-1 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition text-slate-400 hover:text-white hover:bg-slate-800/60";
+                singleConfig.classList.add('hidden');
+                singleConfig.classList.remove('grid');
+                multiConfig.classList.remove('hidden');
+                multiConfig.classList.add('grid');
+                loadPreset('podcast');
+            }
+        }
+
+        function updateSpeedLabel(val) {
+            const num = parseFloat(val);
+            let desc = "Normal";
+            if (num < 0.95) desc = "Lambat";
+            else if (num > 1.1) desc = "Cepat";
+            document.getElementById('speedLabel').textContent = `${num.toFixed(2)}x (${desc})`;
+            audioEl.playbackRate = num;
+        }
+
+        function updateCharCount() {
+            const text = document.getElementById('textInput').value;
+            document.getElementById('charCount').textContent = `${text.length} / 2500 karakter`;
+
+            // Estimasi Durasi Suara (rata-rata 15 karakter per detik berbicara)
+            const estSeconds = Math.max(1, Math.round(text.length / 15));
+            document.getElementById('estDuration').textContent = `Est. Durasi: ~${estSeconds} detik`;
+        }
+
+        function clearText() {
+            document.getElementById('textInput').value = '';
+            updateCharCount();
+            hideStatusAlert();
+        }
+
+        function loadPreset(type) {
+            const input = document.getElementById('textInput');
+            if (type === 'konten') {
+                if (currentMode !== 'single') switchMode('single');
+                document.getElementById('voiceSelect').value = 'Rian';
+                document.getElementById('styleSelect').value = 'ceria, antusias, dan penuh semangat seperti kreator konten TikTok atau Reels';
+                input.value = "Tahukah kamu? Sekarang kita tidak perlu lagi rekaman berjam-jam untuk bikin voice over video Reels atau TikTok! Cukup ketik naskahnya di sini, pilih karakter suara anak Indonesia favoritmu, dan hasilnya langsung siap diunduh dalam hitungan detik!";
+            } else if (type === 'edukasi') {
+                if (currentMode !== 'single') switchMode('single');
+                document.getElementById('voiceSelect').value = 'Bayu';
+                document.getElementById('styleSelect').value = 'tenang, artikulatif, dan profesional seperti pembawa berita TV';
+                input.value = "Ringkasan Materi Biologi: Fotosintesis adalah proses kimia yang mengubah karbondioksida dan air menjadi glukosa menggunakan energi cahaya matahari pada tumbuhan hijau.";
+            } else if (type === 'podcast') {
+                if (currentMode !== 'multi') {
+                    currentMode = 'multi';
+                    switchMode('multi');
+                    return;
+                }
+                const s1 = document.getElementById('speaker1Name').value.trim() || 'Rian';
+                const s2 = document.getElementById('speaker2Name').value.trim() || 'Putri';
+                input.value = `${s1}: Halo ${s2}! Sudah coba fitur suara baru di SuaraAI Studio SobatKarya belum?\n${s2}: Wah, baru saja ${s1}! Sekarang nama suaranya pakai nama lokal Indonesia jadi gampang banget dipilih ya.\n${s1}: Betul sekali! Cocok banget buat bikin konten podcast atau materi belajar harian.`;
+            }
+            updateCharCount();
+        }
+
+        function toggleModal(id) {
+            const el = document.getElementById(id);
+            el.classList.toggle('hidden');
+        }
+
+        function saveCustomApiKey() {
+            const val = document.getElementById('customApiKeyInput').value.trim();
+            customUserKey = val;
+            if (val) {
+                localStorage.setItem('SUARAAI_API_KEY', val);
+                document.getElementById('apiKeyStatusBadge').textContent = "Key Aktif";
+            } else {
+                localStorage.removeItem('SUARAAI_API_KEY');
+                document.getElementById('apiKeyStatusBadge').textContent = "API Key";
+            }
+            toggleModal('apiModal');
+            showStatusAlert("API Key Gemini berhasil disimpan dan siap digunakan.", "info");
+        }
+
+        function showStatusAlert(message, type = 'error') {
+            const box = document.getElementById('statusAlert');
+            const textEl = document.getElementById('statusAlertText');
+            box.classList.remove('hidden', 'bg-rose-950/60', 'border-rose-800', 'text-rose-200', 'bg-indigo-950/60', 'border-indigo-800', 'text-indigo-200');
+            if (type === 'error') {
+                box.classList.add('bg-rose-950/60', 'border-rose-800', 'text-rose-200');
+            } else {
+                box.classList.add('bg-indigo-950/60', 'border-indigo-800', 'text-indigo-200');
+            }
+            textEl.textContent = message;
+        }
+
+        function hideStatusAlert() {
+            document.getElementById('statusAlert').classList.add('hidden');
+        }
+
+        // ============================================================================
+        // 3. INTEGRASI GEMINI 2.5 FLASH TTS API
+        // ============================================================================
+        async function fetchWithRetry(url, options, maxRetries = 4) {
+            let delay = 1000;
+            for (let attempt = 0; attempt < maxRetries; attempt++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.ok) return await response.json();
+                    if (response.status === 429 || response.status >= 500) {
+                        if (attempt === maxRetries - 1) {
+                            const errBody = await response.json().catch(() => ({}));
+                            throw new Error(errBody?.error?.message || `Server merespons dengan kode ${response.status}`);
+                        }
+                    } else {
+                        const errBody = await response.json().catch(() => ({}));
+                        throw new Error(errBody?.error?.message || errBody?.error || `Permintaan gagal (${response.status})`);
+                    }
+                } catch (err) {
+                    if (attempt === maxRetries - 1) throw err;
+                }
+                await new Promise(res => setTimeout(res, delay));
+                delay *= 2;
+            }
+        }
+
+        async function handleGenerateAudio() {
+            hideStatusAlert();
+            const rawText = document.getElementById('textInput').value.trim();
+            if (!rawText) {
+                showStatusAlert("Silakan masukkan naskah teks terlebih dahulu sebelum melakukan konversi.", "error");
+                return;
+            }
+
+            const btn = document.getElementById('generateBtn');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const loadingStepText = document.getElementById('loadingStepText');
+
+            btn.disabled = true;
+            btn.classList.add('opacity-60', 'cursor-not-allowed');
+            loadingOverlay.classList.remove('hidden');
+            loadingStepText.textContent = "Menyusun instruksi fonetik & menghubungi Gemini TTS...";
+
+            try {
+                const langInstruction = document.getElementById('langSelect').value;
+                const speedVal = parseFloat(document.getElementById('speedRange').value);
+                let paceText = "dengan kecepatan bicara normal";
+                if (speedVal < 0.95) paceText = "dengan tempo bicara agak perlahan dan jelas";
+                if (speedVal > 1.1) paceText = "dengan tempo bicara agak cepat dan dinamis";
+
+                let payload = {};
+                let voiceLabel = "";
+
+                if (currentMode === 'single') {
+                    const localVoiceName = document.getElementById('voiceSelect').value;
+                    const geminiVoice = voiceMapping[localVoiceName] || "Kore";
+                    const selectedStyle = document.getElementById('styleSelect').value;
+                    voiceLabel = `${localVoiceName} (Tunggal)`;
+
+                    const styledPrompt = `Ucapkan teks berikut dalam ${langInstruction}, dengan gaya suara ${selectedStyle}, ${paceText}:\n\n${rawText}`;
+
+                    payload = {
+                        contents: [{
+                            parts: [{ text: styledPrompt }]
+                        }],
+                        generationConfig: {
+                            responseModalities: ["AUDIO"],
+                            speechConfig: {
+                                voiceConfig: {
+                                    prebuiltVoiceConfig: { voiceName: geminiVoice }
+                                }
+                            }
+                        },
+                        model: "gemini-2.5-flash-preview-tts"
+                    };
+                } else {
+                    const s1Name = document.getElementById('speaker1Name').value.trim() || "Rian";
+                    const s1LocalVoice = document.getElementById('speaker1Voice').value;
+                    const s1GeminiVoice = voiceMapping[s1LocalVoice] || "Puck";
+
+                    const s2Name = document.getElementById('speaker2Name').value.trim() || "Putri";
+                    const s2LocalVoice = document.getElementById('speaker2Voice').value;
+                    const s2GeminiVoice = voiceMapping[s2LocalVoice] || "Zephyr";
+
+                    voiceLabel = `${s1Name} & ${s2Name} (Dialog)`;
+
+                    const multiPrompt = `TTS percakapan berikut antara ${s1Name} dan ${s2Name} dalam ${langInstruction} ${paceText}:\n${rawText}`;
+
+                    payload = {
+                        contents: [{
+                            parts: [{ text: multiPrompt }]
+                        }],
+                        generationConfig: {
+                            responseModalities: ["AUDIO"],
+                            speechConfig: {
+                                multiSpeakerVoiceConfig: {
+                                    speakerVoiceConfigs: [
+                                        { speaker: s1Name, voiceConfig: { prebuiltVoiceConfig: { voiceName: s1GeminiVoice } } },
+                                        { speaker: s2Name, voiceConfig: { prebuiltVoiceConfig: { voiceName: s2GeminiVoice } } }
+                                    ]
+                                }
+                            }
+                        },
+                        model: "gemini-2.5-flash-preview-tts"
+                    };
+                }
+
+                const activeKey = customUserKey || apiKey;
+                let result = null;
+
+                if (!activeKey && window.location.protocol.startsWith('http')) {
+                    try {
+                        const phpResp = await fetch('api.php', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ payload })
+                        });
+                        if (phpResp.ok) result = await phpResp.json();
+                    } catch (_) {}
+                }
+
+                if (!result) {
+                    if (!activeKey) {
+                        toggleModal('apiModal');
+                        throw new Error("Silakan masukkan Gemini API Key Anda terlebih dahulu pada menu API Key.");
+                    }
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${activeKey}`;
+                    result = await fetchWithRetry(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                }
+
+                loadingStepText.textContent = "Mengonversi stream PCM16 ke kontainer WAV...";
+
+                const part = result?.candidates?.[0]?.content?.parts?.[0];
+                const audioBase64 = part?.inlineData?.data;
+                const mimeType = part?.inlineData?.mimeType || "audio/L16;rate=24000";
+
+                if (!audioBase64) {
+                    throw new Error("Respons API tidak mengandung data audio. Pastikan Gemini API Key Anda aktif.");
+                }
+
+                const rateMatch = mimeType.match(/rate=(\d+)/);
+                const sampleRate = rateMatch ? parseInt(rateMatch[1], 10) : 24000;
+
+                const pcmBuffer = base64ToArrayBuffer(audioBase64);
+                const pcm16 = new Int16Array(pcmBuffer);
+                const wavBlob = pcmToWav(pcm16, sampleRate);
+                const audioUrl = URL.createObjectURL(wavBlob);
+
+                const item = {
+                    id: Date.now(),
+                    title: rawText.slice(0, 42) + (rawText.length > 42 ? "..." : ""),
+                    voiceLabel: voiceLabel,
+                    timestamp: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }),
+                    url: audioUrl,
+                    speed: speedVal
+                };
+
+                conversionHistory.unshift(item);
+                // Batasi riwayat maksimal 10 item agar LocalStorage tidak penuh
+                if (conversionHistory.length > 10) conversionHistory.pop();
+                
+                // Simpan ke LocalStorage tanpa URL blob (karena Blob URL tidak permanen)
+                const historyToSave = conversionHistory.map(h => ({ id: h.id, title: h.title, voiceLabel: h.voiceLabel, timestamp: h.timestamp }));
+                localStorage.setItem('SUARAAI_HISTORY_META', JSON.stringify(historyToSave));
+
+                renderHistory();
+                loadAudioIntoPlayer(item, true);
+
+            } catch (error) {
+                showStatusAlert(`Gagal memproses suara: ${error.message}`, "error");
+            } finally {
+                btn.disabled = false;
+                btn.classList.remove('opacity-60', 'cursor-not-allowed');
+                loadingOverlay.classList.add('hidden');
+            }
+        }
+
+        // ============================================================================
+        // 4. UTILITAS KONVERSI WAV & PEMUTAR AUDIO
+        // ============================================================================
+        function base64ToArrayBuffer(base64) {
+            const binaryString = window.atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) bytes[i] = binaryString.charCodeAt(i);
+            return bytes.buffer;
+        }
+
+        function pcmToWav(pcm16Data, sampleRate = 24000) {
+            const numChannels = 1;
+            const bitsPerSample = 16;
+            const byteRate = (sampleRate * numChannels * bitsPerSample) / 8;
+            const blockAlign = (numChannels * bitsPerSample) / 8;
+            const dataByteLength = pcm16Data.length * 2;
+            const buffer = new ArrayBuffer(44 + dataByteLength);
+            const view = new DataView(buffer);
+
+            function writeString(view, offset, string) {
+                for (let i = 0; i < string.length; i++) view.setUint8(offset + i, string.charCodeAt(i));
+            }
+
+            writeString(view, 0, 'RIFF');
+            view.setUint32(4, 36 + dataByteLength, true);
+            writeString(view, 8, 'WAVE');
+
+            writeString(view, 12, 'fmt ');
+            view.setUint32(16, 16, true);
+            view.setUint16(20, 1, true);
+            view.setUint16(22, numChannels, true);
+            view.setUint32(24, sampleRate, true);
+            view.setUint32(28, byteRate, true);
+            view.setUint16(32, blockAlign, true);
+            view.setUint16(34, bitsPerSample, true);
+
+            writeString(view, 36, 'data');
+            view.setUint32(40, dataByteLength, true);
+
+            let offset = 44;
+            for (let i = 0; i < pcm16Data.length; i++, offset += 2) view.setInt16(offset, pcm16Data[i], true);
+
+            return new Blob([buffer], { type: 'audio/wav' });
+        }
+
+        function loadAudioIntoPlayer(item, autoPlay = false) {
+            document.getElementById('playerTitle').textContent = item.title;
+            document.getElementById('playerVoiceBadge').textContent = item.voiceLabel;
+
+            audioEl.src = item.url;
+            audioEl.playbackRate = parseFloat(document.getElementById('speedRange').value) || 1.0;
+
+            playPauseBtn.disabled = false;
+            audioSeek.disabled = false;
+
+            const downloadBtn = document.getElementById('downloadBtn');
+            downloadBtn.href = item.url;
+            downloadBtn.download = `suara-ai-${item.id}.wav`;
+            downloadBtn.classList.remove('pointer-events-none', 'opacity-40');
+
+            if (autoPlay) audioEl.play().catch(() => {});
+        }
+
+        function togglePlayPause() {
+            if (!audioEl.src) return;
+            if (audioEl.paused) audioEl.play();
+            else audioEl.pause();
+        }
+
+        audioEl.addEventListener('play', () => {
+            isPlaying = true;
+            setVisualizerActive(true);
+            document.getElementById('playPauseText').textContent = "Jeda Suara";
+            document.getElementById('playPauseIcon').setAttribute('data-lucide', 'pause');
+            lucide.createIcons();
         });
 
-        // Modal Functions (Replacing alert/confirm)
-        function showModalMessage(message, title = "Informasi SobatKarya") {
-            document.getElementById('modal-title').innerText = title;
-            document.getElementById('modal-desc').innerText = message;
-            document.getElementById('custom-modal').classList.remove('hidden');
+        audioEl.addEventListener('pause', () => {
+            isPlaying = false;
+            setVisualizerActive(false);
+            document.getElementById('playPauseText').textContent = "Putar Suara";
+            document.getElementById('playPauseIcon').setAttribute('data-lucide', 'play');
+            lucide.createIcons();
+        });
+
+        audioEl.addEventListener('ended', () => {
+            isPlaying = false;
+            setVisualizerActive(false);
+            audioSeek.value = 0;
+            document.getElementById('playPauseText').textContent = "Putar Ulang";
+            document.getElementById('playPauseIcon').setAttribute('data-lucide', 'rotate-ccw');
+            lucide.createIcons();
+        });
+
+        audioEl.addEventListener('loadedmetadata', () => {
+            document.getElementById('durationTimeLabel').textContent = formatSeconds(audioEl.duration);
+        });
+
+        audioEl.addEventListener('timeupdate', () => {
+            if (audioEl.duration) {
+                const progress = (audioEl.currentTime / audioEl.duration) * 100;
+                audioSeek.value = progress;
+                document.getElementById('currentTimeLabel').textContent = formatSeconds(audioEl.currentTime);
+            }
+        });
+
+        audioSeek.addEventListener('input', (e) => {
+            if (audioEl.duration) {
+                audioEl.currentTime = (e.target.value / 100) * audioEl.duration;
+            }
+        });
+
+        function formatSeconds(sec) {
+            if (!sec || isNaN(sec)) return "00:00";
+            const m = Math.floor(sec / 60);
+            const s = Math.floor(sec % 60);
+            return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
         }
 
-        function openToolModal(toolName) {
-            showModalMessage(`Kamu memilih alat "${toolName}". Versi interaktif penuh dari tools ini sedang disiapkan dan akan segera aktif di sobatkarya.my.id!`, "Utility Hub");
+        function renderHistory() {
+            const container = document.getElementById('historyList');
+            const badge = document.getElementById('historyCountBadge');
+            badge.textContent = `${conversionHistory.length} File`;
+
+            if (conversionHistory.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 px-4 border border-dashed border-slate-800 rounded-xl">
+                        <i data-lucide="disc" class="w-7 h-7 text-slate-600 mx-auto mb-2"></i>
+                        <p class="text-xs text-slate-400">Belum ada riwayat konversi suara.</p>
+                        <p class="text-[11px] text-slate-500 mt-0.5">Hasil suara otomatis tersimpan di memori browser Anda.</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            container.innerHTML = conversionHistory.map(item => `
+                <div class="p-3 rounded-xl bg-slate-950 border border-slate-800/90 hover:border-slate-700 flex items-center justify-between gap-3 transition">
+                    <div class="min-w-0 flex-1">
+                        <p class="text-xs font-semibold text-slate-200 truncate">${escapeHtml(item.title)}</p>
+                        <div class="flex items-center gap-2 text-[11px] text-slate-400 mt-0.5">
+                            <span class="text-brand-400 font-medium">${escapeHtml(item.voiceLabel)}</span>
+                            <span>•</span>
+                            <span>${item.timestamp}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        ${item.url ? `
+                            <button onclick="playFromHistory(${item.id})" class="p-2 rounded-lg bg-brand-600/20 hover:bg-brand-600 text-brand-300 hover:text-white transition" title="Putar">
+                                <i data-lucide="play" class="w-3.5 h-3.5"></i>
+                            </button>
+                            <a href="${item.url}" download="suara-ai-${item.id}.wav" class="p-2 rounded-lg bg-slate-800 hover:bg-emerald-600 text-slate-300 hover:text-white transition" title="Unduh WAV">
+                                <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                            </a>
+                        ` : `
+                            <span class="text-[10px] text-slate-500 italic">Konversi ulang diperlukan</span>
+                        `}
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
         }
 
-        function closeModal() {
-            document.getElementById('custom-modal').classList.add('hidden');
+        function playFromHistory(id) {
+            const found = conversionHistory.find(x => x.id === id);
+            if (found && found.url) loadAudioIntoPlayer(found, true);
         }
 
-        // Form Submission Handler
-        function handleSubmission(event) {
-            event.preventDefault();
-            const name = document.getElementById('sub-name').value;
-            const category = document.getElementById('sub-category').value;
-            
-            showModalMessage(`Terima kasih banyak, ${name}! Kontribusi kamu untuk kategori "${category}" telah berhasil terkirim dan akan segera kami tinjau. Semangat berkarya!`, "Kontribusi Berhasil!");
-            document.getElementById('submission-form').reset();
+        function clearHistory() {
+            conversionHistory = [];
+            localStorage.removeItem('SUARAAI_HISTORY_META');
+            renderHistory();
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/[&<>"']/g, function(m) {
+                return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m];
+            });
         }
     </script>
 </body>
