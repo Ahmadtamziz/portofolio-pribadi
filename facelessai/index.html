@@ -46,6 +46,12 @@
     const KeyIcon = ({ className = "w-5 h-5" }) => (
       <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
     );
+    const CoffeeIcon = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8zM6 1v3m4-3v3m4-3v3"/></svg>
+    );
+    const GlobeIcon = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path strokeLinecap="round" strokeLinejoin="round" d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+    );
     const SettingsIcon = ({ className = "w-5 h-5" }) => (
       <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
     );
@@ -91,25 +97,25 @@
         id: "storytime_white_head",
         name: "2D Storytime - Minimalist White Head (iCerita Style)",
         characterLock: "a minimalist cartoon character with a round pure white head, simple dot eyes, wearing a casual hoodie and pants",
-        styleSuffix: "2D storytime animation style, detailed hand-drawn background with clean black outlines, warm pastel color palette, cozy lofi comic aesthetic"
+        styleSuffix: "2D storytime animation style, clean black outlines, warm pastel color palette, cozy lofi comic aesthetic"
       },
       {
         id: "storytime_npc_interaction",
         name: "2D Storytime - Classic Webtoon (Interaksi Karakter & NPC)",
         characterLock: "a minimalist cartoon character with a round pure white head and dot eyes, interacting with local shopkeeper or characters",
-        styleSuffix: "2D storytime animation style, detailed 2D illustrated background, clean line art, warm earthy pastel colors, cozy lofi webcomic aesthetic"
+        styleSuffix: "2D storytime animation style, clean line art, warm earthy pastel colors, cozy lofi webcomic aesthetic"
       },
       {
         id: "modern_webtoon_edu",
         name: "Modern Webtoon - Edu-Business (Karakter Manusia + Whiteboard)",
         characterLock: "a young Indonesian male character with black hair and glasses wearing a casual t-shirt, expressive educational style",
-        styleSuffix: "Modern 2D webtoon art style, standing in a busy traditional local coffee shop or office background, warm lighting, clean line art, educational comic book aesthetic"
+        styleSuffix: "Modern 2D webtoon art style, warm lighting, clean line art, educational comic book aesthetic"
       },
       {
         id: "historical_explainer",
         name: "Historical / Science Explainer (Dokumenter & Sejarah Kuno)",
         characterLock: "a simple cartoon character with a round white head and dot eyes pointing at ancient objects or historical timelines",
-        styleSuffix: "Minimalist historical educational 2D animation style, sepia tone parchment background, historical documentary aesthetic, clean black line art, warm earthy colors"
+        styleSuffix: "Minimalist historical educational 2D animation style, sepia tone parchment background, historical documentary aesthetic, clean black line art"
       }
     ];
 
@@ -301,17 +307,37 @@
         return res;
       };
 
-      // Smart Blueprint Prompts: Adapting location & character presence based on narrative context
+      const extractDynamicLocation = (text, index) => {
+        const lower = text.toLowerCase();
+        if (lower.includes('saham') || lower.includes('trading') || lower.includes('pasar') || lower.includes('cuan') || lower.includes('uang')) {
+          return "standing inside a modern sleek financial trading floor with glowing rising stock charts and digital screens in the background";
+        } else if (lower.includes('kerja') || lower.includes('kantor') || lower.includes('produktiv') || lower.includes('bisnis') || lower.includes('gaji')) {
+          return "sitting at a minimalist wooden desk inside a high-rise glass corporate office overlooking a bustling city skyline at sunset";
+        } else if (lower.includes('ai') || lower.includes('teknologi') || lower.includes('digital') || lower.includes('otomasi') || lower.includes('sistem')) {
+          return "standing in a futuristic cyberpunk tech startup laboratory filled with holographic monitors and glowing blue server racks";
+        } else if (lower.includes('sejarah') || lower.includes('kuno') || lower.includes('masa lalu') || lower.includes('dulu')) {
+          return "standing inside an ancient archaeological library filled with old parchment scrolls, dusty wooden bookshelves, and warm candle lighting";
+        } else {
+          const locations = [
+            "standing on a sunlit balcony overlooking a vibrant green suburban neighborhood",
+            "working inside a cozy modern minimalist home study room with indoor plants",
+            "walking along a bustling modern creative startup co-working space hallway",
+            "standing in front of a giant interactive whiteboard displaying clean business strategy diagrams"
+          ];
+          return locations[index % locations.length];
+        }
+      };
+
       const handleGenerateFlowPrompt = () => {
         setIsGeneratingFlowPrompt(true);
         setTimeout(() => {
           const segs = getSegments(totalAssetsCount);
           const txt = segs.map((s, i) => {
             const idx = i + 1;
-            // Detect if character is required based on keywords, otherwise generate pure environmental/object blueprint
-            const needsCharacter = !/statistik|grafik|chart|data|pemandangan|gedung|suasana|latar/i.test(s);
-            const subject = needsCharacter ? activeStyleObj.characterLock : "cinematic environment blueprint, no human character";
-            return `gambar_${idx}: ${subject}, dynamically placed in a unique setting matching narration: "${s}" -- ${activeStyleObj.styleSuffix} --ar ${videoAspectRatio}`;
+            const needsCharacter = !/statistik|grafik|chart|data|pemandangan|gedung|suasana/i.test(s);
+            const subject = needsCharacter ? activeStyleObj.characterLock : "cinematic architectural environment blueprint, no human character";
+            const dynamicLocation = extractDynamicLocation(s, i);
+            return `gambar_${idx}: ${subject}, ${dynamicLocation}. Action context: "${s}" -- ${activeStyleObj.styleSuffix} --ar ${videoAspectRatio}`;
           }).join('\n\n');
           setMasterFlowPromptText(txt);
           setIsGeneratingFlowPrompt(false);
@@ -324,9 +350,10 @@
           const segs = getSegments(totalVeoCount);
           const txt = segs.map((s, i) => {
             const idx = i + 1;
-            const needsCharacter = !/statistik|grafik|chart|data|pemandangan|gedung|suasana|latar/i.test(s);
-            const subject = needsCharacter ? activeStyleObj.characterLock : "cinematic motion background, no human character";
-            return `video_${idx}: ${subject}, 8-second smooth cinematic action in a unique setting matching narration: "${s}" -- ${activeStyleObj.styleSuffix} --ar ${videoAspectRatio}`;
+            const needsCharacter = !/statistik|grafik|chart|data|pemandangan|gedung|suasana/i.test(s);
+            const subject = needsCharacter ? activeStyleObj.characterLock : "cinematic motion environment, no human character";
+            const dynamicLocation = extractDynamicLocation(s, i);
+            return `video_${idx}: ${subject}, ${dynamicLocation}. 8-second cinematic motion matching: "${s}" -- ${activeStyleObj.styleSuffix} --ar ${videoAspectRatio}`;
           }).join('\n\n');
           setMasterVeoPromptText(txt);
           setIsGeneratingVeoPrompt(false);
@@ -351,7 +378,28 @@
                 </div>
               </div>
 
-              <div className="flex items-center space-x-2.5">
+              {/* Top Right Buttons */}
+              <div className="flex items-center space-x-2">
+                <a
+                  href="https://sobatkarya.my.id"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-xl hidden sm:flex items-center gap-1.5 border border-slate-700 transition-all"
+                  title="Kunjungi SobatKarya"
+                >
+                  <GlobeIcon className="w-4 h-4 text-purple-400" />
+                  <span>SobatKarya</span>
+                </a>
+
+                <button
+                  onClick={() => setShowQrisModal(true)}
+                  className="px-3 py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-semibold rounded-xl flex items-center gap-1.5 border border-amber-500/30 transition-all"
+                  title="Sawer Uang Kopi"
+                >
+                  <CoffeeIcon className="w-4 h-4 text-amber-400" />
+                  <span className="hidden md:inline">Sawer Kopi</span>
+                </button>
+
                 <button
                   onClick={handleInstallPWA}
                   className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-xl flex items-center gap-1.5 border border-slate-700 transition-all"
@@ -388,7 +436,7 @@
 
                   <div className="bg-white p-3 rounded-2xl shadow-inner flex items-center justify-center">
                     <img 
-                      src="facelessai/qris.jpeg" 
+                      src="qris.jpg" 
                       alt="QRIS AHMAD TAMZIZ ZUHRI" 
                       className="w-full h-auto rounded-xl object-contain max-h-72"
                       onError={(e) => {
