@@ -121,7 +121,6 @@
       const [saveKeyStatus, setSaveKeyStatus] = useState(false);
       const [installPrompt, setInstallPrompt] = useState(null);
 
-      // QRIS Popup Modal State (10 seconds auto-close)
       const [showQrisModal, setShowQrisModal] = useState(true);
       const [qrisTimer, setQrisTimer] = useState(10);
 
@@ -158,12 +157,9 @@
             e.preventDefault();
             setInstallPrompt(e);
           });
-        } catch (err) {
-          console.error(err);
-        }
+        } catch (err) {}
       }, []);
 
-      // QRIS Countdown Timer Effect
       useEffect(() => {
         if (!showQrisModal) return;
         const interval = setInterval(() => {
@@ -187,9 +183,7 @@
         try {
           installPrompt.prompt();
           const { outcome } = await installPrompt.userChoice;
-          if (outcome === 'accepted') {
-            setInstallPrompt(null);
-          }
+          if (outcome === 'accepted') setInstallPrompt(null);
         } catch (e) {}
       };
 
@@ -307,12 +301,18 @@
         return res;
       };
 
+      // Smart Blueprint Prompts: Adapting location & character presence based on narrative context
       const handleGenerateFlowPrompt = () => {
         setIsGeneratingFlowPrompt(true);
         setTimeout(() => {
-          const header = "You are a bulk image generation agent. Please generate the following images sequentially based on the list below, strictly reflecting narrative and style. Name output files sequentially (gambar_1, gambar_2, etc.).";
           const segs = getSegments(totalAssetsCount);
-          const txt = `${header}\n\n` + segs.map((s, i) => `[gambar_${i+1}]: ${activeStyleObj.characterLock}, visual for "${s}" -- ${activeStyleObj.styleSuffix} --ar ${videoAspectRatio}`).join('\n\n');
+          const txt = segs.map((s, i) => {
+            const idx = i + 1;
+            // Detect if character is required based on keywords, otherwise generate pure environmental/object blueprint
+            const needsCharacter = !/statistik|grafik|chart|data|pemandangan|gedung|suasana|latar/i.test(s);
+            const subject = needsCharacter ? activeStyleObj.characterLock : "cinematic environment blueprint, no human character";
+            return `gambar_${idx}: ${subject}, dynamically placed in a unique setting matching narration: "${s}" -- ${activeStyleObj.styleSuffix} --ar ${videoAspectRatio}`;
+          }).join('\n\n');
           setMasterFlowPromptText(txt);
           setIsGeneratingFlowPrompt(false);
         }, 300);
@@ -321,9 +321,13 @@
       const handleGenerateVeoPrompt = () => {
         setIsGeneratingVeoPrompt(true);
         setTimeout(() => {
-          const header = `You are a bulk video generation agent using Veo 3. Each clip is exactly 8 seconds. Generate the following ${totalVeoCount} clips sequentially.`;
           const segs = getSegments(totalVeoCount);
-          const txt = `${header}\n\n` + segs.map((s, i) => `[video_${i+1}]: ${activeStyleObj.characterLock}, 8-second cinematic clip for "${s}" -- ${activeStyleObj.styleSuffix} --ar ${videoAspectRatio}`).join('\n\n');
+          const txt = segs.map((s, i) => {
+            const idx = i + 1;
+            const needsCharacter = !/statistik|grafik|chart|data|pemandangan|gedung|suasana|latar/i.test(s);
+            const subject = needsCharacter ? activeStyleObj.characterLock : "cinematic motion background, no human character";
+            return `video_${idx}: ${subject}, 8-second smooth cinematic action in a unique setting matching narration: "${s}" -- ${activeStyleObj.styleSuffix} --ar ${videoAspectRatio}`;
+          }).join('\n\n');
           setMasterVeoPromptText(txt);
           setIsGeneratingVeoPrompt(false);
         }, 300);
@@ -366,7 +370,7 @@
               </div>
             </header>
 
-            {/* QRIS Support Popup Modal (Loads qris.jpeg from public_html) */}
+            {/* QRIS Support Popup Modal */}
             {showQrisModal && (
               <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn">
                 <div className="bg-[#131b2e] border border-purple-500/40 rounded-3xl max-w-sm w-full p-6 shadow-2xl text-center space-y-4 relative">
@@ -382,10 +386,9 @@
                     <p className="text-xs text-slate-300 mt-1">Boleh Sawer Uang Kopi Seikhlasnya ☕</p>
                   </div>
 
-                  {/* QRIS Card Image Container */}
                   <div className="bg-white p-3 rounded-2xl shadow-inner flex items-center justify-center">
                     <img 
-                      src="/facelessai/qris.jpeg" 
+                      src="qris.jpg" 
                       alt="QRIS AHMAD TAMZIZ ZUHRI" 
                       className="w-full h-auto rounded-xl object-contain max-h-72"
                       onError={(e) => {
@@ -409,7 +412,7 @@
               </div>
             )}
 
-            {/* API Key Modal with Direct Link Buttons */}
+            {/* API Key Modal */}
             {showApiModal && (
               <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
                 <div className="bg-[#131b2e] border border-slate-700 rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-6 relative">
