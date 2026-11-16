@@ -75,7 +75,7 @@
                     <div>
                         <div class="flex items-center gap-2">
                             <h1 class="font-bold text-sm sm:text-base tracking-tight text-white">SuaraAI <span class="text-brand-400">Studio</span></h1>
-                            <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-brand-500/15 text-brand-400 border border-brand-500/30 hidden md:inline-block">Gemini TTS</span>
+                            <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-brand-500/15 text-brand-400 border border-brand-500/30 hidden md:inline-block">Gemini 2.5 TTS</span>
                         </div>
                         <p class="text-[11px] text-slate-400 hidden sm:block">Konversi Teks ke Suara Natural • SobatKarya</p>
                     </div>
@@ -128,26 +128,28 @@
                 <div class="flex items-center justify-between">
                     <h2 class="text-sm font-semibold text-slate-200 flex items-center gap-2">
                         <i data-lucide="sliders-horizontal" class="w-4 h-4 text-brand-400"></i>
-                        Konfigurasi Karakter Vokal & Intonasi
+                        Pilih Karakter Vokal Indonesia & Intonasi
                     </h2>
                     <span class="text-xs text-slate-400">24kHz Neural Audio</span>
                 </div>
 
-                <!-- Pilihan Suara Single Mode -->
+                <!-- Pilihan Suara Single Mode (Nama Lokal Indonesia) -->
                 <div id="singleVoiceConfig" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-medium text-slate-400 mb-1.5">Karakter Suara (Prebuilt Voice)</label>
+                        <label class="block text-xs font-medium text-slate-400 mb-1.5">Karakter Suara (Nama Indonesia)</label>
                         <select id="voiceSelect" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500 transition">
-                            <option value="Kore">Kore — Tegas, Jelas & Profesional</option>
-                            <option value="Puck">Puck — Ceria, Energik & Antusias</option>
-                            <option value="Zephyr">Zephyr — Cerah, Ramah & Modern</option>
-                            <option value="Charon">Charon — Informatif, Dalam & Tenang</option>
-                            <option value="Aoede">Aoede — Mengalir, Natural & Hangat</option>
-                            <option value="Fenrir">Fenrir — Ekspresif & Bersemangat</option>
-                            <option value="Leda">Leda — Muda, Segar & Bersahabat</option>
-                            <option value="Orus">Orus — Berwibawa & Kokoh</option>
-                            <option value="Sulafat">Sulafat — Hangat & Empatik (Storytelling)</option>
-                            <option value="Sadaltager">Sadaltager — Edukatif & Akademis</option>
+                            <!-- Pria -->
+                            <option value="Dimas">👦 Dimas (Pria) — Tegas, Jelas & Profesional</option>
+                            <option value="Rian">👦 Rian (Pria) — Ceria, Energik & Antusias</option>
+                            <option value="Bayu">👦 Bayu (Pria) — Informatif, Dalam & Tenang</option>
+                            <option value="Galang">👦 Galang (Pria) — Ekspresif & Bersemangat</option>
+                            <option value="Satrio">👦 Satrio (Pria) — Berwibawa & Kokoh</option>
+                            <option value="Reza">👦 Reza (Pria) — Edukatif & Akademis</option>
+                            <!-- Wanita -->
+                            <option value="Putri">👧 Putri (Wanita) — Cerah, Ramah & Modern</option>
+                            <option value="Siti">👧 Siti (Wanita) — Mengalir, Natural & Hangat</option>
+                            <option value="Ayu">👧 Ayu (Wanita) — Muda, Segar & Bersahabat</option>
+                            <option value="Dewi">👧 Dewi (Wanita) — Hangat & Empatik (Storytelling)</option>
                         </select>
                     </div>
 
@@ -155,11 +157,11 @@
                         <label class="block text-xs font-medium text-slate-400 mb-1.5">Gaya Emosi & Intonasi</label>
                         <select id="styleSelect" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500 transition">
                             <option value="natural dan jelas">Natural & Jelas (Default)</option>
-                            <option value="ceria, antusias, dan penuh semangat seperti kreator konten">Kreator Konten (Ceria & Antusias)</option>
-                            <option value="tenang, artikulatif, dan profesional seperti pembawa berita">Pembawa Berita (Formal & Jelas)</option>
-                            <option value="hangat, perlahan, dan penuh penghayatan seperti pendongeng">Storyteller / Dongeng (Hangat)</option>
-                            <option value="santai, akrab, dan kasual seperti mengobrol dengan teman">Santai & Kasual (Ngobrol)</option>
-                            <option value="berbisik pelan dan misterius">Berbisik & Misterius</option>
+                            <option value="ceria, antusias, dan penuh semangat seperti kreator konten TikTok atau Reels">Kreator Konten (Ceria & Antusias)</option>
+                            <option value="tenang, artikulatif, dan profesional seperti pembawa berita TV">Pembawa Berita (Formal & Jelas)</option>
+                            <option value="hangat, perlahan, dan penuh penghayatan seperti pendongeng cerita">Storyteller / Pendongeng (Hangat)</option>
+                            <option value="santai, akrab, dan kasual seperti mengobrol santai dengan teman">Santai & Kasual (Ngobrol)</option>
+                            <option value="berbisik pelan, intim, dan misterius">Berbisik & Misterius</option>
                         </select>
                     </div>
                 </div>
@@ -167,23 +169,23 @@
                 <!-- Pilihan Suara Multi-Speaker Mode (Hidden by default) -->
                 <div id="multiVoiceConfig" class="hidden grid-cols-1 sm:grid-cols-2 gap-4 p-3.5 rounded-xl bg-slate-950/80 border border-slate-800/80">
                     <div class="space-y-2">
-                        <label class="block text-xs font-semibold text-indigo-400">Pembicara 1</label>
-                        <input id="speaker1Name" type="text" value="Budi" placeholder="Nama Pembicara 1" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white">
+                        <label class="block text-xs font-semibold text-indigo-400">Pembicara 1 (Pria/Wanita)</label>
+                        <input id="speaker1Name" type="text" value="Rian" placeholder="Nama Pembicara 1" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white">
                         <select id="speaker1Voice" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white">
-                            <option value="Puck" selected>Puck (Energik)</option>
-                            <option value="Charon">Charon (Informatif)</option>
-                            <option value="Orus">Orus (Tegas)</option>
-                            <option value="Fenrir">Fenrir (Antusias)</option>
+                            <option value="Rian" selected>Rian (Pria - Energik)</option>
+                            <option value="Dimas">Dimas (Pria - Profesional)</option>
+                            <option value="Bayu">Bayu (Pria - Tenang)</option>
+                            <option value="Putri">Putri (Wanita - Cerah)</option>
                         </select>
                     </div>
                     <div class="space-y-2">
-                        <label class="block text-xs font-semibold text-purple-400">Pembicara 2</label>
-                        <input id="speaker2Name" type="text" value="Siti" placeholder="Nama Pembicara 2" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white">
+                        <label class="block text-xs font-semibold text-purple-400">Pembicara 2 (Pria/Wanita)</label>
+                        <input id="speaker2Name" type="text" value="Putri" placeholder="Nama Pembicara 2" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white">
                         <select id="speaker2Voice" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white">
-                            <option value="Aoede" selected>Aoede (Hangat)</option>
-                            <option value="Kore">Kore (Profesional)</option>
-                            <option value="Zephyr">Zephyr (Cerah)</option>
-                            <option value="Leda">Leda (Muda)</option>
+                            <option value="Putri" selected>Putri (Wanita - Ramah)</option>
+                            <option value="Siti">Siti (Wanita - Hangat)</option>
+                            <option value="Ayu">Ayu (Wanita - Segar)</option>
+                            <option value="Dewi">Dewi (Wanita - Empatik)</option>
                         </select>
                     </div>
                 </div>
@@ -193,7 +195,7 @@
                     <div>
                         <label class="block text-xs font-medium text-slate-400 mb-1.5">Aksen / Bahasa Prioritas</label>
                         <select id="langSelect" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500 transition">
-                            <option value="Bahasa Indonesia dengan pelafalan alami">🇮🇩 Bahasa Indonesia (id-ID)</option>
+                            <option value="Bahasa Indonesia dengan pelafalan natural khas Indonesia">🇮🇩 Bahasa Indonesia (id-ID)</option>
                             <option value="English (US) with native pronunciation">🇺🇸 English - US (en-US)</option>
                             <option value="Japanese with natural intonation">🇯🇵 Bahasa Jepang (ja-JP)</option>
                             <option value="Arabic with clear pronunciation">🇸🇦 Bahasa Arab (ar-EG)</option>
@@ -242,10 +244,12 @@
                     >Halo semuanya! Selamat datang di SuaraAI Studio dari SobatKarya. Sekarang kamu bisa mengubah teks catatan belajar, naskah video kreator, atau artikel panjang menjadi suara manusia yang sangat ekspresif hanya dalam hitungan detik.</textarea>
                 </div>
 
-                <!-- Baris Status Karakter & Tombol Aksi -->
+                <!-- Baris Status Karakter, Estimasi Durasi, & Tombol Aksi -->
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
-                    <div class="flex items-center gap-3 text-xs text-slate-400">
+                    <div class="flex items-center gap-3 text-xs text-slate-400 flex-wrap">
                         <span id="charCount">229 / 2500 karakter</span>
+                        <span>•</span>
+                        <span id="estDuration" class="text-brand-300 font-medium">Est. Durasi: ~14 detik</span>
                         <span>•</span>
                         <button onclick="clearText()" class="text-slate-400 hover:text-rose-400 flex items-center gap-1 transition">
                             <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Bersihkan
@@ -343,21 +347,24 @@
                 </div>
             </div>
 
-            <!-- Riwayat Konversi Sesi Ini -->
+            <!-- Riwayat Konversi Sesi Ini (Tersimpan LocalStorage) -->
             <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-3 shadow-xl">
                 <div class="flex items-center justify-between">
                     <h3 class="text-sm font-semibold text-slate-200 flex items-center gap-2">
                         <i data-lucide="history" class="w-4 h-4 text-brand-400"></i>
-                        Riwayat Audio Sesi Ini
+                        Riwayat Audio Tersimpan
                     </h3>
-                    <span id="historyCountBadge" class="text-[11px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-400">0 File</span>
+                    <div class="flex items-center gap-2">
+                        <span id="historyCountBadge" class="text-[11px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-400">0 File</span>
+                        <button onclick="clearHistory()" class="text-[11px] text-slate-400 hover:text-rose-400 transition" title="Hapus Riwayat">Reset</button>
+                    </div>
                 </div>
 
                 <div id="historyList" class="space-y-2.5 max-h-[260px] overflow-y-auto pr-1">
                     <div class="text-center py-8 px-4 border border-dashed border-slate-800 rounded-xl">
                         <i data-lucide="disc" class="w-7 h-7 text-slate-600 mx-auto mb-2"></i>
                         <p class="text-xs text-slate-400">Belum ada riwayat konversi suara.</p>
-                        <p class="text-[11px] text-slate-500 mt-0.5">Setiap hasil suara akan tersimpan di sini agar bisa diputar ulang atau diunduh kapan saja.</p>
+                        <p class="text-[11px] text-slate-500 mt-0.5">Hasil suara otomatis tersimpan di memori browser Anda.</p>
                     </div>
                 </div>
             </div>
@@ -382,7 +389,7 @@
         </div>
     </main>
 
-    <!-- Modal 1: Menu API Key (Bersih & Langsung ke Inti + Tombol Get API Key) -->
+    <!-- Modal 1: Menu API Key -->
     <div id="apiModal" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-5 space-y-4 shadow-2xl">
             <div class="flex items-center justify-between border-b border-slate-800 pb-3">
@@ -436,7 +443,7 @@
         </div>
     </div>
 
-    <!-- Modal 2: Menu Sawer Seikhlasnya (Mengarah ke tts/qris.jpeg) -->
+    <!-- Modal 2: Menu Sawer Seikhlasnya -->
     <div id="sawerModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-2xl text-center">
             <div class="flex items-center justify-between border-b border-slate-800 pb-3 text-left">
@@ -465,7 +472,7 @@
                         id="qrisImage"
                         src="facelessai/qris.jpeg"
                         alt="QRIS Donasi SobatKarya"
-                        onerror="if(this.src.includes('facelessai/qris.jpeg')){this.src='qris.jpeg';}else{this.onerror=null;this.parentElement.innerHTML='<div class=\'py-8 px-3 text-slate-700 text-xs\'><p class=\'font-bold mb-1\'>Gambar QRIS (facelessai/qris.jpeg)</p><p>Pastikan file qris.jpeg sudah diupload ke dalam folder tts/qris.jpeg</p></div>';}"
+                        onerror="if(this.src.includes('tts/qris.jpeg')){this.src='qris.jpeg';}else{this.onerror=null;this.parentElement.innerHTML='<div class=\'py-8 px-3 text-slate-700 text-xs\'><p class=\'font-bold mb-1\'>Gambar QRIS (facelessai/qris.jpeg)</p><p>Pastikan file qris.jpeg sudah diupload ke dalam folder facelessai/qris.jpeg</p></div>';}"
                         class="w-full h-auto rounded-xl object-contain"
                     >
                 </div>
@@ -539,12 +546,27 @@
     <!-- Application Script -->
     <script>
         // ============================================================================
-        // 1. STATE & INISIALISASI APLIKASI
+        // 1. MAPPING NAMA LOKAL KE GEMINI SYSTEM VOICE (PREBUILT VOICE)
         // ============================================================================
-        const apiKey = ""; // Disediakan otomatis oleh runtime environment jika di dalam preview
+        const voiceMapping = {
+            // Pria
+            "Dimas": "Kore",
+            "Rian": "Puck",
+            "Bayu": "Charon",
+            "Galang": "Fenrir",
+            "Satrio": "Orus",
+            "Reza": "Sadaltager",
+            // Wanita
+            "Putri": "Zephyr",
+            "Siti": "Aoede",
+            "Ayu": "Leda",
+            "Dewi": "Sulafat"
+        };
+
+        const apiKey = ""; 
         let customUserKey = localStorage.getItem('SUARAAI_API_KEY') || "";
-        let currentMode = 'single'; // 'single' atau 'multi'
-        let conversionHistory = [];
+        let currentMode = 'single'; 
+        let conversionHistory = JSON.parse(localStorage.getItem('SUARAAI_HISTORY') || "[]");
         let isPlaying = false;
 
         const audioEl = document.getElementById('mainAudioElement');
@@ -555,6 +577,7 @@
             lucide.createIcons();
             initVisualizerBars();
             updateCharCount();
+            renderHistory();
             if (customUserKey) {
                 document.getElementById('customApiKeyInput').value = customUserKey;
                 document.getElementById('apiKeyStatusBadge').textContent = "Key Aktif";
@@ -562,7 +585,6 @@
             setupPWAManifest();
         };
 
-        // Inisialisasi Web App Manifest Dinamis agar siap diinstal di Android
         function setupPWAManifest() {
             const manifest = {
                 name: "SuaraAI Studio - SobatKarya",
@@ -573,16 +595,8 @@
                 theme_color: "#4f46e5",
                 description: "Aplikasi Pengubah Teks ke Suara berbasis Google Gemini TTS oleh SobatKarya",
                 icons: [
-                    {
-                        src: "https://placehold.co/192x192/4f46e5/ffffff.png?text=AI",
-                        sizes: "192x192",
-                        type: "image/png"
-                    },
-                    {
-                        src: "https://placehold.co/512x512/4f46e5/ffffff.png?text=SuaraAI",
-                        sizes: "512x512",
-                        type: "image/png"
-                    }
+                    { src: "https://placehold.co/192x192/4f46e5/ffffff.png?text=AI", sizes: "192x192", type: "image/png" },
+                    { src: "https://placehold.co/512x512/4f46e5/ffffff.png?text=SuaraAI", sizes: "512x512", type: "image/png" }
                 ]
             };
             const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
@@ -620,7 +634,7 @@
         }
 
         // ============================================================================
-        // 2. KONTROL ANTARMUKA PENGGUNA (UI)
+        // 2. KONTROL UI & ESTIMASI DURASI OTOMATIS
         // ============================================================================
         function switchMode(mode) {
             currentMode = mode;
@@ -659,6 +673,10 @@
         function updateCharCount() {
             const text = document.getElementById('textInput').value;
             document.getElementById('charCount').textContent = `${text.length} / 2500 karakter`;
+
+            // Estimasi Durasi Suara (rata-rata 15 karakter per detik berbicara)
+            const estSeconds = Math.max(1, Math.round(text.length / 15));
+            document.getElementById('estDuration').textContent = `Est. Durasi: ~${estSeconds} detik`;
         }
 
         function clearText() {
@@ -671,23 +689,23 @@
             const input = document.getElementById('textInput');
             if (type === 'konten') {
                 if (currentMode !== 'single') switchMode('single');
-                document.getElementById('voiceSelect').value = 'Puck';
-                document.getElementById('styleSelect').value = 'ceria, antusias, dan penuh semangat seperti kreator konten';
-                input.value = "Tahukah kamu? Sekarang kita tidak perlu lagi rekaman berjam-jam untuk bikin voice over video Reels atau TikTok! Cukup ketik naskahnya di sini, pilih karakter suara AI favoritmu, dan hasilnya langsung siap diunduh dalam hitungan detik!";
+                document.getElementById('voiceSelect').value = 'Rian';
+                document.getElementById('styleSelect').value = 'ceria, antusias, dan penuh semangat seperti kreator konten TikTok atau Reels';
+                input.value = "Tahukah kamu? Sekarang kita tidak perlu lagi rekaman berjam-jam untuk bikin voice over video Reels atau TikTok! Cukup ketik naskahnya di sini, pilih karakter suara anak Indonesia favoritmu, dan hasilnya langsung siap diunduh dalam hitungan detik!";
             } else if (type === 'edukasi') {
                 if (currentMode !== 'single') switchMode('single');
-                document.getElementById('voiceSelect').value = 'Charon';
-                document.getElementById('styleSelect').value = 'tenang, artikulatif, dan profesional seperti pembawa berita';
-                input.value = "Ringkasan Materi Fotosintesis: Fotosintesis adalah proses biokimia pembentukan zat makanan seperti glukosa yang dilakukan oleh tumbuhan hijau, alga, dan beberapa jenis bakteri dengan menggunakan zat hara, karbondioksida, serta energi cahaya matahari.";
+                document.getElementById('voiceSelect').value = 'Bayu';
+                document.getElementById('styleSelect').value = 'tenang, artikulatif, dan profesional seperti pembawa berita TV';
+                input.value = "Ringkasan Materi Biologi: Fotosintesis adalah proses kimia yang mengubah karbondioksida dan air menjadi glukosa menggunakan energi cahaya matahari pada tumbuhan hijau.";
             } else if (type === 'podcast') {
                 if (currentMode !== 'multi') {
                     currentMode = 'multi';
                     switchMode('multi');
                     return;
                 }
-                const s1 = document.getElementById('speaker1Name').value || 'Budi';
-                const s2 = document.getElementById('speaker2Name').value || 'Siti';
-                input.value = `${s1}: Halo ${s2}! Sudah coba bikin suara narasi pakai SuaraAI Studio dari SobatKarya belum?\n${s2}: Wah, barusan aku coba ${s1}! Suaranya jernih banget dan bisa langsung dipakai buat konten maupun belajar.\n${s1}: Betul banget! Apalagi kita bisa bikin percakapan dua orang secara otomatis seperti ini.`;
+                const s1 = document.getElementById('speaker1Name').value.trim() || 'Rian';
+                const s2 = document.getElementById('speaker2Name').value.trim() || 'Putri';
+                input.value = `${s1}: Halo ${s2}! Sudah coba fitur suara baru di SuaraAI Studio SobatKarya belum?\n${s2}: Wah, baru saja ${s1}! Sekarang nama suaranya pakai nama lokal Indonesia jadi gampang banget dipilih ya.\n${s1}: Betul sekali! Cocok banget buat bikin konten podcast atau materi belajar harian.`;
             }
             updateCharCount();
         }
@@ -735,9 +753,7 @@
             for (let attempt = 0; attempt < maxRetries; attempt++) {
                 try {
                     const response = await fetch(url, options);
-                    if (response.ok) {
-                        return await response.json();
-                    }
+                    if (response.ok) return await response.json();
                     if (response.status === 429 || response.status >= 500) {
                         if (attempt === maxRetries - 1) {
                             const errBody = await response.json().catch(() => ({}));
@@ -783,9 +799,10 @@
                 let voiceLabel = "";
 
                 if (currentMode === 'single') {
-                    const selectedVoice = document.getElementById('voiceSelect').value;
+                    const localVoiceName = document.getElementById('voiceSelect').value;
+                    const geminiVoice = voiceMapping[localVoiceName] || "Kore";
                     const selectedStyle = document.getElementById('styleSelect').value;
-                    voiceLabel = `${selectedVoice} (Tunggal)`;
+                    voiceLabel = `${localVoiceName} (Tunggal)`;
 
                     const styledPrompt = `Ucapkan teks berikut dalam ${langInstruction}, dengan gaya suara ${selectedStyle}, ${paceText}:\n\n${rawText}`;
 
@@ -797,18 +814,22 @@
                             responseModalities: ["AUDIO"],
                             speechConfig: {
                                 voiceConfig: {
-                                    prebuiltVoiceConfig: { voiceName: selectedVoice }
+                                    prebuiltVoiceConfig: { voiceName: geminiVoice }
                                 }
                             }
                         },
                         model: "gemini-2.5-flash-preview-tts"
                     };
                 } else {
-                    const s1Name = document.getElementById('speaker1Name').value.trim() || "Budi";
-                    const s1Voice = document.getElementById('speaker1Voice').value;
-                    const s2Name = document.getElementById('speaker2Name').value.trim() || "Siti";
-                    const s2Voice = document.getElementById('speaker2Voice').value;
-                    voiceLabel = `${s1Voice} & ${s2Voice} (Dialog)`;
+                    const s1Name = document.getElementById('speaker1Name').value.trim() || "Rian";
+                    const s1LocalVoice = document.getElementById('speaker1Voice').value;
+                    const s1GeminiVoice = voiceMapping[s1LocalVoice] || "Puck";
+
+                    const s2Name = document.getElementById('speaker2Name').value.trim() || "Putri";
+                    const s2LocalVoice = document.getElementById('speaker2Voice').value;
+                    const s2GeminiVoice = voiceMapping[s2LocalVoice] || "Zephyr";
+
+                    voiceLabel = `${s1Name} & ${s2Name} (Dialog)`;
 
                     const multiPrompt = `TTS percakapan berikut antara ${s1Name} dan ${s2Name} dalam ${langInstruction} ${paceText}:\n${rawText}`;
 
@@ -821,8 +842,8 @@
                             speechConfig: {
                                 multiSpeakerVoiceConfig: {
                                     speakerVoiceConfigs: [
-                                        { speaker: s1Name, voiceConfig: { prebuiltVoiceConfig: { voiceName: s1Voice } } },
-                                        { speaker: s2Name, voiceConfig: { prebuiltVoiceConfig: { voiceName: s2Voice } } }
+                                        { speaker: s1Name, voiceConfig: { prebuiltVoiceConfig: { voiceName: s1GeminiVoice } } },
+                                        { speaker: s2Name, voiceConfig: { prebuiltVoiceConfig: { voiceName: s2GeminiVoice } } }
                                     ]
                                 }
                             }
@@ -841,9 +862,7 @@
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ payload })
                         });
-                        if (phpResp.ok) {
-                            result = await phpResp.json();
-                        }
+                        if (phpResp.ok) result = await phpResp.json();
                     } catch (_) {}
                 }
 
@@ -888,6 +907,13 @@
                 };
 
                 conversionHistory.unshift(item);
+                // Batasi riwayat maksimal 10 item agar LocalStorage tidak penuh
+                if (conversionHistory.length > 10) conversionHistory.pop();
+                
+                // Simpan ke LocalStorage tanpa URL blob (karena Blob URL tidak permanen)
+                const historyToSave = conversionHistory.map(h => ({ id: h.id, title: h.title, voiceLabel: h.voiceLabel, timestamp: h.timestamp }));
+                localStorage.setItem('SUARAAI_HISTORY_META', JSON.stringify(historyToSave));
+
                 renderHistory();
                 loadAudioIntoPlayer(item, true);
 
@@ -901,15 +927,13 @@
         }
 
         // ============================================================================
-        // 4. UTILITAS KONVERSI RAW PCM16 KE FILE WAV STANDAR
+        // 4. UTILITAS KONVERSI WAV & PEMUTAR AUDIO
         // ============================================================================
         function base64ToArrayBuffer(base64) {
             const binaryString = window.atob(base64);
             const len = binaryString.length;
             const bytes = new Uint8Array(len);
-            for (let i = 0; i < len; i++) {
-                bytes[i] = binaryString.charCodeAt(i);
-            }
+            for (let i = 0; i < len; i++) bytes[i] = binaryString.charCodeAt(i);
             return bytes.buffer;
         }
 
@@ -923,9 +947,7 @@
             const view = new DataView(buffer);
 
             function writeString(view, offset, string) {
-                for (let i = 0; i < string.length; i++) {
-                    view.setUint8(offset + i, string.charCodeAt(i));
-                }
+                for (let i = 0; i < string.length; i++) view.setUint8(offset + i, string.charCodeAt(i));
             }
 
             writeString(view, 0, 'RIFF');
@@ -945,16 +967,11 @@
             view.setUint32(40, dataByteLength, true);
 
             let offset = 44;
-            for (let i = 0; i < pcm16Data.length; i++, offset += 2) {
-                view.setInt16(offset, pcm16Data[i], true);
-            }
+            for (let i = 0; i < pcm16Data.length; i++, offset += 2) view.setInt16(offset, pcm16Data[i], true);
 
             return new Blob([buffer], { type: 'audio/wav' });
         }
 
-        // ============================================================================
-        // 5. LOGIKA AUDIO PLAYER & RIWAYAT KONVERSI
-        // ============================================================================
         function loadAudioIntoPlayer(item, autoPlay = false) {
             document.getElementById('playerTitle').textContent = item.title;
             document.getElementById('playerVoiceBadge').textContent = item.voiceLabel;
@@ -970,18 +987,13 @@
             downloadBtn.download = `suara-ai-${item.id}.wav`;
             downloadBtn.classList.remove('pointer-events-none', 'opacity-40');
 
-            if (autoPlay) {
-                audioEl.play().catch(() => {});
-            }
+            if (autoPlay) audioEl.play().catch(() => {});
         }
 
         function togglePlayPause() {
             if (!audioEl.src) return;
-            if (audioEl.paused) {
-                audioEl.play();
-            } else {
-                audioEl.pause();
-            }
+            if (audioEl.paused) audioEl.play();
+            else audioEl.pause();
         }
 
         audioEl.addEventListener('play', () => {
@@ -1023,8 +1035,7 @@
 
         audioSeek.addEventListener('input', (e) => {
             if (audioEl.duration) {
-                const seekTime = (e.target.value / 100) * audioEl.duration;
-                audioEl.currentTime = seekTime;
+                audioEl.currentTime = (e.target.value / 100) * audioEl.duration;
             }
         });
 
@@ -1040,7 +1051,17 @@
             const badge = document.getElementById('historyCountBadge');
             badge.textContent = `${conversionHistory.length} File`;
 
-            if (conversionHistory.length === 0) return;
+            if (conversionHistory.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 px-4 border border-dashed border-slate-800 rounded-xl">
+                        <i data-lucide="disc" class="w-7 h-7 text-slate-600 mx-auto mb-2"></i>
+                        <p class="text-xs text-slate-400">Belum ada riwayat konversi suara.</p>
+                        <p class="text-[11px] text-slate-500 mt-0.5">Hasil suara otomatis tersimpan di memori browser Anda.</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
 
             container.innerHTML = conversionHistory.map(item => `
                 <div class="p-3 rounded-xl bg-slate-950 border border-slate-800/90 hover:border-slate-700 flex items-center justify-between gap-3 transition">
@@ -1053,12 +1074,16 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-1.5 shrink-0">
-                        <button onclick="playFromHistory(${item.id})" class="p-2 rounded-lg bg-brand-600/20 hover:bg-brand-600 text-brand-300 hover:text-white transition" title="Putar">
-                            <i data-lucide="play" class="w-3.5 h-3.5"></i>
-                        </button>
-                        <a href="${item.url}" download="suara-ai-${item.id}.wav" class="p-2 rounded-lg bg-slate-800 hover:bg-emerald-600 text-slate-300 hover:text-white transition" title="Unduh WAV">
-                            <i data-lucide="download" class="w-3.5 h-3.5"></i>
-                        </a>
+                        ${item.url ? `
+                            <button onclick="playFromHistory(${item.id})" class="p-2 rounded-lg bg-brand-600/20 hover:bg-brand-600 text-brand-300 hover:text-white transition" title="Putar">
+                                <i data-lucide="play" class="w-3.5 h-3.5"></i>
+                            </button>
+                            <a href="${item.url}" download="suara-ai-${item.id}.wav" class="p-2 rounded-lg bg-slate-800 hover:bg-emerald-600 text-slate-300 hover:text-white transition" title="Unduh WAV">
+                                <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                            </a>
+                        ` : `
+                            <span class="text-[10px] text-slate-500 italic">Konversi ulang diperlukan</span>
+                        `}
                     </div>
                 </div>
             `).join('');
@@ -1067,7 +1092,13 @@
 
         function playFromHistory(id) {
             const found = conversionHistory.find(x => x.id === id);
-            if (found) loadAudioIntoPlayer(found, true);
+            if (found && found.url) loadAudioIntoPlayer(found, true);
+        }
+
+        function clearHistory() {
+            conversionHistory = [];
+            localStorage.removeItem('SUARAAI_HISTORY_META');
+            renderHistory();
         }
 
         function escapeHtml(str) {
