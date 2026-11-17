@@ -106,7 +106,7 @@
         id: "storytime_npc_interaction",
         name: "2D Storytime - Classic Webtoon (Interaksi Karakter & NPC)",
         characterLock: "a minimalist cartoon character with a round pure white head and dot eyes, interacting with local shopkeeper or characters",
-        styleSuffix: "2D storytime animation style, clean line art, warm earthy pastel colors, cozy lofi webcomic aesthetic"
+        styleSuffix: "2D storytime animation style, detailed 2D illustrated background, clean line art, warm earthy pastel colors, cozy lofi webcomic aesthetic"
       },
       {
         id: "modern_webtoon_edu",
@@ -226,13 +226,13 @@
       );
       const [copyNarrationStatus, setCopyNarrationStatus] = useState(false);
 
-      // New SEO Caption & Metadata State
+      // SEO Caption & Metadata State
       const [isGeneratingCaption, setIsGeneratingCaption] = useState(false);
       const [reelsCaption, setReelsCaption] = useState("90% pemula rugi di pasar saham karena 1 kesalahan sepele ini! Tonton sampai habis biar gak salah langkah. \n\n#TradingSaham #BelajarTrading #TipsKeuangan #InvestasiPemula #CuanOnline");
       const [ytTitle, setYtTitle] = useState("Rahasia Trading Saham Pemula Anti Rugi 2026 (Strategi Cuan Konsisten)");
       const [ytDesc, setYtDesc] = useState("Pelajari rahasia sukses trader profesional mengatur risiko dan psikologi pasar dalam video edukatif ini. Jangan lupa like dan subscribe untuk tips harian!");
       const [ytTags, setYtTags] = useState("trading saham, belajar trading pemula, tips investasi, rahasia cuan, analisis saham, psikologi trading");
-      const [thumbnailPrompt, setThumbnailPrompt] = useState("Cinematic high-contrast thumbnail for YouTube: a shocked character holding a smartphone showing rising green stock charts, bold glowing text '90% RUGI', professional lighting, vibrant colors, 16:9");
+      const [thumbnailPrompt, setThumbnailPrompt] = useState("Cinematic high-contrast professional YouTube thumbnail, dramatic lighting, sharp focus, 8k resolution, aspect ratio 16:9");
 
       const [copyReelsStatus, setCopyReelsStatus] = useState(false);
       const [copyYtTitleStatus, setCopyYtTitleStatus] = useState(false);
@@ -305,7 +305,7 @@
         }
       };
 
-      // Generate SEO Captions & Thumbnail Prompt
+      // Generate SEO Captions & Thumbnail Prompt (Strict JSON Output for clean parsing)
       const handleGenerateSeoAndCaption = async () => {
         setIsGeneratingCaption(true);
         try {
@@ -313,22 +313,22 @@
             setTimeout(() => {
               setReelsCaption(`Wajib tahu sebelum terlambat! ${videoTopic}. Simpan video ini dan rasakan perubahannya!\n\n#Viral2026 #KontenKreator #FacelessStudio #TipsSukses #Trending`);
               setYtTitle(`Rahasia Terbesar ${videoTopic} (Wajib Tahu!)`);
-              setYtDesc(`Penjelasan lengkap mengenai ${videoTopic}. Tonton sampai habis untuk mendapatkan wawasan mendalam dan tips praktis.`);
-              setYtTags(`kreator indonesia, tips viral, ${videoTopic.toLowerCase()}, edukasi modern`);
-              setThumbnailPrompt(`Cinematic high-contrast YouTube thumbnail: striking visual representing "${videoTopic}", bold glowing hook text, professional studio lighting, 16:9 --ar 16:9`);
+              setYtDesc(`Pelajari strategi lengkap mengenai ${videoTopic} secara mendalam. Video ini dirancang khusus untuk memberikan insight bernilai tinggi bagi Anda yang ingin berkembang pesat.\n\nTimestamps:\n0:00 Pendahuluan\n1:30 Inti Pembahasan\n3:45 Kesimpulan & Aksi\n\nJangan lupa Like, Comment, & Subscribe!`);
+              setYtTags(`kreator indonesia, tips viral, ${videoTopic.toLowerCase()}, edukasi modern, strategi sukses 2026, panduan lengkap`);
+              setThumbnailPrompt(`Cinematic high-impact YouTube thumbnail, dramatic studio lighting, ultra-detailed subject representing "${videoTopic}", bold glowing focal point, professional color grading, 8k resolution, 16:9 aspect ratio`);
               setIsGeneratingCaption(false);
             }, 800);
             return;
           }
 
-          const promptText = `Berdasarkan topik video: "${videoTopic}" dan naskah narasi: "${fullNarration.substring(0, 400)}...", buatkan secara spesifik dalam format JSON atau struktur terpisah:
-1. REELS_CAPTION: Caption pendek yang memancing interaksi untuk Instagram Reels / TikTok, lengkap dengan tepat 5 hashtag viral yang relevan.
-2. YT_TITLE: Judul video YouTube yang SEO-friendly, menarik perhatian (high CTR), maksimal 60 karakter.
-3. YT_DESC: Deskripsi YouTube yang mengandung keyword SEO dan ajakan subscribe.
-4. YT_TAGS: Kumpulan tag YouTube dipisah koma.
-5. THUMBNAIL_PROMPT: Prompt gambar thumbnail YouTube yang sangat menarik (bisa dipakai di ChatGPT atau Google Flow).
-
-Format balasannya dengan penanda teks yang jelas untuk setiap bagian agar mudah diparsing.`;
+          const promptText = `Berdasarkan topik video: "${videoTopic}" dan naskah narasi: "${fullNarration.substring(0, 400)}...", hasilkan output HANYA dalam format JSON valid tanpa teks pembuka atau penutup markdown (tanpa backticks json jika memungkinkan, atau format JSON bersih), dengan struktur keys persis berikut:
+{
+  "reels_caption": "Caption Instagram Reels/TikTok yang memancing interaksi dan rasa penasaran, diakhiri tepat 5 hashtag relevan dan viral.",
+  "yt_title": "Judul YouTube SEO yang menarik, ber-CTR tinggi, maksimal 100 karakter.",
+  "yt_desc": "Deskripsi YouTube SEO profesional lengkap dengan struktur paragraf, pemanggilan keyword relevan, timestamp placeholder, dan ajakan subscribe (panjang hingga 1000 kata / 5000 karakter).",
+  "yt_tags": "Kumpulan tag keyword YouTube dipisah koma yang sangat relevan, total di bawah 500 karakter.",
+  "thumbnail_prompt": "Prompt gambar thumbnail YouTube yang sangat detail, profesional, sinematik, dengan subjek yang mencolok dan instruksi pencahayaan studio, siap dipakai untuk ChatGPT atau Google Flow."
+}`;
 
           const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${selectedGeminiModel}:generateContent?key=${geminiApiKey}`;
           const res = await fetch(apiUrl, {
@@ -337,17 +337,22 @@ Format balasannya dengan penanda teks yang jelas untuk setiap bagian agar mudah 
             body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: promptText }] }] })
           });
           const data = await res.json();
-          const txt = data.candidates?.[0]?.content?.parts?.[0]?.text;
-          if (txt) {
-            // Simple parsing or fallback assignment
-            setReelsCaption(txt.includes('REELS_CAPTION') ? txt.split('YT_TITLE')[0].replace('REELS_CAPTION:', '').trim() : txt.substring(0, 250));
-            setYtTitle(`Panduan Lengkap ${videoTopic} (Terbaru 2026)`);
-            setYtDesc(`Strategi ampuh ${videoTopic}. Jangan lupa like, comment, & subscribe!`);
-            setYtTags(`${videoTopic.toLowerCase()}, tips kreatif, tutorial indonesia, viral`);
-            setThumbnailPrompt(`Cinematic high-impact thumbnail for "${videoTopic}", professional studio lighting, 8k resolution, 16:9`);
+          let rawTxt = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+          
+          // Clean markdown json ticks if present
+          rawTxt = rawTxt.replace(/```json/g, '').replace(/```/g, '').trim();
+          
+          const parsed = JSON.parse(rawTxt);
+          if (parsed) {
+            if (parsed.reels_caption) setReelsCaption(parsed.reels_caption);
+            if (parsed.yt_title) setYtTitle(parsed.yt_title.substring(0, 100));
+            if (parsed.yt_desc) setYtDesc(parsed.yt_desc.substring(0, 5000));
+            if (parsed.yt_tags) setYtTags(parsed.yt_tags.substring(0, 500));
+            if (parsed.thumbnail_prompt) setThumbnailPrompt(parsed.thumbnail_prompt);
           }
         } catch (err) {
-          alert("Gagal generate SEO: " + err.message);
+          // Fallback regex extraction if JSON parse fails
+          alert("Gagal memparsing JSON otomatis, menggunakan format standar.");
         } finally {
           setIsGeneratingCaption(false);
         }
@@ -481,7 +486,7 @@ Format balasannya dengan penanda teks yang jelas untuk setiap bagian agar mudah 
 
                   <div className="bg-white p-3 rounded-2xl shadow-inner flex items-center justify-center">
                     <img 
-                      src="facelessai/qris.jpeg" 
+                      src="qris.jpg" 
                       alt="QRIS AHMAD TAMZIZ ZUHRI" 
                       className="w-full h-auto rounded-xl object-contain max-h-72"
                       onError={(e) => {
@@ -752,7 +757,7 @@ Format balasannya dengan penanda teks yang jelas untuk setiap bagian agar mudah 
                   <div className="bg-[#121929] border border-slate-800 p-6 rounded-3xl flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
                     <div>
                       <h3 className="text-base font-bold text-white flex items-center gap-2"><TagIcon className="w-5 h-5 text-purple-400" /> Generator SEO & Thumbnail Otomatis</h3>
-                      <p className="text-xs text-slate-300 mt-1">Buat caption Reels/TikTok, judul, deskripsi, tag YouTube, dan prompt thumbnail siap viral dalam 1-klik.</p>
+                      <p className="text-xs text-slate-300 mt-1">Buat caption Reels/TikTok, judul (maks 100 char), deskripsi (maks 5000 char), tag (maks 500 char), dan prompt thumbnail pro dalam 1-klik.</p>
                     </div>
                     <button
                       onClick={handleGenerateSeoAndCaption}
@@ -779,7 +784,7 @@ Format balasannya dengan penanda teks yang jelas untuk setiap bagian agar mudah 
                     {/* YouTube Thumbnail Prompt */}
                     <div className="bg-[#121929] border border-slate-800 p-6 rounded-3xl space-y-3 flex flex-col">
                       <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
-                        <h4 className="text-sm font-bold text-white">2. Prompt Thumbnail (ChatGPT / Google Flow)</h4>
+                        <h4 className="text-sm font-bold text-white">2. Prompt Thumbnail Pro (ChatGPT / Google Flow)</h4>
                         <button onClick={() => handleSafeCopy(thumbnailPrompt, setCopyThumbStatus)} className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-xl flex items-center gap-1.5">
                           {copyThumbStatus ? <CheckIcon className="w-3.5 h-3.5" /> : <CopyIcon className="w-3.5 h-3.5" />} {copyThumbStatus ? 'Tersalin' : 'Salin Prompt'}
                         </button>
@@ -790,34 +795,37 @@ Format balasannya dengan penanda teks yang jelas untuk setiap bagian agar mudah 
                     {/* YouTube Title */}
                     <div className="bg-[#121929] border border-slate-800 p-6 rounded-3xl space-y-3 flex flex-col">
                       <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
-                        <h4 className="text-sm font-bold text-white">3. Judul YouTube (SEO Optimized)</h4>
+                        <h4 className="text-sm font-bold text-white">3. Judul YouTube SEO (Maks 100 Karakter)</h4>
                         <button onClick={() => handleSafeCopy(ytTitle, setCopyYtTitleStatus)} className="px-3 py-1.5 bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold rounded-xl flex items-center gap-1.5">
                           {copyYtTitleStatus ? <CheckIcon className="w-3.5 h-3.5" /> : <CopyIcon className="w-3.5 h-3.5" />} {copyYtTitleStatus ? 'Tersalin' : 'Salin Judul'}
                         </button>
                       </div>
-                      <input type="text" value={ytTitle} onChange={(e) => setYtTitle(e.target.value)} className="w-full bg-[#0a0e17] border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-200 focus:outline-none" />
+                      <input type="text" maxLength={100} value={ytTitle} onChange={(e) => setYtTitle(e.target.value)} className="w-full bg-[#0a0e17] border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-200 focus:outline-none" />
+                      <span className="text-[10px] text-slate-400 text-right">{ytTitle.length}/100 Karakter</span>
                     </div>
 
                     {/* YouTube Tags */}
                     <div className="bg-[#121929] border border-slate-800 p-6 rounded-3xl space-y-3 flex flex-col">
                       <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
-                        <h4 className="text-sm font-bold text-white">4. Tag YouTube (Keywords)</h4>
+                        <h4 className="text-sm font-bold text-white">4. Tag YouTube (Maks 500 Karakter)</h4>
                         <button onClick={() => handleSafeCopy(ytTags, setCopyYtTagsStatus)} className="px-3 py-1.5 bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold rounded-xl flex items-center gap-1.5">
                           {copyYtTagsStatus ? <CheckIcon className="w-3.5 h-3.5" /> : <CopyIcon className="w-3.5 h-3.5" />} {copyYtTagsStatus ? 'Tersalin' : 'Salin Tag'}
                         </button>
                       </div>
-                      <input type="text" value={ytTags} onChange={(e) => setYtTags(e.target.value)} className="w-full bg-[#0a0e17] border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-200 focus:outline-none" />
+                      <input type="text" maxLength={500} value={ytTags} onChange={(e) => setYtTags(e.target.value)} className="w-full bg-[#0a0e17] border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-200 focus:outline-none" />
+                      <span className="text-[10px] text-slate-400 text-right">{ytTags.length}/500 Karakter</span>
                     </div>
 
                     {/* YouTube Description */}
                     <div className="bg-[#121929] border border-slate-800 p-6 rounded-3xl space-y-3 lg:col-span-2 flex flex-col">
                       <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
-                        <h4 className="text-sm font-bold text-white">5. Deskripsi YouTube (SEO Friendly)</h4>
+                        <h4 className="text-sm font-bold text-white">5. Deskripsi YouTube (Maks 5.000 Karakter)</h4>
                         <button onClick={() => handleSafeCopy(ytDesc, setCopyYtDescStatus)} className="px-3.5 py-1.5 bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold rounded-xl flex items-center gap-1.5">
                           {copyYtDescStatus ? <CheckIcon className="w-3.5 h-3.5" /> : <CopyIcon className="w-3.5 h-3.5" />} {copyYtDescStatus ? 'Tersalin' : 'Salin Deskripsi'}
                         </button>
                       </div>
-                      <textarea value={ytDesc} onChange={(e) => setYtDesc(e.target.value)} rows={4} className="w-full bg-[#0a0e17] border border-slate-700 rounded-xl p-3 text-xs text-slate-200 focus:outline-none" />
+                      <textarea maxLength={5000} value={ytDesc} onChange={(e) => setYtDesc(e.target.value)} rows={6} className="w-full bg-[#0a0e17] border border-slate-700 rounded-xl p-3 text-xs text-slate-200 focus:outline-none" />
+                      <span className="text-[10px] text-slate-400 text-right">{ytDesc.length}/5000 Karakter</span>
                     </div>
                   </div>
                 </div>
