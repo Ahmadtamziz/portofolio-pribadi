@@ -70,6 +70,9 @@
     const VideoIcon = ({ className = "w-5 h-5" }) => (
       <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="m15 10 4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
     );
+    const TagIcon = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+    );
     const RefreshCwIcon = ({ className = "w-5 h-5" }) => (
       <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
     );
@@ -223,6 +226,20 @@
       );
       const [copyNarrationStatus, setCopyNarrationStatus] = useState(false);
 
+      // New SEO Caption & Metadata State
+      const [isGeneratingCaption, setIsGeneratingCaption] = useState(false);
+      const [reelsCaption, setReelsCaption] = useState("90% pemula rugi di pasar saham karena 1 kesalahan sepele ini! Tonton sampai habis biar gak salah langkah. \n\n#TradingSaham #BelajarTrading #TipsKeuangan #InvestasiPemula #CuanOnline");
+      const [ytTitle, setYtTitle] = useState("Rahasia Trading Saham Pemula Anti Rugi 2026 (Strategi Cuan Konsisten)");
+      const [ytDesc, setYtDesc] = useState("Pelajari rahasia sukses trader profesional mengatur risiko dan psikologi pasar dalam video edukatif ini. Jangan lupa like dan subscribe untuk tips harian!");
+      const [ytTags, setYtTags] = useState("trading saham, belajar trading pemula, tips investasi, rahasia cuan, analisis saham, psikologi trading");
+      const [thumbnailPrompt, setThumbnailPrompt] = useState("Cinematic high-contrast thumbnail for YouTube: a shocked character holding a smartphone showing rising green stock charts, bold glowing text '90% RUGI', professional lighting, vibrant colors, 16:9");
+
+      const [copyReelsStatus, setCopyReelsStatus] = useState(false);
+      const [copyYtTitleStatus, setCopyYtTitleStatus] = useState(false);
+      const [copyYtDescStatus, setCopyYtDescStatus] = useState(false);
+      const [copyYtTagsStatus, setCopyYtTagsStatus] = useState(false);
+      const [copyThumbStatus, setCopyThumbStatus] = useState(false);
+
       const handleSafeCopy = (text, setStatusFn) => {
         try {
           if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -285,6 +302,54 @@
           setFullNarration("Error: " + err.message);
         } finally {
           setIsGeneratingScript(false);
+        }
+      };
+
+      // Generate SEO Captions & Thumbnail Prompt
+      const handleGenerateSeoAndCaption = async () => {
+        setIsGeneratingCaption(true);
+        try {
+          if (!geminiApiKey) {
+            setTimeout(() => {
+              setReelsCaption(`Wajib tahu sebelum terlambat! ${videoTopic}. Simpan video ini dan rasakan perubahannya!\n\n#Viral2026 #KontenKreator #FacelessStudio #TipsSukses #Trending`);
+              setYtTitle(`Rahasia Terbesar ${videoTopic} (Wajib Tahu!)`);
+              setYtDesc(`Penjelasan lengkap mengenai ${videoTopic}. Tonton sampai habis untuk mendapatkan wawasan mendalam dan tips praktis.`);
+              setYtTags(`kreator indonesia, tips viral, ${videoTopic.toLowerCase()}, edukasi modern`);
+              setThumbnailPrompt(`Cinematic high-contrast YouTube thumbnail: striking visual representing "${videoTopic}", bold glowing hook text, professional studio lighting, 16:9 --ar 16:9`);
+              setIsGeneratingCaption(false);
+            }, 800);
+            return;
+          }
+
+          const promptText = `Berdasarkan topik video: "${videoTopic}" dan naskah narasi: "${fullNarration.substring(0, 400)}...", buatkan secara spesifik dalam format JSON atau struktur terpisah:
+1. REELS_CAPTION: Caption pendek yang memancing interaksi untuk Instagram Reels / TikTok, lengkap dengan tepat 5 hashtag viral yang relevan.
+2. YT_TITLE: Judul video YouTube yang SEO-friendly, menarik perhatian (high CTR), maksimal 60 karakter.
+3. YT_DESC: Deskripsi YouTube yang mengandung keyword SEO dan ajakan subscribe.
+4. YT_TAGS: Kumpulan tag YouTube dipisah koma.
+5. THUMBNAIL_PROMPT: Prompt gambar thumbnail YouTube yang sangat menarik (bisa dipakai di ChatGPT atau Google Flow).
+
+Format balasannya dengan penanda teks yang jelas untuk setiap bagian agar mudah diparsing.`;
+
+          const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${selectedGeminiModel}:generateContent?key=${geminiApiKey}`;
+          const res = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: promptText }] }] })
+          });
+          const data = await res.json();
+          const txt = data.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (txt) {
+            // Simple parsing or fallback assignment
+            setReelsCaption(txt.includes('REELS_CAPTION') ? txt.split('YT_TITLE')[0].replace('REELS_CAPTION:', '').trim() : txt.substring(0, 250));
+            setYtTitle(`Panduan Lengkap ${videoTopic} (Terbaru 2026)`);
+            setYtDesc(`Strategi ampuh ${videoTopic}. Jangan lupa like, comment, & subscribe!`);
+            setYtTags(`${videoTopic.toLowerCase()}, tips kreatif, tutorial indonesia, viral`);
+            setThumbnailPrompt(`Cinematic high-impact thumbnail for "${videoTopic}", professional studio lighting, 8k resolution, 16:9`);
+          }
+        } catch (err) {
+          alert("Gagal generate SEO: " + err.message);
+        } finally {
+          setIsGeneratingCaption(false);
         }
       };
 
@@ -380,26 +445,6 @@
 
               {/* Top Right Buttons */}
               <div className="flex items-center space-x-2">
-                <a
-                  href="https://sobatkarya.my.id"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-xl hidden sm:flex items-center gap-1.5 border border-slate-700 transition-all"
-                  title="Kunjungi SobatKarya"
-                >
-                  <GlobeIcon className="w-4 h-4 text-purple-400" />
-                  <span>SobatKarya</span>
-                </a>
-
-                <button
-                  onClick={() => setShowQrisModal(true)}
-                  className="px-3 py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-semibold rounded-xl flex items-center gap-1.5 border border-amber-500/30 transition-all"
-                  title="Sawer Uang Kopi"
-                >
-                  <CoffeeIcon className="w-4 h-4 text-amber-400" />
-                  <span className="hidden md:inline">Sawer Kopi</span>
-                </button>
-
                 <button
                   onClick={handleInstallPWA}
                   className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-xl flex items-center gap-1.5 border border-slate-700 transition-all"
@@ -436,7 +481,7 @@
 
                   <div className="bg-white p-3 rounded-2xl shadow-inner flex items-center justify-center">
                     <img 
-                      src="qris.jpg" 
+                      src="facelessai/qris.jpeg" 
                       alt="QRIS AHMAD TAMZIZ ZUHRI" 
                       className="w-full h-auto rounded-xl object-contain max-h-72"
                       onError={(e) => {
@@ -544,23 +589,29 @@
                   <h2 className="text-xl sm:text-2xl font-black text-white mt-1">Rakit Konten Viral Otomatis & Cuan Mengalir!</h2>
                   <p className="text-slate-300 text-xs sm:text-sm mt-1 max-w-2xl">Ubah ide jadi narasi super memikat berteknologi tinggi dalam hitungan detik.</p>
                 </div>
-                <div className="flex items-center bg-[#0a0e17] p-1.5 rounded-2xl border border-slate-800 self-stretch sm:self-auto">
+                <div className="flex flex-wrap items-center bg-[#0a0e17] p-1.5 rounded-2xl border border-slate-800 self-stretch sm:self-auto gap-1">
                   <button
                     onClick={() => setActiveTab('narration')}
-                    className={`flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${activeTab === 'narration' ? 'bg-purple-600 text-white shadow-md' : 'text-slate-400'}`}
+                    className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${activeTab === 'narration' ? 'bg-purple-600 text-white shadow-md' : 'text-slate-400'}`}
                   >
-                    <WandIcon className="w-4 h-4" /> 1. Generator Narasi
+                    <WandIcon className="w-3.5 h-3.5" /> 1. Narasi
                   </button>
                   <button
                     onClick={() => setActiveTab('prompts')}
-                    className={`flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${activeTab === 'prompts' ? 'bg-purple-600 text-white shadow-md' : 'text-slate-400'}`}
+                    className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${activeTab === 'prompts' ? 'bg-purple-600 text-white shadow-md' : 'text-slate-400'}`}
                   >
-                    <ClapperboardIcon className="w-4 h-4" /> 2. Master Flow & Veo
+                    <ClapperboardIcon className="w-3.5 h-3.5" /> 2. Flow & Veo
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('captions')}
+                    className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${activeTab === 'captions' ? 'bg-purple-600 text-white shadow-md' : 'text-slate-400'}`}
+                  >
+                    <TagIcon className="w-3.5 h-3.5" /> 3. SEO & Caption
                   </button>
                 </div>
               </div>
 
-              {/* TAB 1 */}
+              {/* TAB 1: NARRATION */}
               {activeTab === 'narration' && (
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                   <div className="bg-[#121929] border border-slate-800 p-6 rounded-3xl space-y-5 shadow-xl">
@@ -650,7 +701,7 @@
                 </div>
               )}
 
-              {/* TAB 2 */}
+              {/* TAB 2: PROMPTS HUB */}
               {activeTab === 'prompts' && (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <div className="bg-[#121929] border border-slate-800 p-6 rounded-3xl space-y-4 flex flex-col shadow-xl">
@@ -694,12 +745,103 @@
                   </div>
                 </div>
               )}
+
+              {/* TAB 3: SEO CAPTIONS & THUMBNAIL */}
+              {activeTab === 'captions' && (
+                <div className="space-y-6">
+                  <div className="bg-[#121929] border border-slate-800 p-6 rounded-3xl flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+                    <div>
+                      <h3 className="text-base font-bold text-white flex items-center gap-2"><TagIcon className="w-5 h-5 text-purple-400" /> Generator SEO & Thumbnail Otomatis</h3>
+                      <p className="text-xs text-slate-300 mt-1">Buat caption Reels/TikTok, judul, deskripsi, tag YouTube, dan prompt thumbnail siap viral dalam 1-klik.</p>
+                    </div>
+                    <button
+                      onClick={handleGenerateSeoAndCaption}
+                      disabled={isGeneratingCaption}
+                      className="px-6 py-3.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 text-white font-bold text-xs rounded-2xl shadow-lg flex items-center gap-2 whitespace-nowrap"
+                    >
+                      {isGeneratingCaption ? <RefreshCwIcon className="w-4 h-4 animate-spin" /> : <SparklesIcon className="w-4 h-4" />}
+                      {isGeneratingCaption ? 'Meracik SEO...' : '✨ Buat Caption & SEO'}
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {/* Reels / TikTok Caption */}
+                    <div className="bg-[#121929] border border-slate-800 p-6 rounded-3xl space-y-3 flex flex-col">
+                      <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
+                        <h4 className="text-sm font-bold text-white">1. Caption Reels & TikTok (+ 5 Hashtag)</h4>
+                        <button onClick={() => handleSafeCopy(reelsCaption, setCopyReelsStatus)} className="px-3 py-1.5 bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold rounded-xl flex items-center gap-1.5">
+                          {copyReelsStatus ? <CheckIcon className="w-3.5 h-3.5" /> : <CopyIcon className="w-3.5 h-3.5" />} {copyReelsStatus ? 'Tersalin' : 'Salin Caption'}
+                        </button>
+                      </div>
+                      <textarea value={reelsCaption} onChange={(e) => setReelsCaption(e.target.value)} rows={5} className="w-full bg-[#0a0e17] border border-slate-700 rounded-xl p-3 text-xs text-slate-200 focus:outline-none" />
+                    </div>
+
+                    {/* YouTube Thumbnail Prompt */}
+                    <div className="bg-[#121929] border border-slate-800 p-6 rounded-3xl space-y-3 flex flex-col">
+                      <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
+                        <h4 className="text-sm font-bold text-white">2. Prompt Thumbnail (ChatGPT / Google Flow)</h4>
+                        <button onClick={() => handleSafeCopy(thumbnailPrompt, setCopyThumbStatus)} className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-xl flex items-center gap-1.5">
+                          {copyThumbStatus ? <CheckIcon className="w-3.5 h-3.5" /> : <CopyIcon className="w-3.5 h-3.5" />} {copyThumbStatus ? 'Tersalin' : 'Salin Prompt'}
+                        </button>
+                      </div>
+                      <textarea value={thumbnailPrompt} onChange={(e) => setThumbnailPrompt(e.target.value)} rows={5} className="w-full bg-[#0a0e17] border border-slate-700 rounded-xl p-3 text-xs text-slate-200 focus:outline-none" />
+                    </div>
+
+                    {/* YouTube Title */}
+                    <div className="bg-[#121929] border border-slate-800 p-6 rounded-3xl space-y-3 flex flex-col">
+                      <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
+                        <h4 className="text-sm font-bold text-white">3. Judul YouTube (SEO Optimized)</h4>
+                        <button onClick={() => handleSafeCopy(ytTitle, setCopyYtTitleStatus)} className="px-3 py-1.5 bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold rounded-xl flex items-center gap-1.5">
+                          {copyYtTitleStatus ? <CheckIcon className="w-3.5 h-3.5" /> : <CopyIcon className="w-3.5 h-3.5" />} {copyYtTitleStatus ? 'Tersalin' : 'Salin Judul'}
+                        </button>
+                      </div>
+                      <input type="text" value={ytTitle} onChange={(e) => setYtTitle(e.target.value)} className="w-full bg-[#0a0e17] border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-200 focus:outline-none" />
+                    </div>
+
+                    {/* YouTube Tags */}
+                    <div className="bg-[#121929] border border-slate-800 p-6 rounded-3xl space-y-3 flex flex-col">
+                      <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
+                        <h4 className="text-sm font-bold text-white">4. Tag YouTube (Keywords)</h4>
+                        <button onClick={() => handleSafeCopy(ytTags, setCopyYtTagsStatus)} className="px-3 py-1.5 bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold rounded-xl flex items-center gap-1.5">
+                          {copyYtTagsStatus ? <CheckIcon className="w-3.5 h-3.5" /> : <CopyIcon className="w-3.5 h-3.5" />} {copyYtTagsStatus ? 'Tersalin' : 'Salin Tag'}
+                        </button>
+                      </div>
+                      <input type="text" value={ytTags} onChange={(e) => setYtTags(e.target.value)} className="w-full bg-[#0a0e17] border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-200 focus:outline-none" />
+                    </div>
+
+                    {/* YouTube Description */}
+                    <div className="bg-[#121929] border border-slate-800 p-6 rounded-3xl space-y-3 lg:col-span-2 flex flex-col">
+                      <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
+                        <h4 className="text-sm font-bold text-white">5. Deskripsi YouTube (SEO Friendly)</h4>
+                        <button onClick={() => handleSafeCopy(ytDesc, setCopyYtDescStatus)} className="px-3.5 py-1.5 bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold rounded-xl flex items-center gap-1.5">
+                          {copyYtDescStatus ? <CheckIcon className="w-3.5 h-3.5" /> : <CopyIcon className="w-3.5 h-3.5" />} {copyYtDescStatus ? 'Tersalin' : 'Salin Deskripsi'}
+                        </button>
+                      </div>
+                      <textarea value={ytDesc} onChange={(e) => setYtDesc(e.target.value)} rows={4} className="w-full bg-[#0a0e17] border border-slate-700 rounded-xl p-3 text-xs text-slate-200 focus:outline-none" />
+                    </div>
+                  </div>
+                </div>
+              )}
             </main>
           </div>
 
-          {/* Footer Watermark */}
-          <footer className="w-full text-center py-4 border-t border-slate-800/80 bg-[#0f1523]/50 text-xs text-slate-400 mt-8">
-            Faceless AI Studio • Crafted with ❤️ <a href="https://www.instagram.com/tamziz_pb" target="_blank" rel="noopener noreferrer" className="text-purple-400 font-bold hover:underline">by @tamziz_pb</a>
+          {/* Footer Watermark & Quick Links */}
+          <footer className="w-full py-5 border-t border-slate-800/80 bg-[#0f1523]/80 text-xs text-slate-400 mt-12 flex flex-col items-center justify-center space-y-2">
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              <span>© 2026 Faceless AI • Bagian dari</span>
+              <a href="https://sobatkarya.my.id" target="_blank" rel="noopener noreferrer" className="text-purple-400 font-bold hover:underline">sobatkarya.my.id</a>
+              <span>•</span>
+              <button onClick={() => setShowQrisModal(true)} className="text-amber-400 font-bold hover:underline flex items-center gap-1">
+                <CoffeeIcon className="w-3.5 h-3.5" /> Sawer Seikhlasnya
+              </button>
+              <span>•</span>
+              <a href="https://sobatkarya.my.id" target="_blank" rel="noopener noreferrer" className="text-slate-300 hover:text-white font-semibold flex items-center gap-1">
+                <GlobeIcon className="w-3.5 h-3.5" /> Kembali ke Website Utama
+              </a>
+            </div>
+            <div className="text-[11px] text-slate-500">
+              Crafted with ❤️ <a href="https://www.instagram.com/tamziz_pb" target="_blank" rel="noopener noreferrer" className="text-purple-400 font-bold hover:underline">by @tamziz_pb</a>
+            </div>
           </footer>
         </div>
       );
