@@ -222,6 +222,16 @@
                     <textarea id="input-topic" rows="3" placeholder="Contoh: Kenapa baterai HP cepat habis padahal nggak dipakai, atau rahasia di balik kecepatan internet 5G..." class="w-full rounded-2xl bg-slate-950/80 border border-slate-700/80 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-sm text-white placeholder-slate-500 p-3.5 transition-all outline-none resize-none"></textarea>
                 </div>
 
+                <!-- Watermark / Channel Name Field -->
+                <div>
+                    <label for="input-watermark" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Nama Channel / Watermark (Muncul di Narasi &amp; Video)</label>
+                    <div class="relative">
+                        <input id="input-watermark" type="text" value="sobatkarya.my.id" placeholder="Contoh: Sekarang Kamu Tau atau sobatkarya.my.id" class="w-full rounded-2xl bg-slate-950/80 border border-slate-700/80 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-sm text-white placeholder-slate-500 px-3.5 py-3 pl-10 transition-all outline-none">
+                        <i data-lucide="at-sign" class="w-4 h-4 text-indigo-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                    </div>
+                    <p class="text-[11px] text-slate-500 mt-1">Otomatis dipakai pada kalimat penutup narasi &amp; watermark render video 3D.</p>
+                </div>
+
                 <!-- Quick Topic Suggestions -->
                 <div class="flex flex-wrap items-center gap-1.5">
                     <span class="text-[11px] text-slate-500 mr-1">Ide cepat:</span>
@@ -342,6 +352,47 @@
                         <span>Download Voice Over (.WAV)</span>
                     </a>
                 </div>
+            </div>
+        </section>
+
+        <!-- STEP 2.5: Buat Video 3D (Claude AI & Gemini AI) -->
+        <section id="section-create-video" class="glass-card rounded-3xl p-5 sm:p-6 shadow-xl border border-indigo-500/30">
+            <div class="flex items-start gap-3 mb-4">
+                <span class="w-7 h-7 rounded-lg bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center font-bold text-sm shrink-0 mt-0.5">
+                    <i data-lucide="clapperboard" class="w-4 h-4"></i>
+                </span>
+                <div>
+                    <h2 class="font-bold text-base sm:text-lg text-white">Buat Video</h2>
+                    <p class="text-xs text-amber-300/95 font-medium mt-0.5">
+                        Pastikan kamu sudah memasang skill <code class="px-1.5 py-0.5 rounded bg-slate-900 text-indigo-300 border border-slate-700 font-mono">/remotion-motion-graphics</code> di claude dan gemini
+                    </p>
+                </div>
+            </div>
+
+            <div class="p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800/90 text-[11px] text-slate-300 leading-relaxed mb-4 space-y-1">
+                <p class="font-semibold text-indigo-300 flex items-center gap-1.5">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                    <span>Otomatisasi Siap Tempel & Lampirkan:</span>
+                </p>
+                <p class="text-slate-400">
+                    Saat tombol diklik, aplikasi otomatis mengunduh file <strong class="text-slate-200">narasi (.md)</strong> &amp; <strong class="text-slate-200">audio (.wav)</strong> ke perangkatmu, menyalin prompt 3D ke clipboard, lalu membuka percakapan baru di browser (rekomendasi Chrome).
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <!-- Tombol 1: Buat Video via Claude AI -->
+                <a id="btn-video-claude" href="https://claude.ai/new" target="_blank" rel="noopener noreferrer" onclick="return launchVideoBuilder(event, 'claude')" class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white font-bold text-sm shadow-lg shadow-orange-600/20 flex items-center justify-center gap-2.5 transition-all active:scale-[0.98] cursor-pointer">
+                    <i data-lucide="bot" class="w-4 h-4 shrink-0"></i>
+                    <span>Buat Video (Claude AI)</span>
+                    <i data-lucide="external-link" class="w-3.5 h-3.5 opacity-80 shrink-0"></i>
+                </a>
+
+                <!-- Tombol 2: Buat Video via Gemini AI -->
+                <a id="btn-video-gemini" href="https://gemini.google.com/app" target="_blank" rel="noopener noreferrer" onclick="return launchVideoBuilder(event, 'gemini')" class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 hover:from-blue-500 hover:via-indigo-500 hover:to-violet-500 text-white font-bold text-sm shadow-lg shadow-indigo-600/25 flex items-center justify-center gap-2.5 transition-all active:scale-[0.98] cursor-pointer">
+                    <i data-lucide="sparkles" class="w-4 h-4 shrink-0"></i>
+                    <span>Buat Video (Gemini AI)</span>
+                    <i data-lucide="external-link" class="w-3.5 h-3.5 opacity-80 shrink-0"></i>
+                </a>
             </div>
         </section>
 
@@ -662,6 +713,7 @@
         function saveStateToCache() {
             const state = {
                 topic: document.getElementById('input-topic').value,
+                watermark: document.getElementById('input-watermark').value,
                 hook: document.getElementById('output-hook').textContent,
                 narasi: document.getElementById('output-narasi').value,
                 voice: document.getElementById('select-voice').value,
@@ -687,6 +739,7 @@
                 try {
                     const state = JSON.parse(rawState);
                     if (state.topic) document.getElementById('input-topic').value = state.topic;
+                    if (state.watermark !== undefined) document.getElementById('input-watermark').value = state.watermark;
                     if (state.hook) document.getElementById('output-hook').textContent = state.hook;
                     if (state.narasi) {
                         document.getElementById('output-narasi').value = state.narasi;
@@ -743,9 +796,9 @@
             showToast('Proyek baru siap! Cache sebelumnya telah dibersihkan.', 'success');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-
-        // Save input topic automatically as user types
+        // Save input topic & watermark automatically as user types
         document.getElementById('input-topic').addEventListener('input', saveStateToCache);
+        document.getElementById('input-watermark').addEventListener('input', saveStateToCache);
 
         // =========================================================================
         // 4. GEMINI API INTEGRATION WITH EXPONENTIAL BACKOFF
@@ -805,6 +858,16 @@
         // =========================================================================
         // STEP 1: GENERATE NARRATION SCRIPT (STRICT RULES)
         // =========================================================================
+        function getChannelWatermark() {
+            const val = document.getElementById('input-watermark').value.trim();
+            return val || 'sobatkarya.my.id';
+        }
+
+        function getClosingSentence() {
+            const channelName = getChannelWatermark();
+            return `Sekarang kamu tau kan? Follow ${channelName} biar nggak ketinggalan fakta teknologi lainnya!`;
+        }
+
         async function generateNarration() {
             const topic = document.getElementById('input-topic').value.trim();
             if (!topic) {
@@ -816,18 +879,19 @@
             const btn = document.getElementById('btn-generate-script');
             setButtonLoading(btn, true, 'AI Agent sedang menulis narasi...');
 
-            const closingSentence = "Sekarang kamu tau kan? Follow Sekarang Kamu Tau biar nggak ketinggalan fakta teknologi lainnya!";
+            const channelName = getChannelWatermark();
+            const closingSentence = getClosingSentence();
 
-            const systemInstruction = `Kamu adalah penulis naskah profesional untuk konten video vertikal pendek (YouTube Shorts / TikTok / Reels) kanal edukasi teknologi "Sekarang Kamu Tau".
+            const systemInstruction = `Kamu adalah penulis naskah profesional untuk konten video vertikal pendek (YouTube Shorts / TikTok / Reels) kanal edukasi teknologi "${channelName}".
 
 ATURAN WAJIB NASKAH (narasi_vo) YANG HARUS DIPATUHI 100 PERSEN:
 1. Gunakan Bahasa Indonesia yang natural, mengalir, santai seperti bercerita kepada teman, dan sangat mudah dipahami orang awam. Hindari bahasa kaku seperti terjemahan mesin.
 2. Panjang "narasi_vo" WAJIB antara 115 hingga 130 kata (hitung dengan teliti agar tidak kurang dari 115 kata dan tidak lebih dari 130 kata, supaya durasi audio pas 46 sampai 50 detik).
 3. Kalimat pertama di dalam "narasi_vo" HARUS sama persis dengan isi field "hook". Buat hook yang memancing rasa penasaran di 3 detik pertama.
-4. Tutup kalimat terakhir "narasi_vo" WAJIB dengan kalimat khas kanal persis seperti ini: "${closingSentence}"
+4. Tutup kalimat terakhir "narasi_vo" dengan kalimat khas kanal: "${closingSentence}"
 5. Ramah Text-to-Speech (TTS) Bahasa Indonesia: DILARANG KERAS menggunakan emoji, tanda kurung, tanda bintang, tanda pagar, garis miring, atau simbol apapun. Tulis semua angka, singkatan sulit, atau satuan menjadi kata penuh seperti "persen", "derajat Celcius", "Wi-Fi", "lima G", atau "gigabita", bukan simbol.`;
 
-            const userQuery = `Buatkan hook dan narasi_vo tentang topik berikut: "${topic}". Pastikan jumlah kata narasi_vo berada tepat di antara 115 sampai 130 kata, diawali persis dengan hook, diakhiri persis dengan kalimat penutup kanal, dan bersih dari simbol atau emoji.`;
+            const userQuery = `Buatkan hook dan narasi_vo tentang topik berikut: "${topic}". Pastikan jumlah kata narasi_vo berada tepat di antara 115 sampai 130 kata, diawali persis dengan hook, diakhiri persis dengan kalimat penutup kanal ("${closingSentence}"), dan bersih dari simbol atau emoji.`;
 
             try {
                 const apiKey = getApiKey();
@@ -1070,6 +1134,102 @@ ATURAN WAJIB NASKAH (narasi_vo) YANG HARUS DIPATUHI 100 PERSEN:
         }
 
         // =========================================================================
+        // STEP 2.5: LAUNCH CLAUDE AI / GEMINI AI FOR 3D VIDEO GENERATION
+        // =========================================================================
+        function launchVideoBuilder(event, platform) {
+            const topic = document.getElementById('input-topic').value.trim() || 'Konten Teknologi';
+            const hook = document.getElementById('output-hook').textContent.trim();
+            const narasi = document.getElementById('output-narasi').value.trim();
+            const watermark = getChannelWatermark();
+
+            if (!narasi) {
+                if (event) event.preventDefault();
+                showToast('Buat narasi terlebih dahulu sebelum membuat video!', 'error');
+                document.getElementById('input-topic').focus();
+                return false;
+            }
+
+            const videoPrompt = `buatkan menjadi video 3D menggunakan skill ini sesuai dengan narasi dan audio yang sudah aku lampirkan.dengan format 9:16 kasih watermark : ${watermark} dan lansung render menjadi mp4`;
+
+            // 1. Copy prompt instruksi otomatis ke clipboard secara sinkron
+            const tempTextarea = document.createElement('textarea');
+            tempTextarea.value = videoPrompt;
+            tempTextarea.style.position = 'fixed';
+            tempTextarea.style.left = '-9999px';
+            document.body.appendChild(tempTextarea);
+            tempTextarea.select();
+            tempTextarea.setSelectionRange(0, 99999);
+            try {
+                document.execCommand('copy');
+            } catch (e) {}
+            document.body.removeChild(tempTextarea);
+
+            // 2. Buat & unduh file narasi dalam format .md secara sinkron
+            const slug = topic
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/(^-|-$)/g, '')
+                .slice(0, 30) || 'narasi';
+
+            const mdContent = [
+                `# Narasi Video Shorts: ${topic}`,
+                ``,
+                `**Channel / Watermark:** ${watermark}`,
+                `**Format:** 9:16 (1080x1920) | **Watermark:** ${watermark}`,
+                ``,
+                `## Hook Pembuka`,
+                `${hook || narasi.split('.')[0]}`,
+                ``,
+                `## Naskah Lengkap (Voice Over)`,
+                `${narasi}`
+            ].join('\n');
+
+            const mdBlob = new Blob([mdContent], { type: 'text/markdown;charset=utf-8' });
+            const mdUrl = URL.createObjectURL(mdBlob);
+            const mdLink = document.createElement('a');
+            mdLink.href = mdUrl;
+            mdLink.download = `AutoShort-${slug}.md`;
+            document.body.appendChild(mdLink);
+            mdLink.click();
+            document.body.removeChild(mdLink);
+            setTimeout(() => URL.revokeObjectURL(mdUrl), 5000);
+
+            // 3. Unduh otomatis file audio .wav jika sudah tersedia di sesi saat ini
+            if (currentAudioUrl) {
+                const voiceName = document.getElementById('select-voice').value || 'Kore';
+                const wavLink = document.createElement('a');
+                wavLink.href = currentAudioUrl;
+                wavLink.download = `AutoShort-${voiceName}-${slug}.wav`;
+                document.body.appendChild(wavLink);
+                wavLink.click();
+                document.body.removeChild(wavLink);
+            } else {
+                showToast('Catatan: Audio .WAV belum dibuat, hanya file .MD & prompt yang disiapkan.', 'info');
+            }
+
+            // 4. Navigasi langsung tanpa terblokir pop-up blocker browser ponsel/Chrome
+            const encodedPrompt = encodeURIComponent(videoPrompt);
+            const targetUrl = platform === 'claude'
+                ? `https://claude.ai/new?q=${encodedPrompt}`
+                : `https://gemini.google.com/app?q=${encodedPrompt}`;
+
+            showToast(`File .MD & .WAV diunduh + Prompt disalin! Membuka ${platform === 'claude' ? 'Claude AI' : 'Gemini AI'}...`, 'success');
+
+            if (event && event.currentTarget) {
+                event.currentTarget.href = targetUrl;
+            }
+
+            // Buka langsung di tab baru secara sinkron di dalam event klik pengguna
+            const newTab = window.open(targetUrl, '_blank', 'noopener,noreferrer');
+            if (newTab) {
+                if (event) event.preventDefault();
+                return false;
+            }
+            // Jika browser memblokir window.open, biarkan default klik <a href="..." target="_blank"> berjalan
+            return true;
+        }
+
+        // =========================================================================
         // STEP 3: GENERATE YOUTUBE SHORTS METADATA (TITLE, DESCRIPTION, TAGS)
         // =========================================================================
         async function generateMetadata() {
@@ -1082,7 +1242,8 @@ ATURAN WAJIB NASKAH (narasi_vo) YANG HARUS DIPATUHI 100 PERSEN:
             const btn = document.getElementById('btn-generate-meta');
             setButtonLoading(btn, true, 'Meracik SEO YouTube Shorts...');
 
-            const systemInstruction = `Kamu adalah pakar algoritma dan SEO YouTube Shorts berbahasa Indonesia untuk kanal edukasi teknologi "Sekarang Kamu Tau".
+            const channelName = getChannelWatermark();
+            const systemInstruction = `Kamu adalah pakar algoritma dan SEO YouTube Shorts berbahasa Indonesia untuk kanal edukasi teknologi "${channelName}".
 Tugasmu membuat metadata YouTube Shorts yang sangat menarik klik (high CTR) dan relevan berdasarkan naskah narasi yang diberikan:
 1. "judul": Maksimal 65 karakter, memancing rasa penasaran, natural, dan diakhiri hashtag #shorts atau #teknologi.
 2. "deskripsi": Ringkasan menarik 2-3 kalimat tentang isi video, ajakan subscribe kanal Sekarang Kamu Tau, dan 5 hashtag relevan di bagian bawah.
