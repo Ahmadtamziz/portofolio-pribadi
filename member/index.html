@@ -64,9 +64,9 @@
   </main>
 <script>
   // Isi dua nilai publik dari Supabase Project Settings > API. Jangan gunakan service_role key di browser.
-  const SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co';
-  const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_PUBLISHABLE_OR_ANON_KEY';
-  const configured = !SUPABASE_URL.includes('YOUR_PROJECT_ID') && !SUPABASE_ANON_KEY.includes('YOUR_SUPABASE');
+  const SUPABASE_URL = 'https://ukhcjzvpjzfnggedwjwe.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVraGNqenZwanpmbmdnZWR3andlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUzNTgzNjAsImV4cCI6MjExMDkzNDM2MH0.OU1P8vuusOLGNzrJnLV0o_OVrjZ6Zwxusd59fX5wUTw';
+  const configured = !SUPABASE_URL.includes('ukhcjzvpjzfnggedwjwe') && !SUPABASE_ANON_KEY.includes('YOUR_SUPABASE');
   const client = configured ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
   const $ = (id) => document.getElementById(id);
   function notify(message) { const el = $('notice'); el.textContent = message; el.classList.remove('hidden'); setTimeout(() => el.classList.add('hidden'), 5000); }
