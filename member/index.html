@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Kirim dan temukan karya komunitas SobatKarya.">
+  <title>Karya Member — SobatKarya</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+  <header class="bg-white border-b border-slate-200">
+    <div class="max-w-5xl mx-auto px-4 py-5 flex items-center justify-between gap-4">
+      <a href="/" class="font-extrabold text-xl text-indigo-600">SobatKarya</a>
+      <a href="/" class="text-sm text-slate-600 hover:text-indigo-600">Kembali ke beranda</a>
+    </div>
+  </header>
+  <main class="max-w-5xl mx-auto px-4 py-10 space-y-8">
+    <section class="bg-gradient-to-br from-indigo-600 to-violet-700 text-white rounded-3xl p-8">
+      <p class="text-xs uppercase tracking-widest text-indigo-100 font-bold">Komunitas SobatKarya</p>
+      <h1 class="text-3xl font-extrabold mt-2">Karya Member</h1>
+      <p class="mt-2 text-indigo-100">Masuk untuk mengirim file. Karya akan tampil setelah disetujui admin.</p>
+    </section>
+
+    <section id="auth-panel" class="bg-white border rounded-2xl p-6 shadow-sm">
+      <h2 class="text-xl font-bold">Login / Daftar Member</h2>
+      <p class="text-sm text-slate-500 mt-1">Gunakan email aktif. Jika konfirmasi email diaktifkan, klik tautan yang dikirim Supabase sebelum login.</p>
+      <form id="auth-form" class="mt-5 grid sm:grid-cols-2 gap-3">
+        <label class="text-sm">Email<input id="email" type="email" autocomplete="email" required class="mt-1 w-full border rounded-xl p-3"></label>
+        <label class="text-sm">Password<input id="password" type="password" autocomplete="current-password" minlength="8" required class="mt-1 w-full border rounded-xl p-3"></label>
+        <div class="sm:col-span-2 flex flex-wrap gap-3">
+          <button id="login-btn" class="rounded-xl bg-indigo-600 text-white px-5 py-3 font-semibold">Masuk</button>
+          <button id="signup-btn" type="button" class="rounded-xl bg-slate-100 px-5 py-3 font-semibold">Daftar</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="member-panel" class="hidden bg-white border rounded-2xl p-6 shadow-sm">
+      <div class="flex flex-wrap justify-between items-center gap-3">
+        <div><h2 class="text-xl font-bold">Kirim karya</h2><p id="signed-in-as" class="text-sm text-slate-500"></p></div>
+        <button id="logout-btn" class="text-sm rounded-lg border px-4 py-2">Keluar</button>
+      </div>
+      <form id="upload-form" class="mt-5 space-y-3">
+        <label class="block text-sm">Judul karya<input id="title" maxlength="100" required class="mt-1 w-full border rounded-xl p-3"></label>
+        <label class="block text-sm">Deskripsi (opsional)<textarea id="description" maxlength="1000" rows="3" class="mt-1 w-full border rounded-xl p-3"></textarea></label>
+        <label class="block text-sm">File .zip, .skill, atau .md (maks. 10 MB)<input id="file" type="file" required accept=".zip,.skill,.md" class="mt-1 block w-full border rounded-xl p-3"></label>
+        <button id="upload-btn" class="rounded-xl bg-indigo-600 text-white px-5 py-3 font-semibold">Unggah untuk ditinjau</button>
+      </form>
+      <p class="mt-3 text-xs text-slate-500">Unggahan disimpan secara privat. Jangan unggah data rahasia, malware, atau file yang tidak berhak kamu bagikan.</p>
+      <div id="admin-panel" class="hidden mt-8 border-t pt-6">
+        <h3 class="text-lg font-bold">Antrean persetujuan admin</h3>
+        <div id="admin-list" class="mt-3 space-y-3"></div>
+      </div>
+      <h3 class="text-lg font-bold mt-8 border-t pt-6">Unggahan saya</h3>
+      <div id="my-submissions" class="mt-3 space-y-3"></div>
+    </section>
+
+    <section class="bg-white border rounded-2xl p-6 shadow-sm">
+      <h2 class="text-xl font-bold">Karya yang sudah disetujui</h2>
+      <p class="text-sm text-slate-500 mt-1">File baru terlihat di sini setelah admin menyetujuinya.</p>
+      <div id="approved-list" class="mt-4 grid sm:grid-cols-2 gap-4"><p class="text-sm text-slate-500">Memuat karya…</p></div>
+    </section>
+    <p id="notice" role="status" class="hidden fixed bottom-4 left-1/2 -translate-x-1/2 max-w-[90%] bg-slate-900 text-white px-5 py-3 rounded-xl shadow-lg text-sm"></p>
+  </main>
+<script>
+  // Isi dua nilai publik dari Supabase Project Settings > API. Jangan gunakan service_role key di browser.
+  const SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co';
+  const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_PUBLISHABLE_OR_ANON_KEY';
+  const configured = !SUPABASE_URL.includes('YOUR_PROJECT_ID') && !SUPABASE_ANON_KEY.includes('YOUR_SUPABASE');
+  const client = configured ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+  const $ = (id) => document.getElementById(id);
+  function notify(message) { const el = $('notice'); el.textContent = message; el.classList.remove('hidden'); setTimeout(() => el.classList.add('hidden'), 5000); }
+  function escapeHtml(value='') { return String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function statusLabel(status) { return ({pending:'Menunggu tinjauan',approved:'Disetujui',rejected:'Ditolak'})[status] || status; }
+  if (!configured) notify('Supabase belum dikonfigurasi. Isi URL dan publishable/anon key di member/index.html.');
+
+  $('auth-form').addEventListener('submit', async (event) => {
+    event.preventDefault(); if (!client) return notify('Konfigurasi Supabase terlebih dahulu.');
+    const { error } = await client.auth.signInWithPassword({ email: $('email').value.trim(), password: $('password').value });
+    if (error) return notify(error.message); await refreshSession();
+  });
+  $('signup-btn').addEventListener('click', async () => {
+    if (!client) return notify('Konfigurasi Supabase terlebih dahulu.');
+    const { data, error } = await client.auth.signUp({ email: $('email').value.trim(), password: $('password').value });
+    if (error) return notify(error.message);
+    if (!data.session) notify('Pendaftaran berhasil. Cek email untuk konfirmasi, lalu masuk.'); else { notify('Akun berhasil dibuat.'); await refreshSession(); }
+  });
+  $('logout-btn').addEventListener('click', async () => { await client.auth.signOut(); await refreshSession(); });
+
+  $('upload-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const { data: { user } } = await client.auth.getUser();
+    if (!user) return notify('Silakan masuk terlebih dahulu.');
+    const file = $('file').files[0];
+    if (!file) return notify('Pilih file terlebih dahulu.');
+    const extension = file.name.split('.').pop().toLowerCase();
+    if (!['zip','skill','md'].includes(extension)) return notify('Format yang diizinkan hanya .zip, .skill, dan .md.');
+    if (file.size > 10 * 1024 * 1024) return notify('Ukuran maksimal file adalah 10 MB.');
+    $('upload-btn').disabled = true;
+    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_').slice(-120);
+    const path = `${user.id}/${crypto.randomUUID()}-${safeName}`;
+    try {
+      const { error: storageError } = await client.storage.from('member-submissions').upload(path, file, { upsert: false, contentType: file.type || 'application/octet-stream' });
+      if (storageError) throw storageError;
+      const { error: dbError } = await client.from('submissions').insert({ title: $('title').value.trim(), description: $('description').value.trim(), file_name: file.name, storage_path: path });
+      if (dbError) { await client.storage.from('member-submissions').remove([path]); throw dbError; }
+      $('upload-form').reset(); notify('Unggahan terkirim dan menunggu persetujuan admin.'); await loadMemberData(user);
+    } catch (error) { notify(error.message || 'Unggahan gagal.'); }
+    finally { $('upload-btn').disabled = false; }
+  });
+
+  async function signedLink(path) {
+    const { data, error } = await client.storage.from('member-submissions').createSignedUrl(path, 60);
+    if (error) throw error; return data.signedUrl;
+  }
+  async function loadApproved() {
+    if (!client) { $('approved-list').innerHTML = '<p class="text-sm text-slate-500">Hubungkan Supabase untuk memuat karya.</p>'; return; }
+    const { data, error } = await client.from('submissions').select('id,title,description,file_name,storage_path,created_at').eq('status','approved').order('created_at',{ascending:false});
+    if (error) { $('approved-list').innerHTML = '<p class="text-sm text-rose-600">Karya belum dapat dimuat. Periksa konfigurasi dan SQL Supabase.</p>'; return; }
+    $('approved-list').innerHTML = data.length ? data.map(item => `<article class="border rounded-xl p-4"><h3 class="font-bold">${escapeHtml(item.title)}</h3><p class="text-sm text-slate-600 mt-1">${escapeHtml(item.description || '')}</p><p class="text-xs text-slate-500 mt-2">${escapeHtml(item.file_name)}</p><button data-file="${escapeHtml(item.storage_path)}" class="download-approved mt-3 text-sm text-indigo-600 font-semibold">Unduh file</button></article>`).join('') : '<p class="text-sm text-slate-500">Belum ada karya yang disetujui.</p>';
+    document.querySelectorAll('.download-approved').forEach(button => button.addEventListener('click', async () => { try { window.location.href = await signedLink(button.dataset.file); } catch (e) { notify(e.message); } }));
+  }
+  async function loadMemberData(user) {
+    $('my-submissions').innerHTML = '<p class="text-sm text-slate-500">Memuat…</p>';
+    const { data, error } = await client.from('submissions').select('id,title,file_name,status,created_at').eq('user_id',user.id).order('created_at',{ascending:false});
+    if (error) { $('my-submissions').textContent = error.message; return; }
+    $('my-submissions').innerHTML = data.length ? data.map(item => `<div class="border rounded-xl p-3 flex justify-between gap-3"><span><b>${escapeHtml(item.title)}</b><small class="block text-slate-500">${escapeHtml(item.file_name)}</small></span><span class="text-sm">${statusLabel(item.status)}</span></div>`).join('') : '<p class="text-sm text-slate-500">Belum ada unggahan.</p>';
+    const { data: adminCheck, error: adminError } = await client.rpc('is_submission_admin');
+    $('admin-panel').classList.toggle('hidden', !!adminError || adminCheck !== true);
+    if (!adminError && adminCheck === true) await loadAdminQueue();
+  }
+  async function loadAdminQueue() {
+    const { data, error } = await client.from('submissions').select('id,user_id,title,description,file_name,storage_path,created_at').eq('status','pending').order('created_at');
+    if (error) { $('admin-list').textContent = error.message; return; }
+    $('admin-list').innerHTML = data.length ? data.map(item => `<article class="border rounded-xl p-4"><h4 class="font-bold">${escapeHtml(item.title)}</h4><p class="text-sm text-slate-600">${escapeHtml(item.description || '')}</p><p class="text-xs text-slate-500 mt-1">${escapeHtml(item.file_name)}</p><div class="flex gap-2 mt-3"><button data-id="${item.id}" data-path="${escapeHtml(item.storage_path)}" class="review-download border rounded-lg px-3 py-2 text-sm">Lihat/unduh</button><button data-id="${item.id}" data-status="approved" class="review-action bg-emerald-600 text-white rounded-lg px-3 py-2 text-sm">Setujui</button><button data-id="${item.id}" data-status="rejected" class="review-action bg-rose-600 text-white rounded-lg px-3 py-2 text-sm">Tolak</button></div></article>`).join('') : '<p class="text-sm text-slate-500">Tidak ada antrean.</p>';
+    document.querySelectorAll('.review-download').forEach(button => button.addEventListener('click', async () => { try { window.open(await signedLink(button.dataset.path), '_blank', 'noopener'); } catch (e) { notify(e.message); } }));
+    document.querySelectorAll('.review-action').forEach(button => button.addEventListener('click', async () => { const { error } = await client.rpc('review_submission', { submission_id: button.dataset.id, new_status: button.dataset.status }); if (error) return notify(error.message); notify(`Pengajuan ${statusLabel(button.dataset.status).toLowerCase()}.`); const { data: { user } } = await client.auth.getUser(); await loadMemberData(user); await loadApproved(); }));
+  }
+  async function refreshSession() {
+    if (!client) return;
+    const { data: { user } } = await client.auth.getUser();
+    $('auth-panel').classList.toggle('hidden', !!user); $('member-panel').classList.toggle('hidden', !user);
+    if (user) { $('signed-in-as').textContent = user.email; await loadMemberData(user); }
+  }
+  if (client) { client.auth.onAuthStateChange(() => refreshSession()); refreshSession(); }
+  loadApproved();
+</script>
+</body>
+</html>
