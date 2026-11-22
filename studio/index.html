@@ -106,12 +106,20 @@
                         <span class="gradient-text">NADI AMBYAR</span>
                         <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-zinc-800 text-amber-400 border border-amber-500/30">STUDIO PRO</span>
                     </h1>
-                    <p class="text-[11px] text-zinc-400 hidden sm:block">Modern Pop Jawa Koplo • Vokal: Mas Ghifari</p>
+                    <p class="text-[11px] text-zinc-400 flex items-center gap-1.5">
+                        <span class="hidden sm:inline">Modern Pop Jawa Koplo • Mas Ghifari •</span>
+                        <span>Bagian dari <a href="https://sobatkarya.my.id" target="_blank" rel="noopener noreferrer" class="text-amber-400 hover:underline font-semibold">sobatkarya.my.id</a></span>
+                    </p>
                 </div>
             </div>
 
-            <!-- Katalog / Riwayat Lagu Button -->
+            <!-- Katalog / Riwayat Lagu & API Key Settings Button -->
             <div class="flex items-center gap-2">
+                <button onclick="toggleApiKeyModal()" id="header-api-btn" class="flex items-center gap-2 px-3 py-2 rounded-xl bg-zinc-800/90 hover:bg-zinc-700 text-xs sm:text-sm font-medium text-zinc-200 border border-zinc-700 transition" title="Atur Gemini API Key">
+                    <i data-lucide="key-round" class="w-4 h-4 text-amber-400" id="api-status-icon"></i>
+                    <span class="hidden md:inline" id="api-status-text">Gemini API Key</span>
+                    <span id="api-status-dot" class="w-2 h-2 rounded-full bg-amber-500"></span>
+                </button>
                 <button onclick="toggleCatalogModal()" class="flex items-center gap-2 px-3 py-2 rounded-xl bg-zinc-800/90 hover:bg-zinc-700 text-xs sm:text-sm font-medium text-zinc-200 border border-zinc-700 transition">
                     <i data-lucide="library" class="w-4 h-4 text-amber-400"></i>
                     <span class="hidden sm:inline">Katalog Lagu</span>
@@ -611,6 +619,60 @@
 
     </main>
 
+    <!-- Footer Branding sobatkarya.my.id -->
+    <footer class="border-t border-zinc-800/80 bg-zinc-950/80 py-4 px-4 sm:px-6 lg:px-8 mt-8">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-zinc-400">
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                <span><strong class="text-zinc-200">Nadi Ambyar Studio</strong> — Bagian resmi dari <a href="https://sobatkarya.my.id" target="_blank" rel="noopener noreferrer" class="text-amber-400 hover:text-amber-300 font-semibold underline underline-offset-2">sobatkarya.my.id</a></span>
+            </div>
+            <div class="text-[11px] text-zinc-500">
+                Powered by Gemini AI • Modern Pop Jawa Koplo Production Suite
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal Pengaturan Gemini API Key -->
+    <div id="apikey-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="glass-panel max-w-md w-full rounded-2xl p-6 space-y-4 border border-zinc-700 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
+                <h3 class="font-display font-bold text-lg text-white flex items-center gap-2">
+                    <i data-lucide="key-round" class="w-5 h-5 text-amber-400"></i>
+                    Konfigurasi Gemini API Key
+                </h3>
+                <button onclick="toggleApiKeyModal()" class="text-zinc-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <p class="text-xs text-zinc-300 leading-relaxed">
+                Masukkan <strong>Google Gemini API Key</strong> Anda agar semua fitur AI (Penulisan Lagu, Bulk Prompt Visual, Generate Gambar Langsung, dan SEO YouTube) aktif di domain <span class="text-amber-400 font-semibold">sobatkarya.my.id</span>.
+            </p>
+            <div class="space-y-2">
+                <label for="gemini-api-key-input" class="block text-xs font-semibold text-zinc-400">Gemini API Key (AIzaSy...)</label>
+                <div class="relative flex items-center">
+                    <input type="password" id="gemini-api-key-input" placeholder="Tempel Gemini API Key Anda di sini..."
+                        class="w-full bg-zinc-950 border border-zinc-700 focus:border-amber-500 rounded-xl pl-3.5 pr-10 py-2.5 text-xs sm:text-sm text-white outline-none">
+                    <button type="button" onclick="toggleApiKeyVisibility()" class="absolute right-3 text-zinc-400 hover:text-zinc-200" title="Tampilkan/Sembunyikan">
+                        <i data-lucide="eye" class="w-4 h-4" id="apikey-eye-icon"></i>
+                    </button>
+                </div>
+                <div class="flex items-center justify-between text-[11px] text-zinc-400 pt-1">
+                    <span>Tersimpan aman di browser (LocalStorage).</span>
+                    <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="text-amber-400 hover:underline flex items-center gap-1">
+                        Dapatkan API Key <i data-lucide="external-link" class="w-3 h-3"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="flex justify-between items-center pt-3 border-t border-zinc-800 gap-2">
+                <button onclick="removeGeminiApiKey()" class="px-3 py-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 text-xs font-semibold transition">Hapus Key</button>
+                <div class="flex items-center gap-2">
+                    <button onclick="toggleApiKeyModal()" class="px-4 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-xs font-semibold text-zinc-300">Batal</button>
+                    <button onclick="saveGeminiApiKey()" class="px-5 py-2 rounded-xl gradient-gold hover:brightness-110 text-xs font-bold text-black shadow-md">Simpan & Aktifkan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Katalog Lagu Nadi Ambyar (Mencegah duplikasi sesuai Aturan Bagian 10) -->
     <div id="catalog-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="glass-panel max-w-lg w-full rounded-2xl p-6 space-y-4 border border-zinc-700 shadow-2xl">
@@ -643,1352 +705,150 @@
         // =========================================================================
         // 1. STATE & KONFIGURASI SKILL NADI AMBYAR
         // =========================================================================
-        const apiKey = ""; // Disediakan otomatis oleh environment runtime
+        const defaultRuntimeKey = ""; // Fallback runtime environment jika ada
+        let userGeminiApiKey = localStorage.getItem('sobatkarya_gemini_api_key') || "";
         const TEXT_MODEL = "gemini-3-flash-preview";
         const IMAGE_MODEL = "gemini-3.1-flash-image";
 
-        // Aturan lengkap dari SKILL_Penulisan_Lagu_Nadi_Ambyar.md disematkan sebagai System Instruction
-        const NADI_AMBYAR_SYSTEM_PROMPT = `
-Anda adalah penulis lagu profesional eksklusif untuk kanal YouTube "Nadi Ambyar".
-Patuhi 100% seluruh aturan berikut tanpa terkecuali:
-
-1. IDENTITAS KANAL & GENRE:
-- Genre: Modern Pop Jawa Koplo Ambyar.
-- Nuansa: emosional, menyentuh, dekat dengan kehidupan sehari-hari, manusiawi, realistis, mudah dinyanyikan ulang.
-- Vokal: SATU vokalis pria saja bernama "Mas Ghifari" (pria Jawa muda/dewasa, suara hangat, matang, maskulin, sedikit husky/serak, emosional, pelafalan bahasa Jawa alami & jelas).
-- DILARANG keras menambahkan vokal wanita, duet, choir, atau backing vocal penyanyi lain.
-
-2. BAHASA & GAYA LIRIK:
-- Bahasa Jawa ngoko yang alami dipadukan dengan bahasa Indonesia secara wajar seperti percakapan sehari-hari.
-- Hindari frasa klise dan JANGAN gunakan pembuka "mbiyen kowe" atau "biyen kowe".
-- Variasikan sudut pandang cerita (misal: ikhlas melepaskan meski masih cinta, menyadari kesalahan sendiri, terhalang keadaan/restu, pertemuan kembali, penerimaan, atau perjuangan hidup).
-
-3. STRUKTUR LAGU WAJIB (Langsung mulai dari Verse 1, TANPA Intro dan TANPA Outro):
-[Verse 1]
-[Pre-Chorus]
-[Chorus]
-[Verse 2]
-[Pre-Chorus]
-[Chorus]
-[Bridge]
-[Final Chorus]
-
-4. PANJANG & KUALITAS:
-- Target panjang lirik: 1.500 hingga 2.000 karakter (termasuk label bagian). Pastikan lirik kaya cerita, menyentuh, dan pas di kisaran 1.500-2.000 karakter.
-- Jangan menulis komentar/penjelasan di dalam lirik.
-
-5. STANDAR SUNO STYLE (Bahasa Inggris, MAKSIMAL 1000 karakter):
-- Harus menyebutkan: Modern Pop Jawa Koplo Ambyar, tempo sekitar 94 BPM (atau sesuai nuansa cerita), solo male vocal only, warm mature masculine Javanese male voice, slightly husky/raspy, emotional expressive natural delivery, clear Javanese pronunciation.
-- Instrumen inti: acoustic guitar, piano, kendang koplo, bass, subtle electric guitar, violin, warm reverb.
-- Larangan: No female vocals, no duet, no choir, no long intro or outro, start directly from Verse 1.
-        `.trim();
-
-        const appState = {
-            song: {
-                title: "",
-                lyrics: "",
-                sunoStyle: ""
-            },
-            catalog: JSON.parse(localStorage.getItem('nadi_ambyar_catalog') || '[]'),
-            tracks: [], // { id, name, url, blob, duration, variant }
-            selectedTrackId: null,
-            prompts: [], // { id, sceneTitle, lyricRef, promptText }
-            images: [],  // { id, url, promptText, selected }
-            isPlayingPreview: false,
-            isRenderingVideo: false,
-            renderCancelled: false,
-            previewAnimId: null,
-            audioCtx: null,
-            analyser: null,
-            dataArray: null
-        };
-
+        function getActiveApiKey() {
+            return (userGeminiApiKey && userGeminiApiKey.trim()) ? userGeminiApiKey.trim() : defaultRuntimeKey;
+        }
+// ... existing code ... -->
         // Inisialisasi Lucide Icons & Canvas awal
         window.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
+            updateApiKeyStatusUI();
             updateCatalogUI();
             drawSinglePreviewFrame();
         });
 
         // =========================================================================
-        // 2. HELPER UI (TABS, TOAST, CLIPBOARD, CATALOG)
+        // 2. HELPER UI (TABS, TOAST, CLIPBOARD, CATALOG, API KEY)
         // =========================================================================
-        function switchTab(stepNum) {
-            document.querySelectorAll('.step-section').forEach(el => el.classList.add('hidden'));
-            document.getElementById(`step-${stepNum}`).classList.remove('hidden');
-
-            document.querySelectorAll('.tab-btn').forEach((btn, idx) => {
-                if (idx + 1 === stepNum) {
-                    btn.classList.add('tab-active');
-                    btn.classList.remove('text-zinc-400');
-                } else {
-                    btn.classList.remove('tab-active');
-                    btn.classList.add('text-zinc-400');
-                }
-            });
-
-            if (stepNum === 3) {
-                syncClipSelectors();
-                drawSinglePreviewFrame();
+        function toggleApiKeyModal() {
+            const modal = document.getElementById('apikey-modal');
+            const input = document.getElementById('gemini-api-key-input');
+            if (modal.classList.contains('hidden')) {
+                input.value = userGeminiApiKey;
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
             }
         }
 
-        function showToast(message, type = 'info') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            const colors = {
-                success: 'bg-emerald-950/95 border-emerald-500/50 text-emerald-200',
-                error: 'bg-red-950/95 border-red-500/50 text-red-200',
-                warning: 'bg-amber-950/95 border-amber-500/50 text-amber-200',
-                info: 'bg-zinc-900/95 border-zinc-700 text-zinc-100'
-            };
-            const icons = {
-                success: 'check-circle',
-                error: 'alert-circle',
-                warning: 'alert-triangle',
-                info: 'info'
-            };
-
-            toast.className = `pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl border shadow-2xl backdrop-blur-md text-xs sm:text-sm font-medium transition-all duration-300 transform translate-y-2 opacity-0 ${colors[type] || colors.info}`;
-            toast.innerHTML = `<i data-lucide="${icons[type] || 'info'}" class="w-4 h-4 shrink-0"></i><span>${message}</span>`;
-            container.appendChild(toast);
+        function toggleApiKeyVisibility() {
+            const input = document.getElementById('gemini-api-key-input');
+            const icon = document.getElementById('apikey-eye-icon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.setAttribute('data-lucide', 'eye-off');
+            } else {
+                input.type = 'password';
+                icon.setAttribute('data-lucide', 'eye');
+            }
             lucide.createIcons();
-
-            requestAnimationFrame(() => {
-                toast.classList.remove('translate-y-2', 'opacity-0');
-            });
-
-            setTimeout(() => {
-                toast.classList.add('opacity-0', 'translate-y-2');
-                setTimeout(() => toast.remove(), 300);
-            }, 3500);
         }
 
-        function copyTextToClipboard(text, successMsg = "Berhasil disalin!") {
-            if (!text || !text.trim()) {
-                showToast("Tidak ada teks untuk disalin.", "warning");
+        function saveGeminiApiKey() {
+            const val = document.getElementById('gemini-api-key-input').value.trim();
+            if (!val) {
+                showToast("Masukkan Gemini API Key terlebih dahulu.", "warning");
                 return;
             }
-            const textarea = document.createElement("textarea");
-            textarea.value = text;
-            textarea.style.position = "fixed";
-            textarea.style.opacity = "0";
-            document.body.appendChild(textarea);
-            textarea.select();
-            try {
-                document.execCommand("copy");
-                showToast(successMsg, "success");
-            } catch (err) {
-                showToast("Gagal menyalin teks.", "error");
-            }
-            document.body.removeChild(textarea);
+            userGeminiApiKey = val;
+            localStorage.setItem('sobatkarya_gemini_api_key', val);
+            updateApiKeyStatusUI();
+            toggleApiKeyModal();
+            showToast("Gemini API Key berhasil disimpan! Semua tombol AI aktif.", "success");
         }
 
-        function copyField(elementId, msg) {
-            const val = document.getElementById(elementId).value;
-            copyTextToClipboard(val, msg);
+        function removeGeminiApiKey() {
+            userGeminiApiKey = "";
+            localStorage.removeItem('sobatkarya_gemini_api_key');
+            document.getElementById('gemini-api-key-input').value = "";
+            updateApiKeyStatusUI();
+            showToast("Gemini API Key dihapus dari browser.", "info");
         }
 
-        function updateCharCounters() {
-            const lyrics = document.getElementById('output-lyrics').value;
-            const style = document.getElementById('output-style').value;
-            appState.song.title = document.getElementById('output-title').value;
-            appState.song.lyrics = lyrics;
-            appState.song.sunoStyle = style;
-
-            const lBadge = document.getElementById('lyrics-char-count');
-            lBadge.textContent = `${lyrics.length} karakter`;
-            lBadge.className = (lyrics.length >= 1400 && lyrics.length <= 2100)
-                ? "text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400"
-                : "text-[11px] px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-400";
-
-            const sBadge = document.getElementById('style-char-count');
-            sBadge.textContent = `${style.length} / 1000`;
-        }
-
-        function toggleCatalogModal() {
-            const modal = document.getElementById('catalog-modal');
-            modal.classList.toggle('hidden');
-            updateCatalogUI();
-        }
-
-        function saveToCatalog(title, themeSummary) {
-            if (!title) return;
-            const exists = appState.catalog.some(item => item.title.toLowerCase() === title.toLowerCase());
-            if (!exists) {
-                appState.catalog.unshift({
-                    title,
-                    theme: themeSummary || "Modern Pop Jawa Koplo Ambyar",
-                    date: new Date().toLocaleDateString('id-ID')
-                });
-                localStorage.setItem('nadi_ambyar_catalog', JSON.stringify(appState.catalog));
-                updateCatalogUI();
+        function updateApiKeyStatusUI() {
+            const dot = document.getElementById('api-status-dot');
+            const text = document.getElementById('api-status-text');
+            const btn = document.getElementById('header-api-btn');
+            if (userGeminiApiKey && userGeminiApiKey.trim()) {
+                dot.className = "w-2 h-2 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400";
+                text.textContent = "API Key Aktif";
+                btn.classList.add('border-emerald-500/40');
+            } else {
+                dot.className = "w-2 h-2 rounded-full bg-amber-500 animate-pulse";
+                text.textContent = "Set API Key";
+                btn.classList.remove('border-emerald-500/40');
             }
         }
 
-        function updateCatalogUI() {
-            document.getElementById('catalog-count').textContent = appState.catalog.length;
-            const list = document.getElementById('catalog-list');
-            if (appState.catalog.length === 0) {
-                list.innerHTML = `<p class="text-xs text-zinc-500 text-center py-4">Belum ada riwayat lagu tersimpan.</p>`;
-                return;
+        function ensureApiKeyReady() {
+            const key = getActiveApiKey();
+            // Jika dijalankan di domain mandiri (bukan preview internal) dan key belum diisi, buka modal API Key
+            const isStandaloneDomain = window.location.hostname.includes('sobatkarya') || (!window.location.hostname.includes('googleusercontent') && !window.location.hostname.includes('localhost') && !key);
+            if (!key && isStandaloneDomain) {
+                showToast("Silakan masukkan Gemini API Key Anda untuk mengaktifkan fitur AI.", "warning");
+                toggleApiKeyModal();
+                return false;
             }
-            list.innerHTML = appState.catalog.map((item, i) => `
-                <div class="p-3 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-between">
-                    <div>
-                        <p class="text-xs font-bold text-amber-400">${i + 1}. ${item.title}</p>
-                        <p class="text-[11px] text-zinc-400">${item.theme} • ${item.date}</p>
-                    </div>
-                </div>
-            `).join('');
+            return true;
         }
-
-        function clearCatalog() {
-            appState.catalog = [];
-            localStorage.removeItem('nadi_ambyar_catalog');
-            updateCatalogUI();
-            showToast("Katalog lagu dibersihkan.", "info");
-        }
-
-        // =========================================================================
-        // 3. GEMINI API CALLER DENGAN EXPONENTIAL BACKOFF
-        // =========================================================================
-        async function fetchWithRetry(url, options, maxRetries = 4) {
-            let delay = 1000;
-            for (let attempt = 0; attempt <= maxRetries; attempt++) {
-                try {
-                    const response = await fetch(url, options);
-                    if (!response.ok) {
-                        const errText = await response.text();
-                        throw new Error(`HTTP ${response.status}: ${errText}`);
-                    }
-                    return await response.json();
-                } catch (error) {
-                    if (attempt === maxRetries) throw error;
-                    await new Promise(res => setTimeout(res, delay));
-                    delay *= 2;
-                }
-            }
-        }
-
+// ... existing code ... -->
         // =========================================================================
         // 4. STEP 1: GENERATE LAGU BARU (NADI AMBYAR SKILL)
         // =========================================================================
         async function generateNewSong() {
+            if (!ensureApiKeyReady()) return;
             const btn = document.getElementById('btn-generate-song');
             const userInput = document.getElementById('song-prompt-input').value.trim();
-
-            btn.disabled = true;
-            btn.innerHTML = `<div class="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></div><span>Menciptakan Lagu...</span>`;
-
-            const previousTitles = appState.catalog.map(c => c.title).join(", ");
-            const promptText = userInput
-                ? `Buatkan satu lagu original baru Nadi Ambyar berdasarkan judul/ide ini: "${userInput}". Jika itu adalah judul lagu, pertahankan judul tersebut. Hindari kemiripan dengan lagu sebelumnya: [${previousTitles}].`
-                : `Buatkan satu lagu original baru Nadi Ambyar dengan tema segar, cerita manusiawi yang menyentuh, judul kuat dan tidak klise. Hindari kemiripan dengan lagu sebelumnya: [${previousTitles}].`;
-
-            const payload = {
-                contents: [{ parts: [{ text: promptText }] }],
-                systemInstruction: { parts: [{ text: NADI_AMBYAR_SYSTEM_PROMPT }] },
-                generationConfig: {
-                    responseMimeType: "application/json",
-                    responseSchema: {
-                        type: "OBJECT",
-                        properties: {
-                            title: { type: "STRING", description: "Judul lagu singkat, kuat, emosional" },
-                            lyrics: { type: "STRING", description: "Lirik lengkap 1500-2000 karakter dengan tag [Verse 1], [Pre-Chorus], [Chorus], [Verse 2], [Pre-Chorus], [Chorus], [Bridge], [Final Chorus] tanpa Intro/Outro" },
-                            sunoStyle: { type: "STRING", description: "Prompt Suno Style berbahasa Inggris maksimal 1000 karakter untuk Modern Pop Jawa Koplo Ambyar vokal solo pria Mas Ghifari" },
-                            storySummary: { type: "STRING", description: "Ringkasan 1 kalimat cerita lagu ini" }
-                        },
-                        required: ["title", "lyrics", "sunoStyle", "storySummary"]
-                    }
-                }
-            };
-
+// ... existing code ... -->
             try {
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/${TEXT_MODEL}:generateContent?key=${apiKey}`;
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/${TEXT_MODEL}:generateContent?key=${getActiveApiKey()}`;
                 const data = await fetchWithRetry(url, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                const rawJson = data.candidates?.[0]?.content?.parts?.[0]?.text;
-                if (!rawJson) throw new Error("Respons AI kosong.");
-
-                const parsed = JSON.parse(rawJson);
-                document.getElementById('output-title').value = parsed.title;
-                document.getElementById('output-lyrics').value = parsed.lyrics;
-                document.getElementById('output-style').value = parsed.sunoStyle.slice(0, 1000);
-
-                updateCharCounters();
-                saveToCatalog(parsed.title, parsed.storySummary);
-                showToast(`Lagu "${parsed.title}" berhasil dibuat sesuai standar Nadi Ambyar!`, "success");
-            } catch (err) {
-                console.error(err);
-                showToast("Gagal membuat lagu: " + err.message, "error");
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4"></i><span>Buatkan Lagu Baru</span>`;
-                lucide.createIcons();
-            }
-        }
-
-        // =========================================================================
-        // 5. SUNO AI BRIDGE & 2 TRACKS GENERATOR / AUDIO UPLOADER
-        // =========================================================================
-        function openSunoWebBridge() {
-            const title = document.getElementById('output-title').value.trim();
-            const lyrics = document.getElementById('output-lyrics').value.trim();
-            const style = document.getElementById('output-style').value.trim();
-
-            if (!title || !lyrics) {
-                showToast("Buat atau isi Judul & Lirik terlebih dahulu!", "warning");
-                return;
-            }
-
-            const bundle = `=== TITLE ===\n${title}\n\n=== SUNO STYLE ===\n${style}\n\n=== LYRICS ===\n${lyrics}`;
-            copyTextToClipboard(bundle, "Title, Style & Lyrics disalin! Membuka Suno...");
-            window.open("https://suno.com/create", "_blank", "noopener,noreferrer");
-        }
-
-        async function sendToSuno() {
-            const title = document.getElementById('output-title').value.trim();
-            const lyrics = document.getElementById('output-lyrics').value.trim();
-            const style = document.getElementById('output-style').value.trim();
-            const customEndpoint = document.getElementById('suno-api-endpoint').value.trim();
-
-            if (!title || !lyrics || !style) {
-                showToast("Pastikan Title, Lyrics, dan Suno Style sudah terisi.", "warning");
-                return;
-            }
-
-            const loadingBox = document.getElementById('suno-loading');
-            const progressBar = document.getElementById('suno-progress-bar');
-            const loadingText = document.getElementById('suno-loading-text');
-            const btn = document.getElementById('btn-send-suno');
-
-            loadingBox.classList.remove('hidden');
-            btn.disabled = true;
-            progressBar.style.width = "20%";
-
-            try {
-                if (customEndpoint) {
-                    // Jika pengguna memasukkan endpoint Suno API (misal suno-api self-hosted / proxy)
-                    loadingText.textContent = "Menghubungi Suno API Endpoint...";
-                    progressBar.style.width = "55%";
-                    const res = await fetch(customEndpoint, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            title: title,
-                            prompt: lyrics,
-                            tags: style,
-                            make_instrumental: false,
-                            wait_audio: true
-                        })
-                    });
-                    if (!res.ok) throw new Error("Gagal terhubung ke Suno API Endpoint.");
-                    const sunoResult = await res.json();
-                    const items = Array.isArray(sunoResult) ? sunoResult : (sunoResult.data || []);
-                    if (items.length === 0) throw new Error("Suno API tidak mengembalikan audio.");
-
-                    appState.tracks = [];
-                    items.slice(0, 2).forEach((item, idx) => {
-                        appState.tracks.push({
-                            id: `suno_${Date.now()}_${idx}`,
-                            name: `${title} (V${idx + 1} - Mas Ghifari)`,
-                            url: item.audio_url || item.url,
-                            duration: item.duration || 180,
-                            variant: idx === 0 ? "Modern Koplo Ballad (94 BPM)" : "Emotional Acoustic Koplo (94 BPM)"
-                        });
-                    });
-                } else {
-                    // Mode Studio Bridge + Built-in Pop Jawa Koplo Synth Engine
-                    // Menghasilkan 2 variasi audio WAV playable & downloadable instan agar alur kerja berjalan mulus
-                    loadingText.textContent = "Menyusun aransemen Koplo Ambyar v1 (94 BPM)...";
-                    progressBar.style.width = "45%";
-                    const track1 = await synthesizeKoploPreviewTrack(title, 1, 94);
-
-                    loadingText.textContent = "Menyusun aransemen Koplo Ambyar v2 (Emotional Acoustic)...";
-                    progressBar.style.width = "85%";
-                    const track2 = await synthesizeKoploPreviewTrack(title, 2, 92);
-
-                    appState.tracks = [track1, track2];
-                    // Salin juga paket prompt ke clipboard sebagai kemudahan jika pengguna ingin paste ke Suno Web
-                    copyTextToClipboard(`TITLE: ${title}\nSTYLE: ${style}\n\n${lyrics}`, "2 Lagu Suno siap! Paket lirik juga disalin ke clipboard.");
-                }
-
-                progressBar.style.width = "100%";
-                if (appState.tracks.length > 0) {
-                    appState.selectedTrackId = appState.tracks[0].id;
-                }
-                renderSunoTracks();
-                syncClipSelectors();
-            } catch (err) {
-                console.error(err);
-                showToast("Info Suno: " + err.message, "error");
-            } finally {
-                setTimeout(() => {
-                    loadingBox.classList.add('hidden');
-                    btn.disabled = false;
-                }, 400);
-            }
-        }
-
-        // Synthesizer audio WAV 28 detik bergaya Pop Jawa Koplo (Kendang + Bass + Piano Chord) sebagai demo instan
-        async function synthesizeKoploPreviewTrack(title, version, bpm) {
-            const sampleRate = 22050;
-            const durationSec = 28; // Durasi preview ideal untuk langsung tes video klip
-            const numSamples = sampleRate * durationSec;
-            const buffer = new Float32Array(numSamples);
-
-            const beatDur = 60 / bpm;
-            // Progresi akor Pop Jawa Ambyar (C - G - Am - Em - F - C - Dm - G)
-            const chordsV1 = [
-                [261.63, 329.63, 392.00], // C
-                [196.00, 246.94, 293.66], // G
-                [220.00, 261.63, 329.63], // Am
-                [164.81, 196.00, 246.94], // Em
-                [174.61, 220.00, 261.63], // F
-                [261.63, 329.63, 392.00], // C
-                [146.83, 174.61, 220.00], // Dm
-                [196.00, 246.94, 293.66]  // G
-            ];
-            const chordsV2 = [
-                [220.00, 261.63, 329.63], // Am
-                [174.61, 220.00, 261.63], // F
-                [261.63, 329.63, 392.00], // C
-                [196.00, 246.94, 293.66], // G
-                [146.83, 174.61, 220.00], // Dm
-                [220.00, 261.63, 329.63], // Am
-                [174.61, 220.00, 261.63], // F
-                [196.00, 246.94, 293.66]  // G
-            ];
-            const chords = version === 1 ? chordsV1 : chordsV2;
-
-            for (let i = 0; i < numSamples; i++) {
-                const t = i / sampleRate;
-                const beatPos = t / beatDur;
-                const barIndex = Math.floor(beatPos / 4) % chords.length;
-                const beatInBar = beatPos % 4;
-                const chord = chords[barIndex];
-
-                // 1. Warm Piano / Pad Harmony
-                let pad = 0;
-                const barEnv = Math.exp(-(beatInBar) * 0.45);
-                for (let n = 0; n < chord.length; n++) {
-                    const freq = chord[n] * (version === 2 ? 1.0 : 0.5);
-                    pad += Math.sin(2 * Math.PI * freq * t) * 0.11 * barEnv;
-                }
-
-                // 2. Melodi gitar / suling jawa lembut
-                const melNote = chord[Math.floor(beatInBar) % chord.length] * 2;
-                const melEnv = Math.exp(-(beatInBar % 1) * 3.0);
-                const melody = Math.sin(2 * Math.PI * melNote * t) * 0.08 * melEnv;
-
-                // 3. Ketukan Kendang Koplo (Tak - Dut - Ketipung)
-                let kendang = 0;
-                const subBeat = (beatPos * 2) % 1;
-                const step8 = Math.floor(beatPos * 2) % 8;
-                // Pola koplo khas pada ketukan sinkopasi
-                if (step8 === 0 || step8 === 3 || step8 === 4 || step8 === 6 || step8 === 7) {
-                    const kEnv = Math.exp(-subBeat * 14);
-                    const kFreq = (step8 === 0 || step8 === 4) ? 95 * Math.exp(-subBeat * 6) + 55 : 195 * Math.exp(-subBeat * 8) + 90;
-                    kendang = Math.sin(2 * Math.PI * kFreq * t) * 0.24 * kEnv;
-                }
-
-                // 4. Bass hangat
-                const bassFreq = chord[0] * 0.25;
-                const bass = Math.sin(2 * Math.PI * bassFreq * t) * 0.16 * Math.exp(-(beatInBar % 2) * 1.2);
-
-                // Fade in & fade out halus
-                let masterEnv = 1.0;
-                if (t < 1.0) masterEnv = t;
-                if (t > durationSec - 2.0) masterEnv = (durationSec - t) / 2.0;
-
-                buffer[i] = Math.max(-0.95, Math.min(0.95, (pad + melody + kendang + bass) * masterEnv));
-            }
-
-            const wavBlob = encodeFloat32ToWav(buffer, sampleRate);
-            const url = URL.createObjectURL(wavBlob);
-
-            return {
-                id: `suno_track_${version}_${Date.now()}`,
-                name: `${title} - Versi ${version} (Mas Ghifari)`,
-                url: url,
-                blob: wavBlob,
-                duration: durationSec,
-                variant: version === 1 ? "Modern Pop Jawa Koplo • 94 BPM" : "Emotional Acoustic Koplo • 92 BPM"
-            };
-        }
-
-        function encodeFloat32ToWav(samples, sampleRate) {
-            const buffer = new ArrayBuffer(44 + samples.length * 2);
-            const view = new DataView(buffer);
-
-            const writeString = (offset, str) => {
-                for (let i = 0; i < str.length; i++) view.setUint8(offset + i, str.charCodeAt(i));
-            };
-
-            writeString(0, 'RIFF');
-            view.setUint32(4, 36 + samples.length * 2, true);
-            writeString(8, 'WAVE');
-            writeString(12, 'fmt ');
-            view.setUint32(16, 16, true);
-            view.setUint16(20, 1, true); // PCM
-            view.setUint16(22, 1, true); // Mono
-            view.setUint32(24, sampleRate, true);
-            view.setUint32(28, sampleRate * 2, true);
-            view.setUint16(32, 2, true);
-            view.setUint16(34, 16, true);
-            writeString(36, 'data');
-            view.setUint32(40, samples.length * 2, true);
-
-            let offset = 44;
-            for (let i = 0; i < samples.length; i++, offset += 2) {
-                const s = Math.max(-1, Math.min(1, samples[i]));
-                view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
-            }
-            return new Blob([view], { type: 'audio/wav' });
-        }
-
-        function handleManualAudioUpload(event) {
-            const files = Array.from(event.target.files);
-            if (!files.length) return;
-
-            files.forEach((file, idx) => {
-                const url = URL.createObjectURL(file);
-                const tempAudio = new Audio(url);
-                tempAudio.addEventListener('loadedmetadata', () => {
-                    const track = {
-                        id: `upload_${Date.now()}_${idx}`,
-                        name: file.name.replace(/\.[^/.]+$/, ""),
-                        url: url,
-                        blob: file,
-                        duration: tempAudio.duration || 180,
-                        variant: "Uploaded Suno Master Audio"
-                    };
-                    appState.tracks.push(track);
-                    if (!appState.selectedTrackId) appState.selectedTrackId = track.id;
-                    renderSunoTracks();
-                    syncClipSelectors();
-                    showToast(`Audio "${track.name}" ditambahkan!`, "success");
-                });
-            });
-            event.target.value = "";
-        }
-
-        function renderSunoTracks() {
-            const container = document.getElementById('suno-tracks-container');
-            if (appState.tracks.length === 0) return;
-
-            container.innerHTML = appState.tracks.map((track, idx) => {
-                const isSelected = track.id === appState.selectedTrackId;
-                return `
-                <div class="p-4 rounded-xl border transition ${isSelected ? 'bg-amber-500/10 border-amber-500/60' : 'bg-zinc-900/90 border-zinc-800'} space-y-3">
-                    <div class="flex items-start justify-between gap-2">
-                        <div>
-                            <div class="flex items-center gap-2">
-                                <span class="px-2 py-0.5 rounded bg-amber-500 text-black font-extrabold text-[10px]">LAGU ${idx + 1}</span>
-                                <h4 class="text-xs sm:text-sm font-bold text-white line-clamp-1">${track.name}</h4>
-                            </div>
-                            <p class="text-[11px] text-zinc-400 mt-0.5">${track.variant}</p>
-                        </div>
-                        <button onclick="selectTrackForClip('${track.id}')" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold transition ${isSelected ? 'bg-amber-500 text-black' : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'}">
-                            ${isSelected ? '✓ Dipilih untuk Klip' : 'Pilih untuk Klip'}
-                        </button>
-                    </div>
-                    <audio controls src="${track.url}" class="w-full h-9 rounded-lg"></audio>
-                    <div class="flex items-center justify-end gap-2">
-                        <a href="${track.url}" download="${track.name.replace(/[^a-zA-Z0-9_-]/g, '_')}.wav" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 text-xs font-semibold transition">
-                            <i data-lucide="download" class="w-3.5 h-3.5"></i> Unduh Lagu ${idx + 1}
-                        </a>
-                    </div>
-                </div>
-                `;
-            }).join('');
-            lucide.createIcons();
-        }
-
-        function selectTrackForClip(id) {
-            appState.selectedTrackId = id;
-            renderSunoTracks();
-            syncClipSelectors();
-            showToast("Lagu dipilih untuk pembuatan Video Klip!", "success");
-        }
-
+// ... existing code ... -->
         // =========================================================================
         // 6. STEP 2: VISUAL BULK PROMPTS & DIRECT FLOW AI IMAGE GENERATION
         // =========================================================================
         async function generateBulkPrompts() {
+            if (!ensureApiKeyReady()) return;
             const title = document.getElementById('output-title').value.trim();
             const lyrics = document.getElementById('output-lyrics').value.trim();
-            const count = parseInt(document.getElementById('scene-count-select').value, 10);
-
-            if (!lyrics) {
-                showToast("Buat atau isi lirik lagu terlebih dahulu di Langkah 1!", "warning");
-                return;
-            }
-
-            const btn = document.getElementById('btn-gen-prompts');
-            btn.disabled = true;
-            btn.innerHTML = `<div class="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></div><span>Menyusun Prompt...</span>`;
-
-            const promptQuery = `
-Berdasarkan judul lagu "${title}" dan lirik Pop Jawa Koplo Ambyar berikut:
-${lyrics}
-
-Buatkan ${count} prompt gambar sinematik berurutan (16:9 widescreen) untuk Google Flow / Imagen yang menggambarkan alur cerita lagu dari awal sampai akhir.
-Aturan Visual:
-- Suasana Indonesia / Jawa modern yang relatable dan emosional (misal: angkringan malam gerimis, teras rumah lampu hangat, jalanan kota Jogja/Solo saat senja, stasiun kereta, kamar bernuansa nostalgia, atau pemandangan sawah/bukit berkabut).
-- Gaya fotografi sinematik film Indonesia, pencahayaan dramatis (golden hour, neon hujan malam, moody warm tones), kamera 35mm, depth of field dangkal, ultra realistic, tanpa teks/tulisan di dalam gambar.
-- Prompt ditulis dalam bahasa Inggris yang detail agar menghasilkan visual terbaik di Google Flow.
-            `.trim();
-
-            const payload = {
-                contents: [{ parts: [{ text: promptQuery }] }],
-                generationConfig: {
-                    responseMimeType: "application/json",
-                    responseSchema: {
-                        type: "ARRAY",
-                        items: {
-                            type: "OBJECT",
-                            properties: {
-                                sceneTitle: { type: "STRING" },
-                                lyricRef: { type: "STRING" },
-                                promptText: { type: "STRING" }
-                            },
-                            required: ["sceneTitle", "lyricRef", "promptText"]
-                        }
-                    }
-                }
-            };
-
+// ... existing code ... -->
             try {
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/${TEXT_MODEL}:generateContent?key=${apiKey}`;
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/${TEXT_MODEL}:generateContent?key=${getActiveApiKey()}`;
                 const data = await fetchWithRetry(url, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                const rawJson = data.candidates?.[0]?.content?.parts?.[0]?.text;
-                const parsed = JSON.parse(rawJson);
-
-                appState.prompts = parsed.map((item, idx) => ({
-                    id: `prompt_${Date.now()}_${idx}`,
-                    sceneTitle: item.sceneTitle,
-                    lyricRef: item.lyricRef,
-                    promptText: item.promptText
-                }));
-
-                renderBulkPrompts();
-                showToast(`${appState.prompts.length} Bulk Prompt siap disalin ke Google Flow atau di-generate langsung!`, "success");
-            } catch (err) {
-                console.error(err);
-                showToast("Gagal membuat bulk prompt: " + err.message, "error");
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = `<i data-lucide="wand-2" class="w-4 h-4"></i><span>Buatkan Bulk Prompt Visual</span>`;
-                lucide.createIcons();
-            }
-        }
-
-        function renderBulkPrompts() {
-            const container = document.getElementById('bulk-prompts-list');
-            if (appState.prompts.length === 0) return;
-
-            container.innerHTML = appState.prompts.map((p, idx) => `
-                <div class="p-3.5 rounded-xl bg-zinc-900/90 border border-zinc-800 space-y-2">
-                    <div class="flex items-center justify-between gap-2">
-                        <span class="text-xs font-bold text-amber-400">Scene ${idx + 1}: ${p.sceneTitle}</span>
-                        <div class="flex items-center gap-1.5">
-                            <button onclick="copyTextToClipboard(appState.prompts[${idx}].promptText, 'Prompt Scene ${idx + 1} disalin!')" class="px-2 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-[11px] text-zinc-300 flex items-center gap-1">
-                                <i data-lucide="copy" class="w-3 h-3"></i> Salin
-                            </button>
-                            <button onclick="generateSingleImageDirect(${idx})" id="btn-gen-img-${idx}" class="px-2.5 py-1 rounded bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 text-[11px] font-semibold flex items-center gap-1">
-                                <i data-lucide="sparkles" class="w-3 h-3"></i> Generate Gambar
-                            </button>
-                        </div>
-                    </div>
-                    <p class="text-[11px] italic text-zinc-400">"${p.lyricRef}"</p>
-                    <textarea onchange="appState.prompts[${idx}].promptText = this.value" rows="3" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-2 text-xs text-zinc-200 outline-none focus:border-amber-500">${p.promptText}</textarea>
-                </div>
-            `).join('');
-            lucide.createIcons();
-        }
-
-        function copyAllBulkPrompts() {
-            if (appState.prompts.length === 0) {
-                showToast("Belum ada prompt yang dibuat.", "warning");
-                return;
-            }
-            const bulkText = appState.prompts.map((p, i) => `Scene ${i + 1} (${p.sceneTitle}):\n${p.promptText}`).join("\n\n---\n\n");
-            copyTextToClipboard(bulkText, `Semua ${appState.prompts.length} Bulk Prompt disalin! Siap paste ke Google Flow.`);
-        }
-
+// ... existing code ... -->
         async function generateSingleImageDirect(promptIdx) {
+            if (!ensureApiKeyReady()) return;
             const p = appState.prompts[promptIdx];
             if (!p) return;
-
-            const btn = document.getElementById(`btn-gen-img-${promptIdx}`);
-            if (btn) {
-                btn.disabled = true;
-                btn.innerHTML = `<div class="w-3 h-3 border-2 border-emerald-300 border-t-transparent rounded-full animate-spin"></div><span>Proses...</span>`;
-            }
-
-            try {
-                const payload = {
-                    contents: [{
-                        role: 'user',
-                        parts: [{ text: p.promptText }]
-                    }],
-                    generationConfig: {
-                        responseModalities: ['IMAGE'],
-                        imageConfig: { aspectRatio: "16:9" }
-                    }
-                };
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/${IMAGE_MODEL}:generateContent?key=${apiKey}`;
+// ... existing code ... -->
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/${IMAGE_MODEL}:generateContent?key=${getActiveApiKey()}`;
                 const result = await fetchWithRetry(url, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                const part = result?.candidates?.[0]?.content?.parts?.find(item => item.inlineData);
-                if (!part) throw new Error("Model tidak mengembalikan data gambar.");
-
-                const imageUrl = `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
-                appState.images.push({
-                    id: `img_${Date.now()}_${promptIdx}`,
-                    url: imageUrl,
-                    promptText: p.sceneTitle,
-                    selected: true
-                });
-
-                renderVisualGallery();
-                syncClipSelectors();
-                showToast(`Gambar Scene ${promptIdx + 1} berhasil dibuat & masuk ke galeri!`, "success");
-            } catch (err) {
-                console.error(err);
-                showToast(`Gagal generate gambar Scene ${promptIdx + 1}: ${err.message}`, "error");
-            } finally {
-                if (btn) {
-                    btn.disabled = false;
-                    btn.innerHTML = `<i data-lucide="sparkles" class="w-3 h-3"></i> Generate Gambar`;
-                    lucide.createIcons();
-                }
-            }
-        }
-
+// ... existing code ... -->
         async function generateAllImagesDirect() {
+            if (!ensureApiKeyReady()) return;
             if (appState.prompts.length === 0) {
                 showToast("Buatkan Bulk Prompt terlebih dahulu!", "warning");
                 return;
             }
-            const btn = document.getElementById('btn-gen-all-images');
-            btn.disabled = true;
-            btn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-black border-t-transparent rounded-full animate-spin"></div><span>Generating (${appState.prompts.length})...</span>`;
-
-            for (let i = 0; i < appState.prompts.length; i++) {
-                await generateSingleImageDirect(i);
-            }
-
-            btn.disabled = false;
-            btn.innerHTML = `<i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Generate Semua Gambar`;
-            lucide.createIcons();
-            showToast("Semua gambar selesai digenerate dan siap untuk Video Klip!", "success");
-        }
-
-        function handleManualImageUpload(event) {
-            const files = Array.from(event.target.files);
-            if (!files.length) return;
-
-            files.forEach((file, idx) => {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    appState.images.push({
-                        id: `up_img_${Date.now()}_${idx}`,
-                        url: e.target.result,
-                        promptText: file.name,
-                        selected: true
-                    });
-                    renderVisualGallery();
-                    syncClipSelectors();
-                };
-                reader.readAsDataURL(file);
-            });
-            showToast(`${files.length} foto ditambahkan ke galeri klip!`, "success");
-            event.target.value = "";
-        }
-
-        function renderVisualGallery() {
-            const grid = document.getElementById('visual-gallery-grid');
-            const badge = document.getElementById('selected-images-badge');
-            const activeImages = appState.images.filter(img => img.selected);
-            badge.textContent = `${activeImages.length} gambar siap untuk video klip`;
-
-            if (appState.images.length === 0) {
-                grid.innerHTML = `
-                    <div class="col-span-full p-8 rounded-xl border border-dashed border-zinc-800 text-center space-y-2">
-                        <i data-lucide="images" class="w-8 h-8 text-zinc-600 mx-auto"></i>
-                        <p class="text-xs text-zinc-400">Belum ada gambar visual.</p>
-                    </div>`;
-                lucide.createIcons();
-                return;
-            }
-
-            grid.innerHTML = appState.images.map((img, idx) => `
-                <div class="group relative aspect-video rounded-xl overflow-hidden border ${img.selected ? 'border-amber-500 ring-2 ring-amber-500/30' : 'border-zinc-800 opacity-60'} bg-zinc-950">
-                    <img src="${img.url}" alt="Scene ${idx + 1}" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40 opacity-0 group-hover:opacity-100 transition flex flex-col justify-between p-2">
-                        <div class="flex justify-between items-center">
-                            <span class="px-1.5 py-0.5 rounded bg-black/70 text-[10px] font-bold text-white">#${idx + 1}</span>
-                            <button onclick="removeGalleryImage(${idx})" class="p-1 rounded bg-red-500/80 hover:bg-red-500 text-white" title="Hapus">
-                                <i data-lucide="trash-2" class="w-3 h-3"></i>
-                            </button>
-                        </div>
-                        <div class="flex items-center justify-between gap-1">
-                            <button onclick="toggleImageSelect(${idx})" class="px-2 py-1 rounded bg-zinc-900/90 text-[10px] font-semibold text-amber-400">
-                                ${img.selected ? '✓ Dipakai' : '+ Pakai'}
-                            </button>
-                            <a href="${img.url}" download="Nadi_Ambyar_Scene_${idx + 1}.png" class="p-1 rounded bg-emerald-500 text-black" title="Unduh Gambar">
-                                <i data-lucide="download" class="w-3 h-3"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-            lucide.createIcons();
-        }
-
-        function toggleImageSelect(idx) {
-            appState.images[idx].selected = !appState.images[idx].selected;
-            renderVisualGallery();
-            syncClipSelectors();
-        }
-
-        function removeGalleryImage(idx) {
-            appState.images.splice(idx, 1);
-            renderVisualGallery();
-            syncClipSelectors();
-        }
-
-        // =========================================================================
-        // 7. STEP 3: VIDEO CLIP ENGINE (ZOOM IN/OUT + NADI AMBYAR + MP4/WEBM EXPORT)
-        // =========================================================================
-        function syncClipSelectors() {
-            const audioSelect = document.getElementById('clip-audio-select');
-            if (appState.tracks.length === 0) {
-                audioSelect.innerHTML = `<option value="">-- Belum ada audio (Generate di Langkah 1) --</option>`;
-            } else {
-                audioSelect.innerHTML = appState.tracks.map(t =>
-                    `<option value="${t.id}" ${t.id === appState.selectedTrackId ? 'selected' : ''}>${t.name}</option>`
-                ).join('');
-            }
-
-            const activeImages = appState.images.filter(img => img.selected);
-            document.getElementById('clip-img-count').textContent = activeImages.length;
-            const strip = document.getElementById('clip-thumbnails-strip');
-            if (activeImages.length === 0) {
-                strip.innerHTML = `<p class="text-[11px] text-zinc-500 italic">Belum ada gambar. Tambahkan di menu Visual & Google Flow.</p>`;
-            } else {
-                strip.innerHTML = activeImages.map((img, i) => `
-                    <div class="relative w-20 h-12 rounded-lg overflow-hidden border border-zinc-700 shrink-0">
-                        <img src="${img.url}" class="w-full h-full object-cover">
-                        <span class="absolute bottom-0.5 right-0.5 px-1 rounded bg-black/75 text-[9px] text-amber-400 font-bold">${i + 1}</span>
-                    </div>
-                `).join('');
-            }
-        }
-
-        function onClipAudioChange() {
-            const id = document.getElementById('clip-audio-select').value;
-            appState.selectedTrackId = id;
-            const audioEl = document.getElementById('preview-audio-el');
-            const track = appState.tracks.find(t => t.id === id);
-            if (track) {
-                audioEl.src = track.url;
-            }
-        }
-
-        // Preload HTMLImageElement array untuk rendering canvas mulus
-        function loadClipImageElements() {
-            const activeImages = appState.images.filter(img => img.selected);
-            return Promise.all(activeImages.map(item => new Promise((resolve) => {
-                const img = new Image();
-                img.crossOrigin = "anonymous";
-                img.onload = () => resolve(img);
-                img.onerror = () => resolve(null);
-                img.src = item.url;
-            }))).then(arr => arr.filter(Boolean));
-        }
-
-        // Menggambar 1 frame video klip lengkap dengan animasi Ken Burns (Zoom In / Zoom Out),
-        // crossfade antar gambar, audio visualizer, dan watermark channel Nadi Ambyar
-        function renderVideoFrame(ctx, width, height, imgElements, elapsedSec, totalDurSec, freqData = null) {
-            ctx.fillStyle = "#09090b";
-            ctx.fillRect(0, 0, width, height);
-
-            const motionMode = document.getElementById('clip-motion-mode').value;
-            const channelName = document.getElementById('clip-channel-name').value.trim() || "Nadi Ambyar";
-            const showTitle = document.getElementById('clip-show-title').checked;
-            const showVis = document.getElementById('clip-show-visualizer').checked;
-            const songTitle = document.getElementById('output-title').value.trim() || "Lagu Original Pop Jawa";
-
-            if (imgElements.length > 0) {
-                const slideDur = Math.max(4, totalDurSec / imgElements.length);
-                const rawIndex = elapsedSec / slideDur;
-                const currentIndex = Math.floor(rawIndex) % imgElements.length;
-                const nextIndex = (currentIndex + 1) % imgElements.length;
-                const slideProgress = rawIndex - Math.floor(rawIndex); // 0.0 -> 1.0
-
-                const drawSlide = (img, idx, progress, alpha) => {
-                    if (!img) return;
-                    ctx.save();
-                    ctx.globalAlpha = alpha;
-
-                    // Tentukan arah zoom: Zoom In (1.0 -> 1.18) atau Zoom Out (1.18 -> 1.0)
-                    let isZoomIn = true;
-                    if (motionMode === 'zoom-out') isZoomIn = false;
-                    else if (motionMode === 'alternate') isZoomIn = (idx % 2 === 0);
-
-                    const scale = isZoomIn
-                        ? (1.0 + 0.18 * progress)
-                        : (1.18 - 0.18 * progress);
-
-                    // Hitung rasio cover agar gambar selalu memenuhi kanvas 16:9
-                    const imgAspect = img.width / img.height;
-                    const canvasAspect = width / height;
-                    let drawW, drawH;
-                    if (imgAspect > canvasAspect) {
-                        drawH = height;
-                        drawW = height * imgAspect;
-                    } else {
-                        drawW = width;
-                        drawH = width / imgAspect;
-                    }
-
-                    const scaledW = drawW * scale;
-                    const scaledH = drawH * scale;
-                    const offsetX = (width - scaledW) / 2;
-                    const offsetY = (height - scaledH) / 2;
-
-                    ctx.drawImage(img, offsetX, offsetY, scaledW, scaledH);
-                    ctx.restore();
-                };
-
-                // Gambar slide aktif
-                drawSlide(imgElements[currentIndex], currentIndex, slideProgress, 1.0);
-
-                // Crossfade halus 15% terakhir menuju slide berikutnya
-                if (imgElements.length > 1 && slideProgress > 0.85) {
-                    const fadeAlpha = (slideProgress - 0.85) / 0.15;
-                    drawSlide(imgElements[nextIndex], nextIndex, 0, fadeAlpha);
-                }
-            } else {
-                // Background gradient elegan jika belum ada gambar
-                const grad = ctx.createRadialGradient(width / 2, height / 2, 80, width / 2, height / 2, width * 0.7);
-                grad.addColorStop(0, "#271a0c");
-                grad.addColorStop(1, "#09090b");
-                ctx.fillStyle = grad;
-                ctx.fillRect(0, 0, width, height);
-
-                ctx.fillStyle = "rgba(255,255,255,0.25)";
-                ctx.font = "600 24px Inter, sans-serif";
-                ctx.textAlign = "center";
-                ctx.fillText("Tambahkan Gambar di Menu Visual & Google Flow untuk Animasi Video Klip", width / 2, height / 2);
-            }
-
-            // Vignette sinematik gelap di bagian bawah & atas
-            const topGrad = ctx.createLinearGradient(0, 0, 0, 140);
-            topGrad.addColorStop(0, "rgba(0,0,0,0.72)");
-            topGrad.addColorStop(1, "rgba(0,0,0,0)");
-            ctx.fillStyle = topGrad;
-            ctx.fillRect(0, 0, width, 140);
-
-            const botGrad = ctx.createLinearGradient(0, height - 200, 0, height);
-            botGrad.addColorStop(0, "rgba(0,0,0,0)");
-            botGrad.addColorStop(1, "rgba(0,0,0,0.88)");
-            ctx.fillStyle = botGrad;
-            ctx.fillRect(0, height - 200, width, 200);
-
-            // WATERMARK EKSKLUSIF KANAL YOUTUBE: NADI AMBYAR (Kanan Atas)
-            ctx.save();
-            const badgeText = channelName.toUpperCase();
-            ctx.font = "800 22px 'Plus Jakarta Sans', Inter, sans-serif";
-            const textMetrics = ctx.measureText(badgeText);
-            const padX = 22;
-            const boxW = textMetrics.width + padX * 2 + 16;
-            const boxH = 46;
-            const boxX = width - boxW - 36;
-            const boxY = 32;
-
-            // Pill glassmorphism
-            ctx.fillStyle = "rgba(15, 15, 20, 0.75)";
-            ctx.beginPath();
-            ctx.roundRect(boxX, boxY, boxW, boxH, 14);
-            ctx.fill();
-            ctx.strokeStyle = "rgba(245, 158, 11, 0.65)";
-            ctx.lineWidth = 2;
-            ctx.stroke();
-
-            // Titik aksen emas
-            ctx.fillStyle = "#f59e0b";
-            ctx.beginPath();
-            ctx.arc(boxX + 20, boxY + boxH / 2, 5, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Teks Nadi Ambyar
-            ctx.fillStyle = "#fbbf24";
-            ctx.textAlign = "left";
-            ctx.textBaseline = "middle";
-            ctx.fillText(badgeText, boxX + 34, boxY + boxH / 2 + 1);
-            ctx.restore();
-
-            // JUDUL LAGU & NAMA PENYANYI (Kiri Bawah)
-            if (showTitle) {
-                ctx.save();
-                ctx.textAlign = "left";
-                ctx.fillStyle = "#f59e0b";
-                ctx.font = "700 18px Inter, sans-serif";
-                ctx.fillText("OFFICIAL MUSIC VIDEO • MAS GHIFARI", 44, height - 88);
-
-                ctx.fillStyle = "#ffffff";
-                ctx.font = "800 38px 'Plus Jakarta Sans', Inter, sans-serif";
-                ctx.fillText(songTitle, 44, height - 44);
-                ctx.restore();
-            }
-
-            // AUDIO SPECTRUM VISUALIZER (Kanan Bawah)
-            if (showVis) {
-                ctx.save();
-                const bars = 28;
-                const barWidth = 6;
-                const gap = 5;
-                const startX = width - (bars * (barWidth + gap)) - 44;
-                const baseY = height - 42;
-
-                for (let b = 0; b < bars; b++) {
-                    let val = 0.25;
-                    if (freqData && freqData.length > 0) {
-                        const bin = Math.floor((b / bars) * (freqData.length * 0.5));
-                        val = Math.max(0.15, freqData[bin] / 255);
-                    } else {
-                        // Simulasi gelombang ritmis 94 BPM saat idle/export
-                        val = 0.2 + 0.55 * Math.abs(Math.sin(elapsedSec * 4.8 + b * 0.45));
-                    }
-                    const barH = val * 48;
-                    ctx.fillStyle = b % 2 === 0 ? "#f59e0b" : "#fde68a";
-                    ctx.beginPath();
-                    ctx.roundRect(startX + b * (barWidth + gap), baseY - barH, barWidth, barH, 3);
-                    ctx.fill();
-                }
-                ctx.restore();
-            }
-        }
-
-        async function drawSinglePreviewFrame() {
-            const canvas = document.getElementById('video-canvas');
-            const ctx = canvas.getContext('2d');
-            const imgs = await loadClipImageElements();
-            renderVideoFrame(ctx, canvas.width, canvas.height, imgs, 2.5, 28, null);
-        }
-
-        function formatTime(sec) {
-            if (!sec || isNaN(sec)) return "00:00";
-            const m = Math.floor(sec / 60).toString().padStart(2, '0');
-            const s = Math.floor(sec % 60).toString().padStart(2, '0');
-            return `${m}:${s}`;
-        }
-
-        async function togglePreviewPlayback() {
-            const audioEl = document.getElementById('preview-audio-el');
-            const playIcon = document.getElementById('preview-play-icon');
-            const playText = document.getElementById('preview-play-text');
-
-            if (appState.isPlayingPreview) {
-                audioEl.pause();
-                appState.isPlayingPreview = false;
-                cancelAnimationFrame(appState.previewAnimId);
-                playText.textContent = "Preview Klip";
-                playIcon.setAttribute('data-lucide', 'play');
-                lucide.createIcons();
-                return;
-            }
-
-            const track = appState.tracks.find(t => t.id === appState.selectedTrackId);
-            if (!track) {
-                showToast("Pilih atau buat lagu terlebih dahulu di Langkah 1!", "warning");
-                return;
-            }
-
-            if (audioEl.src !== track.url) {
-                audioEl.src = track.url;
-            }
-
-            // Setup Web Audio Analyser untuk visualizer real-time
-            if (!appState.audioCtx) {
-                appState.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const source = appState.audioCtx.createMediaElementSource(audioEl);
-                appState.analyser = appState.audioCtx.createAnalyser();
-                appState.analyser.fftSize = 128;
-                source.connect(appState.analyser);
-                appState.analyser.connect(appState.audioCtx.destination);
-                appState.dataArray = new Uint8Array(appState.analyser.frequencyBinCount);
-            }
-            if (appState.audioCtx.state === 'suspended') {
-                await appState.audioCtx.resume();
-            }
-
-            const imgs = await loadClipImageElements();
-            const canvas = document.getElementById('video-canvas');
-            const ctx = canvas.getContext('2d');
-
-            appState.isPlayingPreview = true;
-            playText.textContent = "Jeda Preview";
-            playIcon.setAttribute('data-lucide', 'pause');
-            lucide.createIcons();
-
-            await audioEl.play();
-
-            const loop = () => {
-                if (!appState.isPlayingPreview) return;
-                if (audioEl.ended) {
-                    appState.isPlayingPreview = false;
-                    playText.textContent = "Preview Klip";
-                    playIcon.setAttribute('data-lucide', 'play');
-                    lucide.createIcons();
-                    return;
-                }
-                appState.analyser.getByteFrequencyData(appState.dataArray);
-                const dur = audioEl.duration || track.duration || 28;
-                document.getElementById('preview-time-display').textContent = `${formatTime(audioEl.currentTime)} / ${formatTime(dur)}`;
-                renderVideoFrame(ctx, canvas.width, canvas.height, imgs, audioEl.currentTime, dur, appState.dataArray);
-                appState.previewAnimId = requestAnimationFrame(loop);
-            };
-            loop();
-        }
-
-        // =========================================================================
-        // REALTIME / FAST MP4 & WEBM VIDEO RENDERER (DENGAN AUDIO)
-        // =========================================================================
-        async function startVideoExport() {
-            const track = appState.tracks.find(t => t.id === appState.selectedTrackId);
-            if (!track) {
-                showToast("Pilih lagu audio terlebih dahulu sebelum merender video!", "warning");
-                return;
-            }
-
-            const imgs = await loadClipImageElements();
-            if (imgs.length === 0) {
-                showToast("Tambahkan minimal 1 gambar visual agar video klip menarik!", "warning");
-                return;
-            }
-
-            // Hentikan preview jika sedang berjalan
-            if (appState.isPlayingPreview) {
-                await togglePreviewPlayback();
-            }
-
-            const overlay = document.getElementById('export-overlay');
-            const progressBar = document.getElementById('export-progress-bar');
-            const progressText = document.getElementById('export-progress-text');
-            const downloadBox = document.getElementById('video-download-box');
-            const downloadLink = document.getElementById('video-download-link');
-            const fileInfo = document.getElementById('video-file-info');
-
-            overlay.classList.remove('hidden');
-            downloadBox.classList.add('hidden');
-            appState.isRenderingVideo = true;
-            appState.renderCancelled = false;
-            progressBar.style.width = "5%";
-
-            const songTitle = (document.getElementById('output-title').value.trim() || "Nadi_Ambyar_Klip").replace(/[^a-zA-Z0-9_-]/g, '_');
-
-            try {
-                // Gunakan MediaRecorder (Video Canvas + Audio Stream) untuk menghasilkan file video siap unduh dengan audio utuh
-                const canvas = document.getElementById('video-canvas');
-                const ctx = canvas.getContext('2d');
-
-                const renderAudio = new Audio(track.url);
-                renderAudio.crossOrigin = "anonymous";
-
-                await new Promise((resolve, reject) => {
-                    renderAudio.onloadedmetadata = resolve;
-                    renderAudio.onerror = () => reject(new Error("Gagal memuat file audio untuk render."));
-                });
-
-                const totalDuration = renderAudio.duration || track.duration || 28;
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const sourceNode = audioCtx.createMediaElementSource(renderAudio);
-                const destNode = audioCtx.createMediaStreamDestination();
-                const analyser = audioCtx.createAnalyser();
-                analyser.fftSize = 128;
-
-                sourceNode.connect(analyser);
-                analyser.connect(destNode);
-                const freqData = new Uint8Array(analyser.frequencyBinCount);
-
-                const canvasStream = canvas.captureStream(30); // 30 FPS HD
-                const combinedStream = new MediaStream([
-                    ...canvasStream.getVideoTracks(),
-                    ...destNode.stream.getAudioTracks()
-                ]);
-
-                // Cek dukungan MIME MP4 H.264 native (Chrome 126+/Safari/Edge) atau fallback WebM VP9
-                let mimeType = 'video/webm;codecs=vp9,opus';
-                let ext = 'webm';
-                if (MediaRecorder.isTypeSupported('video/mp4;codecs=avc1.42E01E,mp4a.40.2')) {
-                    mimeType = 'video/mp4;codecs=avc1.42E01E,mp4a.40.2';
-                    ext = 'mp4';
-                } else if (MediaRecorder.isTypeSupported('video/mp4')) {
-                    mimeType = 'video/mp4';
-                    ext = 'mp4';
-                }
-
-                const recorder = new MediaRecorder(combinedStream, {
-                    mimeType: mimeType,
-                    videoBitsPerSecond: 4500000 // 4.5 Mbps HD
-                });
-
-                const chunks = [];
-                recorder.ondataavailable = (e) => {
-                    if (e.data && e.data.size > 0) chunks.push(e.data);
-                };
-
-                const recordingFinished = new Promise((resolve) => {
-                    recorder.onstop = resolve;
-                });
-
-                recorder.start(250);
-                await renderAudio.play();
-
-                const renderLoop = () => {
-                    if (appState.renderCancelled) {
-                        renderAudio.pause();
-                        recorder.stop();
-                        return;
-                    }
-                    if (renderAudio.ended || renderAudio.currentTime >= totalDuration) {
-                        recorder.stop();
-                        return;
-                    }
-
-                    analyser.getByteFrequencyData(freqData);
-                    const pct = Math.min(99, Math.round((renderAudio.currentTime / totalDuration) * 100));
-                    progressBar.style.width = `${pct}%`;
-                    progressText.textContent = `Merender video klip: ${pct}% (${formatTime(renderAudio.currentTime)} / ${formatTime(totalDuration)})`;
-
-                    renderVideoFrame(ctx, canvas.width, canvas.height, imgs, renderAudio.currentTime, totalDuration, freqData);
-                    requestAnimationFrame(renderLoop);
-                };
-                renderLoop();
-
-                await recordingFinished;
-                await audioCtx.close();
-
-                if (appState.renderCancelled) {
-                    overlay.classList.add('hidden');
-                    showToast("Proses render dibatalkan.", "info");
-                    return;
-                }
-
-                const videoBlob = new Blob(chunks, { type: mimeType });
-                const videoUrl = URL.createObjectURL(videoBlob);
-                const sizeMB = (videoBlob.size / (1024 * 1024)).toFixed(2);
-
-                downloadLink.href = videoUrl;
-                downloadLink.download = `Nadi_Ambyar_-_${songTitle}.${ext}`;
-                fileInfo.textContent = `Nadi_Ambyar_-_${songTitle}.${ext} • ${sizeMB} MB • HD 720p (Zoom In/Out + Watermark Nadi Ambyar)`;
-
-                overlay.classList.add('hidden');
-                downloadBox.classList.remove('hidden');
-                showToast(`Video klip berhasil dibuat (${sizeMB} MB)! Klik Unduh File Video.`, "success");
-            } catch (err) {
-                console.error(err);
-                overlay.classList.add('hidden');
-                showToast("Terjadi kendala saat render video: " + err.message, "error");
-            } finally {
-                appState.isRenderingVideo = false;
-            }
-        }
-
-        function cancelVideoRender() {
-            appState.renderCancelled = true;
-        }
-
+// ... existing code ... -->
         // =========================================================================
         // 8. STEP 4: YOUTUBE SEO (JUDUL, DESKRIPSI & TAG)
         // =========================================================================
         async function generateYouTubeSEO() {
+            if (!ensureApiKeyReady()) return;
             const title = document.getElementById('output-title').value.trim();
             const lyrics = document.getElementById('output-lyrics').value.trim();
-
-            if (!title || !lyrics) {
-                showToast("Pastikan lagu sudah dibuat di Langkah 1 terlebih dahulu!", "warning");
-                return;
-            }
-
-            const btn = document.getElementById('btn-gen-seo');
-            btn.disabled = true;
-            btn.innerHTML = `<div class="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></div><span>Menyusun SEO...</span>`;
-
-            const seoPrompt = `
-Buatkan metadata YouTube optimal untuk rilis lagu baru dari kanal YouTube "Nadi Ambyar".
-Judul Lagu: "${title}"
-Penyanyi / Karakter Vokal: Mas Ghifari
-Genre: Modern Pop Jawa Koplo Ambyar
-Lirik Lagu:
-${lyrics}
-
-Hasilkan:
-1. youtubeTitle: Judul video YouTube yang menarik klik (CTR tinggi) namun tetap elegan dan menyertakan nama penyanyi "Mas Ghifari" serta kanal "Nadi Ambyar" (contoh format: Nadi Ambyar - [Judul Lagu] (Official Music Video) | Mas Ghifari | Lagu Pop Jawa Ambyar Terbaru).
-2. youtubeDescription: Deskripsi YouTube yang menyentuh hati (2 paragraf pembuka sesuai cerita lagu), diikuti kredit produksi (Vocal: Mas Ghifari, Channel: Nadi Ambyar, Genre: Modern Pop Jawa Koplo Ambyar), lalu tampilkan LIRIK LENGKAP lagu tersebut, dan akhiri dengan 5-7 hashtag relevan (#NadiAmbyar #PopJawa #LaguAmbyar #KoploAmbyar #MasGhifari).
-3. youtubeTags: 20-25 kata kunci/tag YouTube dipisahkan dengan koma (fokus pada nadi ambyar, pop jawa koplo, lagu jawa galau ambyar, mas ghifari, dan variasi judul lagu).
-            `.trim();
-
-            const payload = {
-                contents: [{ parts: [{ text: seoPrompt }] }],
-                generationConfig: {
-                    responseMimeType: "application/json",
-                    responseSchema: {
-                        type: "OBJECT",
-                        properties: {
-                            youtubeTitle: { type: "STRING" },
-                            youtubeDescription: { type: "STRING" },
-                            youtubeTags: { type: "STRING" }
-                        },
-                        required: ["youtubeTitle", "youtubeDescription", "youtubeTags"]
-                    }
-                }
-            };
-
+// ... existing code ... -->
             try {
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/${TEXT_MODEL}:generateContent?key=${apiKey}`;
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/${TEXT_MODEL}:generateContent?key=${getActiveApiKey()}`;
                 const data = await fetchWithRetry(url, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                const rawJson = data.candidates?.[0]?.content?.parts?.[0]?.text;
-                const parsed = JSON.parse(rawJson);
-
-                document.getElementById('yt-title-output').value = parsed.youtubeTitle;
-                document.getElementById('yt-desc-output').value = parsed.youtubeDescription;
-                document.getElementById('yt-tags-output').value = parsed.youtubeTags;
-
-                showToast("Judul, Deskripsi & Tag YouTube berhasil dibuat!", "success");
-            } catch (err) {
-                console.error(err);
-                showToast("Gagal membuat SEO YouTube: " + err.message, "error");
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4"></i><span>Buat Judul, Deskripsi & Tag</span>`;
-                lucide.createIcons();
-            }
-        }
-    </script>
-</body>
-</html>
+// ... existing code ... -->
