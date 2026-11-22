@@ -1,1 +1,1293 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="AutoShort">
+    <meta name="description" content="AutoShort by sobatkarya.my.id - AI Penghasil Narasi YouTube Shorts & Voice Over WAV Siap Download">
+    <title>AutoShort — AI Narasi & Voice Over | sobatkarya.my.id</title>
 
+    <!-- Dynamic PWA Manifest & Icon Script -->
+    <script>
+        (function setupPWA() {
+            const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#ec4899"/></linearGradient></defs><rect width="512" height="512" rx="112" fill="url(#g)"/><path d="M196 156l160 100-160 100V156z" fill="#ffffff"/><circle cx="380" cy="140" r="28" fill="#fbbf24"/></svg>`;
+            const iconUrl = 'data:image/svg+xml;base64,' + btoa(svgIcon);
+
+            // Set favicon & apple-touch-icon
+            const linkIcon = document.createElement('link');
+            linkIcon.rel = 'icon';
+            linkIcon.href = iconUrl;
+            document.head.appendChild(linkIcon);
+
+            const appleIcon = document.createElement('link');
+            appleIcon.rel = 'apple-touch-icon';
+            appleIcon.href = iconUrl;
+            document.head.appendChild(appleIcon);
+
+            // Create Manifest JSON Blob
+            const manifest = {
+                name: "AutoShort - sobatkarya.my.id",
+                short_name: "AutoShort",
+                description: "Penghasil Narasi YouTube Shorts & Voice Over WAV Otomatis",
+                start_url: "./",
+                display: "standalone",
+                background_color: "#090d16",
+                theme_color: "#6366f1",
+                orientation: "portrait-primary",
+                icons: [
+                    { src: iconUrl, sizes: "192x192", type: "image/svg+xml", purpose: "any maskable" },
+                    { src: iconUrl, sizes: "512x512", type: "image/svg+xml", purpose: "any maskable" }
+                ]
+            };
+            const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+            const manifestUrl = URL.createObjectURL(manifestBlob);
+            const linkManifest = document.createElement('link');
+            linkManifest.rel = 'manifest';
+            linkManifest.href = manifestUrl;
+            document.head.appendChild(linkManifest);
+        })();
+    </script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #090d16;
+            color: #f8fafc;
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* Custom subtle scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+        .glass-card {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(51, 65, 85, 0.6);
+        }
+        .gradient-border {
+            position: relative;
+        }
+        .gradient-border::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.5), rgba(236, 72, 153, 0.5));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); opacity: 0.7; }
+            50% { transform: scale(1.05); opacity: 0.3; }
+            100% { transform: scale(0.95); opacity: 0.7; }
+        }
+        .animate-pulse-slow {
+            animation: pulse-ring 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-indigo-500/30 selection:text-indigo-200">
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 w-[90%] max-w-md pointer-events-none"></div>
+
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-40 glass-card border-b border-slate-800/80">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between gap-2">
+            <!-- Brand Identity -->
+            <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-indigo-500/25 shrink-0">
+                    <i data-lucide="sparkles" class="w-5 h-5 text-white"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-1.5">
+                        <h1 class="font-extrabold text-lg tracking-tight bg-gradient-to-r from-white via-slate-200 to-indigo-200 bg-clip-text text-transparent">AutoShort</h1>
+                        <span class="text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">PWA</span>
+                    </div>
+                    <a href="https://sobatkarya.my.id" target="_blank" rel="noopener noreferrer" class="text-[11px] text-slate-400 hover:text-indigo-400 transition-colors flex items-center gap-1">
+                        <span>bagian dari</span>
+                        <span class="font-medium underline decoration-slate-600 underline-offset-2">sobatkarya.my.id</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center gap-2">
+                <!-- PWA Install Button (Hidden unless installable) -->
+                <button id="btn-install-pwa" onclick="triggerPWAInstall()" class="hidden items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 text-xs font-semibold transition-all active:scale-95">
+                    <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                    <span class="hidden sm:inline">Install App</span>
+                </button>
+
+                <!-- Sawer Seikhlasnya Button -->
+                <button onclick="openModal('modal-sawer')" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 text-xs font-semibold transition-all active:scale-95 shadow-sm">
+                    <i data-lucide="coffee" class="w-3.5 h-3.5 text-amber-400"></i>
+                    <span>Sawer</span>
+                </button>
+
+                <!-- API Key Settings Button -->
+                <button id="btn-api-key" onclick="openModal('modal-apikey')" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition-all active:scale-95">
+                    <i data-lucide="key-round" class="w-3.5 h-3.5 text-indigo-400"></i>
+                    <span class="hidden sm:inline">API Key</span>
+                    <span id="api-status-dot" class="w-2 h-2 rounded-full bg-emerald-400" title="Siap Digunakan"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-4xl w-full mx-auto px-4 py-6 space-y-6">
+
+        <!-- Cache Banner & Reset Project Button -->
+        <div class="flex flex-wrap items-center justify-between gap-3 px-4 py-3 rounded-2xl bg-slate-900/90 border border-slate-800">
+            <div class="flex items-center gap-2 text-xs text-slate-400">
+                <span class="relative flex h-2.5 w-2.5">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                </span>
+                <span>Auto-Save aktif: progres tersimpan otomatis di cache browser.</span>
+            </div>
+            <button onclick="openModal('modal-reset')" class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 text-xs font-semibold transition-all active:scale-95 ml-auto">
+                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                <span>Buat Video Baru</span>
+            </button>
+        </div>
+
+        <!-- STEP 1: Input Topik & Generate Narasi -->
+        <section class="glass-card rounded-3xl p-5 sm:p-6 shadow-xl gradient-border">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-7 h-7 rounded-lg bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center font-bold text-sm">1</span>
+                    <div>
+                        <h2 class="font-bold text-base sm:text-lg text-white">Ide & Narasi YouTube Shorts</h2>
+                        <p class="text-xs text-slate-400">AI Agent meracik naskah 115–130 kata ramah TTS (durasi pas 46–50 detik)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <label for="input-topic" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Topik atau Ide Konten Teknologi</label>
+                    <textarea id="input-topic" rows="3" placeholder="Contoh: Kenapa baterai HP cepat habis padahal nggak dipakai, atau rahasia di balik kecepatan internet 5G..." class="w-full rounded-2xl bg-slate-950/80 border border-slate-700/80 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-sm text-white placeholder-slate-500 p-3.5 transition-all outline-none resize-none"></textarea>
+                </div>
+
+                <!-- Quick Topic Suggestions -->
+                <div class="flex flex-wrap items-center gap-1.5">
+                    <span class="text-[11px] text-slate-500 mr-1">Ide cepat:</span>
+                    <button type="button" onclick="setTopic('Kenapa layar AMOLED lebih hemat baterai dibanding IPS')" class="text-[11px] px-2.5 py-1 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700/70 transition-colors">Layar AMOLED vs IPS</button>
+                    <button type="button" onclick="setTopic('Bahaya menggunakan charger HP palsu yang murah')" class="text-[11px] px-2.5 py-1 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700/70 transition-colors">Bahaya Charger Palsu</button>
+                    <button type="button" onclick="setTopic('Cara kerja VPN melindungi privasi saat pakai Wi-Fi publik')" class="text-[11px] px-2.5 py-1 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700/70 transition-colors">Cara Kerja VPN</button>
+                </div>
+
+                <button id="btn-generate-script" onclick="generateNarration()" class="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:via-purple-500 hover:to-pink-500 text-white font-bold text-sm shadow-lg shadow-indigo-500/25 flex items-center justify-center gap-2 transition-all active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed">
+                    <i data-lucide="wand-2" class="w-4 h-4"></i>
+                    <span>Buatkan Narasi Sekarang</span>
+                </button>
+            </div>
+
+            <!-- Output Narasi Area -->
+            <div id="script-result-container" class="hidden mt-6 pt-6 border-t border-slate-800 space-y-4">
+                <!-- Hook Badge -->
+                <div class="p-3.5 rounded-2xl bg-indigo-500/10 border border-indigo-500/25">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-400 flex items-center gap-1">
+                            <i data-lucide="zap" class="w-3.5 h-3.5"></i> Hook Pembuka (Kalimat Pertama)
+                        </span>
+                        <button onclick="copyText('output-hook', 'Hook berhasil disalin!')" class="text-xs text-indigo-300 hover:text-white flex items-center gap-1 px-2 py-0.5 rounded-md bg-indigo-500/20">
+                            <i data-lucide="copy" class="w-3 h-3"></i> Salin
+                        </button>
+                    </div>
+                    <p id="output-hook" class="text-sm font-medium text-indigo-100 leading-relaxed"></p>
+                </div>
+
+                <!-- Full Editable Narration -->
+                <div>
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                        <label for="output-narasi" class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                            <i data-lucide="file-text" class="w-3.5 h-3.5 text-pink-400"></i>
+                            <span>Naskah Narasi Siap Salin & TTS</span>
+                        </label>
+                        <div class="flex items-center gap-2">
+                            <span id="word-count-badge" class="text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                                0 kata (~0 detik)
+                            </span>
+                            <button onclick="copyText('output-narasi', 'Narasi siap salin berhasil dicopy!')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white border border-slate-600 text-xs font-semibold transition-all active:scale-95">
+                                <i data-lucide="copy" class="w-3.5 h-3.5 text-indigo-400"></i>
+                                <span>Salin Narasi</span>
+                            </button>
+                        </div>
+                    </div>
+                    <textarea id="output-narasi" rows="7" oninput="handleNarasiEdit()" class="w-full rounded-2xl bg-slate-950/90 border border-slate-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-sm text-slate-100 leading-relaxed p-4 outline-none transition-all"></textarea>
+                    <p class="text-[11px] text-slate-400 mt-1.5 flex items-center gap-1">
+                        <i data-lucide="info" class="w-3.5 h-3.5 text-slate-500 shrink-0"></i>
+                        <span>Naskah otomatis bebas simbol/emoji agar pelafalan Gemini TTS natural. Anda juga bisa mengedit teks di atas secara manual.</span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- STEP 2: Gemini TTS Voice Over Generator -->
+        <section id="section-tts" class="glass-card rounded-3xl p-5 sm:p-6 shadow-xl">
+            <div class="flex items-center gap-2.5 mb-4">
+                <span class="w-7 h-7 rounded-lg bg-pink-500/20 text-pink-400 border border-pink-500/30 flex items-center justify-center font-bold text-sm">2</span>
+                <div>
+                    <h2 class="font-bold text-base sm:text-lg text-white">Studio Voice Over (.WAV)</h2>
+                    <p class="text-xs text-slate-400">Ubah naskah narasi menjadi suara AI jernih siap edit video</p>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <!-- Voice Selector -->
+                    <div>
+                        <label for="select-voice" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Pilih Karakter Suara</label>
+                        <div class="relative">
+                            <select id="select-voice" onchange="saveStateToCache()" class="w-full appearance-none rounded-2xl bg-slate-950/90 border border-slate-700 focus:border-pink-500 text-sm text-white px-4 py-3 pr-10 outline-none transition-all">
+                                <option value="Kore">Kore — Tegas, Jelas & Profesional (Rekomendasi)</option>
+                                <option value="Puck">Puck — Ceria, Enerjik & Santai</option>
+                                <option value="Fenrir">Fenrir — Antusias, Bersemangat & Dinamis</option>
+                                <option value="Zephyr">Zephyr — Cerah, Ramah & Hangat</option>
+                                <option value="Charon">Charon — Informatif, Berat & Berwibawa</option>
+                                <option value="Aoede">Aoede — Mengalir, Ringan & Natural</option>
+                            </select>
+                            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                        </div>
+                    </div>
+
+                    <!-- Tone / Style Prompt -->
+                    <div>
+                        <label for="select-tone" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Gaya Bicara</label>
+                        <div class="relative">
+                            <select id="select-tone" onchange="saveStateToCache()" class="w-full appearance-none rounded-2xl bg-slate-950/90 border border-slate-700 focus:border-pink-500 text-sm text-white px-4 py-3 pr-10 outline-none transition-all">
+                                <option value="Bacakan dengan gaya bercerita santai seperti mengobrol dengan teman, artikulasi Bahasa Indonesia yang jelas, natural, dan tempo yang pas untuk konten edukasi singkat:">Santai & Bercerita ke Teman (Default)</option>
+                                <option value="Bacakan dengan nada antusias, penuh rasa penasaran, dan energik seperti kreator konten teknologi populer di Indonesia:">Antusias & Energik (Kreator Tech)</option>
+                                <option value="Bacakan dengan nada tenang, meyakinkan, dan informatif dalam Bahasa Indonesia yang fasih:">Tenang & Informatif</option>
+                            </select>
+                            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="btn-generate-tts" onclick="generateVoiceOver()" class="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 text-white font-bold text-sm shadow-lg shadow-pink-500/25 flex items-center justify-center gap-2 transition-all active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed">
+                    <i data-lucide="mic" class="w-4 h-4"></i>
+                    <span>Langsung Jadikan Voice Over</span>
+                </button>
+
+                <!-- Audio Player & Download Box -->
+                <div id="audio-result-container" class="hidden p-4 rounded-2xl bg-slate-950/90 border border-pink-500/30 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-pink-500 animate-pulse"></span>
+                            <span class="text-xs font-bold text-pink-300 uppercase tracking-wider">Voice Over Siap</span>
+                            <span id="audio-voice-badge" class="text-[11px] px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 border border-slate-700">Kore</span>
+                        </div>
+                        <span id="audio-duration-badge" class="text-xs font-mono text-slate-400">00:00</span>
+                    </div>
+
+                    <audio id="audio-player" controls class="w-full h-11 rounded-xl"></audio>
+
+                    <a id="btn-download-wav" href="#" download="voiceover-autoshort.wav" class="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-lg shadow-emerald-600/20 flex items-center justify-center gap-2 transition-all active:scale-[0.99]">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        <span>Download Voice Over (.WAV)</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- STEP 3: YouTube Shorts Metadata Generator -->
+        <section id="section-metadata" class="glass-card rounded-3xl p-5 sm:p-6 shadow-xl">
+            <div class="flex items-center justify-between gap-2 mb-4">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center font-bold text-sm">3</span>
+                    <div>
+                        <h2 class="font-bold text-base sm:text-lg text-white">Judul, Deskripsi & Tag Shorts</h2>
+                        <p class="text-xs text-slate-400">Optimasi SEO YouTube Shorts disesuaikan langsung dengan isi narasi</p>
+                    </div>
+                </div>
+            </div>
+
+            <button id="btn-generate-meta" onclick="generateMetadata()" class="w-full py-3.5 px-5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-white border border-slate-600 font-bold text-sm flex items-center justify-center gap-2 transition-all active:scale-[0.99] disabled:opacity-60">
+                <i data-lucide="youtube" class="w-4 h-4 text-rose-500"></i>
+                <span>Buat Judul, Deskripsi & Tag YouTube Shorts</span>
+            </button>
+
+            <!-- Metadata Output -->
+            <div id="meta-result-container" class="hidden mt-5 pt-5 border-t border-slate-800 space-y-4">
+                <!-- Title Options -->
+                <div>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Judul YouTube Shorts (Click-Worthy)</span>
+                        <button onclick="copyText('output-yt-title', 'Judul YouTube Shorts disalin!')" class="text-xs text-indigo-300 hover:text-white flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700">
+                            <i data-lucide="copy" class="w-3 h-3"></i> Salin Judul
+                        </button>
+                    </div>
+                    <input id="output-yt-title" type="text" oninput="saveStateToCache()" class="w-full rounded-xl bg-slate-950/90 border border-slate-700 focus:border-indigo-500 text-sm font-semibold text-white px-3.5 py-2.5 outline-none">
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Deskripsi Video & Hashtag</span>
+                        <button onclick="copyText('output-yt-desc', 'Deskripsi video disalin!')" class="text-xs text-indigo-300 hover:text-white flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700">
+                            <i data-lucide="copy" class="w-3 h-3"></i> Salin Deskripsi
+                        </button>
+                    </div>
+                    <textarea id="output-yt-desc" rows="4" oninput="saveStateToCache()" class="w-full rounded-xl bg-slate-950/90 border border-slate-700 focus:border-indigo-500 text-sm text-slate-200 p-3.5 outline-none leading-relaxed"></textarea>
+                </div>
+
+                <!-- Tags -->
+                <div>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Tag YouTube (Pisah Koma)</span>
+                        <button onclick="copyText('output-yt-tags', 'Tag YouTube disalin!')" class="text-xs text-indigo-300 hover:text-white flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700">
+                            <i data-lucide="copy" class="w-3 h-3"></i> Salin Tag
+                        </button>
+                    </div>
+                    <textarea id="output-yt-tags" rows="2" oninput="saveStateToCache()" class="w-full rounded-xl bg-slate-950/90 border border-slate-700 focus:border-indigo-500 text-xs font-mono text-emerald-300 p-3 outline-none"></textarea>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/80 bg-slate-950/60 py-5 px-4 mt-8">
+        <div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
+            <div class="flex items-center gap-2">
+                <span class="font-bold text-slate-200">AutoShort</span>
+                <span>•</span>
+                <span>Bagian dari ekosistem <a href="https://sobatkarya.my.id" target="_blank" rel="noopener noreferrer" class="text-indigo-400 hover:text-indigo-300 font-semibold underline underline-offset-2">sobatkarya.my.id</a></span>
+            </div>
+            <div class="flex items-center gap-4">
+                <button onclick="openModal('modal-sawer')" class="text-amber-400 hover:text-amber-300 font-medium flex items-center gap-1">
+                    <i data-lucide="heart" class="w-3.5 h-3.5"></i> Dukung Developer
+                </button>
+                <button onclick="openModal('modal-apikey')" class="text-slate-400 hover:text-white flex items-center gap-1">
+                    <i data-lucide="settings" class="w-3.5 h-3.5"></i> Pengaturan API
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL 1: API Key Gemini -->
+    <div id="modal-apikey" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
+        <div class="glass-card w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-700 space-y-4 animate-in fade-in zoom-in-95 duration-150">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center">
+                        <i data-lucide="key-round" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base text-white">Gemini API Key</h3>
+                        <p class="text-xs text-slate-400">Disimpan aman di browser Anda (Local Storage)</p>
+                    </div>
+                </div>
+                <button onclick="closeModal('modal-apikey')" class="p-1.5 rounded-xl hover:bg-slate-800 text-slate-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="space-y-3">
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    Masukkan API Key dari <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer" class="text-indigo-400 underline font-medium">Google AI Studio</a> jika Anda menjalankannya secara mandiri atau ingin memakai kuota pribadi.
+                </p>
+                <div class="relative">
+                    <input id="input-gemini-key" type="password" placeholder="AIzaSy..." class="w-full rounded-xl bg-slate-950 border border-slate-700 focus:border-indigo-500 text-sm text-white px-3.5 py-3 pr-10 outline-none font-mono">
+                    <button type="button" onclick="toggleApiKeyVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white">
+                        <i id="icon-eye" data-lucide="eye" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 pt-2">
+                <button onclick="clearApiKey()" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition-all">
+                    Hapus Key
+                </button>
+                <button onclick="saveApiKey()" class="flex-1 py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-lg shadow-indigo-600/25 transition-all">
+                    Simpan API Key
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: Sawer Seikhlasnya -->
+    <div id="modal-sawer" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
+        <div class="glass-card w-full max-w-md rounded-3xl p-6 shadow-2xl border border-amber-500/30 space-y-5">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 text-slate-950 flex items-center justify-center shadow-lg shadow-amber-500/25">
+                        <i data-lucide="coffee" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base text-white">Sawer Seikhlasnya</h3>
+                        <p class="text-xs text-amber-300/90">Dukung server & pengembangan AutoShort</p>
+                    </div>
+                </div>
+                <button onclick="closeModal('modal-sawer')" class="p-1.5 rounded-xl hover:bg-slate-800 text-slate-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <p class="text-xs text-slate-300 leading-relaxed">
+                Terima kasih telah menggunakan <strong class="text-white">AutoShort</strong> dari <strong class="text-indigo-300">sobatkarya.my.id</strong>! Dukungan kopi darimu sangat berarti agar alat ini terus gratis dan semakin canggih.
+            </p>
+
+            <div class="space-y-2.5">
+                <a href="https://saweria.co" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-3.5 rounded-2xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 transition-all group">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-amber-500 text-slate-950 font-extrabold text-xs flex items-center justify-center">S</span>
+                        <div>
+                            <div class="text-sm font-bold text-white group-hover:text-amber-300 transition-colors">Saweria (QRIS / GoPay / OVO / Dana)</div>
+                            <div class="text-[11px] text-slate-400">Mulai dari Rp 5.000 seikhlasnya</div>
+                        </div>
+                    </div>
+                    <i data-lucide="external-link" class="w-4 h-4 text-amber-400"></i>
+                </a>
+
+                <a href="https://trakteer.id" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-3.5 rounded-2xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 transition-all group">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-rose-500 text-white font-extrabold text-xs flex items-center justify-center">T</span>
+                        <div>
+                            <div class="text-sm font-bold text-white group-hover:text-rose-300 transition-colors">Trakteer.id — SobatKarya</div>
+                            <div class="text-[11px] text-slate-400">Traktir cendol atau kopi untuk kreator</div>
+                        </div>
+                    </div>
+                    <i data-lucide="external-link" class="w-4 h-4 text-rose-400"></i>
+                </a>
+
+                <a href="https://sobatkarya.my.id" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-3.5 rounded-2xl bg-indigo-500/15 hover:bg-indigo-500/25 border border-indigo-500/30 transition-all group">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-indigo-500 text-white font-extrabold text-xs flex items-center justify-center">SK</span>
+                        <div>
+                            <div class="text-sm font-bold text-white group-hover:text-indigo-300 transition-colors">Kunjungi Portal sobatkarya.my.id</div>
+                            <div class="text-[11px] text-slate-400">Lihat koleksi tools AI & kreator lainnya</div>
+                        </div>
+                    </div>
+                    <i data-lucide="arrow-up-right" class="w-4 h-4 text-indigo-400"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 3: Konfirmasi Buat Video Baru (Clear Cache) -->
+    <div id="modal-reset" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
+        <div class="glass-card w-full max-w-sm rounded-3xl p-6 shadow-2xl border border-rose-500/30 space-y-4">
+            <div class="w-12 h-12 rounded-2xl bg-rose-500/20 text-rose-400 flex items-center justify-center mx-auto">
+                <i data-lucide="trash-2" class="w-6 h-6"></i>
+            </div>
+            <div class="text-center space-y-1.5">
+                <h3 class="font-bold text-lg text-white">Buat Video Baru?</h3>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    Semua cache topik, naskah narasi, file audio voice over, dan metadata YouTube Shorts saat ini akan dihapus agar Anda bisa memulai proyek baru dari nol.
+                </p>
+            </div>
+            <div class="flex items-center gap-2.5 pt-2">
+                <button onclick="closeModal('modal-reset')" class="flex-1 py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition-all">
+                    Batal
+                </button>
+                <button onclick="confirmNewVideo()" class="flex-1 py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold shadow-lg shadow-rose-600/25 transition-all">
+                    Ya, Reset Semua
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // =========================================================================
+        // 1. STATE & INDEXEDDB + LOCALSTORAGE CACHE ARCHITECTURE
+        // =========================================================================
+        const STORAGE_KEY_STATE = 'autoshort_sobatkarya_state_v1';
+        const STORAGE_KEY_API = 'autoshort_gemini_api_key';
+        const DB_NAME = 'AutoShortAudioDB';
+        const DB_STORE = 'audioStore';
+        const AUDIO_RECORD_KEY = 'current_vo_wav';
+
+        let currentAudioUrl = null;
+        let deferredInstallPrompt = null;
+
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Service Worker Registration via Blob for Offline / PWA Installability
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                const CACHE_NAME = 'autoshort-v1';
+                self.addEventListener('install', (e) => {
+                    self.skipWaiting();
+                });
+                self.addEventListener('activate', (e) => {
+                    e.waitUntil(clients.claim());
+                });
+                self.addEventListener('fetch', (e) => {
+                    // Network-first strategy for API calls & assets
+                    e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+                });
+            `;
+            try {
+                const swBlob = new Blob([swCode], { type: 'application/javascript' });
+                const swUrl = URL.createObjectURL(swBlob);
+                navigator.serviceWorker.register(swUrl).catch(() => {});
+            } catch (e) {
+                // Ignore SW errors in sandboxed iframes
+            }
+        }
+
+        // Capture PWA beforeinstallprompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredInstallPrompt = e;
+            const installBtn = document.getElementById('btn-install-pwa');
+            installBtn.classList.remove('hidden');
+            installBtn.classList.add('flex');
+        });
+
+        async function triggerPWAInstall() {
+            if (!deferredInstallPrompt) return;
+            deferredInstallPrompt.prompt();
+            const { outcome } = await deferredInstallPrompt.userChoice;
+            if (outcome === 'accepted') {
+                showToast('AutoShort berhasil dipasang di perangkatmu!', 'success');
+                document.getElementById('btn-install-pwa').classList.add('hidden');
+            }
+            deferredInstallPrompt = null;
+        }
+
+        // =========================================================================
+        // 2. INDEXEDDB HELPERS (FOR PERSISTING WAV AUDIO BLOB ACROSS REFRESHES)
+        // =========================================================================
+        function openAudioDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, 1);
+                request.onupgradeneeded = (e) => {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains(DB_STORE)) {
+                        db.createObjectStore(DB_STORE);
+                    }
+                };
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function saveAudioBlobToCache(blob, meta) {
+            try {
+                const db = await openAudioDB();
+                const tx = db.transaction(DB_STORE, 'readwrite');
+                tx.objectStore(DB_STORE).put({ blob, meta }, AUDIO_RECORD_KEY);
+                return new Promise((resolve) => {
+                    tx.oncomplete = () => resolve(true);
+                    tx.onerror = () => resolve(false);
+                });
+            } catch (e) {
+                console.warn('IndexedDB save failed:', e);
+            }
+        }
+
+        async function loadAudioBlobFromCache() {
+            try {
+                const db = await openAudioDB();
+                const tx = db.transaction(DB_STORE, 'readonly');
+                const req = tx.objectStore(DB_STORE).get(AUDIO_RECORD_KEY);
+                return new Promise((resolve) => {
+                    req.onsuccess = () => resolve(req.result || null);
+                    req.onerror = () => resolve(null);
+                });
+            } catch (e) {
+                return null;
+            }
+        }
+
+        async function clearAudioBlobCache() {
+            try {
+                const db = await openAudioDB();
+                const tx = db.transaction(DB_STORE, 'readwrite');
+                tx.objectStore(DB_STORE).delete(AUDIO_RECORD_KEY);
+            } catch (e) {}
+        }
+
+        // =========================================================================
+        // 3. STATE PERSISTENCE (SAVE & RESTORE ON LOAD)
+        // =========================================================================
+        function saveStateToCache() {
+            const state = {
+                topic: document.getElementById('input-topic').value,
+                hook: document.getElementById('output-hook').textContent,
+                narasi: document.getElementById('output-narasi').value,
+                voice: document.getElementById('select-voice').value,
+                tone: document.getElementById('select-tone').value,
+                ytTitle: document.getElementById('output-yt-title').value,
+                ytDesc: document.getElementById('output-yt-desc').value,
+                ytTags: document.getElementById('output-yt-tags').value,
+                hasScript: !document.getElementById('script-result-container').classList.contains('hidden'),
+                hasMeta: !document.getElementById('meta-result-container').classList.contains('hidden')
+            };
+            localStorage.setItem(STORAGE_KEY_STATE, JSON.stringify(state));
+        }
+
+        async function restoreStateFromCache() {
+            // Load API Key
+            const savedKey = localStorage.getItem(STORAGE_KEY_API) || '';
+            document.getElementById('input-gemini-key').value = savedKey;
+            updateApiKeyIndicator();
+
+            // Load Text & UI State
+            const rawState = localStorage.getItem(STORAGE_KEY_STATE);
+            if (rawState) {
+                try {
+                    const state = JSON.parse(rawState);
+                    if (state.topic) document.getElementById('input-topic').value = state.topic;
+                    if (state.hook) document.getElementById('output-hook').textContent = state.hook;
+                    if (state.narasi) {
+                        document.getElementById('output-narasi').value = state.narasi;
+                        updateWordCount(state.narasi);
+                    }
+                    if (state.voice) document.getElementById('select-voice').value = state.voice;
+                    if (state.tone) document.getElementById('select-tone').value = state.tone;
+                    if (state.ytTitle) document.getElementById('output-yt-title').value = state.ytTitle;
+                    if (state.ytDesc) document.getElementById('output-yt-desc').value = state.ytDesc;
+                    if (state.ytTags) document.getElementById('output-yt-tags').value = state.ytTags;
+
+                    if (state.hasScript && state.narasi) {
+                        document.getElementById('script-result-container').classList.remove('hidden');
+                    }
+                    if (state.hasMeta && (state.ytTitle || state.ytDesc)) {
+                        document.getElementById('meta-result-container').classList.remove('hidden');
+                    }
+                } catch (e) {
+                    console.error('Failed parsing cached state', e);
+                }
+            }
+
+            // Load Audio Blob from IndexedDB
+            const cachedAudio = await loadAudioBlobFromCache();
+            if (cachedAudio && cachedAudio.blob) {
+                displayAudioBlob(cachedAudio.blob, cachedAudio.meta?.voice || 'Kore', cachedAudio.meta?.duration || '00:48');
+            }
+        }
+
+        async function confirmNewVideo() {
+            localStorage.removeItem(STORAGE_KEY_STATE);
+            await clearAudioBlobCache();
+
+            document.getElementById('input-topic').value = '';
+            document.getElementById('output-hook').textContent = '';
+            document.getElementById('output-narasi').value = '';
+            document.getElementById('output-yt-title').value = '';
+            document.getElementById('output-yt-desc').value = '';
+            document.getElementById('output-yt-tags').value = '';
+
+            document.getElementById('script-result-container').classList.add('hidden');
+            document.getElementById('audio-result-container').classList.add('hidden');
+            document.getElementById('meta-result-container').classList.add('hidden');
+
+            if (currentAudioUrl) {
+                URL.revokeObjectURL(currentAudioUrl);
+                currentAudioUrl = null;
+            }
+            const player = document.getElementById('audio-player');
+            player.pause();
+            player.removeAttribute('src');
+
+            closeModal('modal-reset');
+            showToast('Proyek baru siap! Cache sebelumnya telah dibersihkan.', 'success');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Save input topic automatically as user types
+        document.getElementById('input-topic').addEventListener('input', saveStateToCache);
+
+        // =========================================================================
+        // 4. GEMINI API INTEGRATION WITH EXPONENTIAL BACKOFF
+        // =========================================================================
+        function getApiKey() {
+            const userKey = localStorage.getItem(STORAGE_KEY_API);
+            return userKey ? userKey.trim() : "";
+        }
+
+        async function fetchWithBackoff(url, options, maxRetries = 4) {
+            let delay = 1000;
+            for (let attempt = 0; attempt <= maxRetries; attempt++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.ok) {
+                        return await response.json();
+                    }
+                    // If client error (e.g. invalid API key 400/403), parse message immediately
+                    if (response.status >= 400 && response.status < 500 && response.status !== 429) {
+                        const errData = await response.json().catch(() => ({}));
+                        throw new Error(errData?.error?.message || `HTTP Error ${response.status}`);
+                    }
+                    if (attempt === maxRetries) {
+                        throw new Error(`Server sibuk (${response.status}). Silakan coba lagi.`);
+                    }
+                } catch (err) {
+                    if (attempt === maxRetries || err.message.includes('API key') || err.message.includes('API_KEY')) {
+                        throw err;
+                    }
+                }
+                await new Promise(res => setTimeout(res, delay));
+                delay *= 2;
+            }
+        }
+
+        // Sanitize text strictly for TTS rules (no emojis, parentheses, asterisks, symbols)
+        function sanitizeForTTS(text) {
+            if (!text) return "";
+            let cleaned = text
+                // Replace common symbols with full Indonesian words
+                .replace(/%/g, ' persen')
+                .replace(/°C/gi, ' derajat Celcius')
+                .replace(/°F/gi, ' derajat Fahrenheit')
+                .replace(/°/g, ' derajat')
+                .replace(/&/g, ' dan ')
+                .replace(/\+/g, ' plus ')
+                // Remove parentheses, brackets, asterisks, hashtags, emojis
+                .replace(/[\*\(\)\[\]\{\}\#\_\~\`\>\|\\\/]/g, ' ')
+                // Remove emojis / non-standard pictographs
+                .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '')
+                // Normalize whitespace
+                .replace(/\s+/g, ' ')
+                .trim();
+            return cleaned;
+        }
+
+        // =========================================================================
+        // STEP 1: GENERATE NARRATION SCRIPT (STRICT RULES)
+        // =========================================================================
+        async function generateNarration() {
+            const topic = document.getElementById('input-topic').value.trim();
+            if (!topic) {
+                showToast('Masukkan topik narasi terlebih dahulu!', 'error');
+                document.getElementById('input-topic').focus();
+                return;
+            }
+
+            const btn = document.getElementById('btn-generate-script');
+            setButtonLoading(btn, true, 'AI Agent sedang menulis narasi...');
+
+            const closingSentence = "Sekarang kamu tau kan? Follow Sekarang Kamu Tau biar nggak ketinggalan fakta teknologi lainnya!";
+
+            const systemInstruction = `Kamu adalah penulis naskah profesional untuk konten video vertikal pendek (YouTube Shorts / TikTok / Reels) kanal edukasi teknologi "Sekarang Kamu Tau".
+
+ATURAN WAJIB NASKAH (narasi_vo) YANG HARUS DIPATUHI 100 PERSEN:
+1. Gunakan Bahasa Indonesia yang natural, mengalir, santai seperti bercerita kepada teman, dan sangat mudah dipahami orang awam. Hindari bahasa kaku seperti terjemahan mesin.
+2. Panjang "narasi_vo" WAJIB antara 115 hingga 130 kata (hitung dengan teliti agar tidak kurang dari 115 kata dan tidak lebih dari 130 kata, supaya durasi audio pas 46 sampai 50 detik).
+3. Kalimat pertama di dalam "narasi_vo" HARUS sama persis dengan isi field "hook". Buat hook yang memancing rasa penasaran di 3 detik pertama.
+4. Tutup kalimat terakhir "narasi_vo" WAJIB dengan kalimat khas kanal persis seperti ini: "${closingSentence}"
+5. Ramah Text-to-Speech (TTS) Bahasa Indonesia: DILARANG KERAS menggunakan emoji, tanda kurung, tanda bintang, tanda pagar, garis miring, atau simbol apapun. Tulis semua angka, singkatan sulit, atau satuan menjadi kata penuh seperti "persen", "derajat Celcius", "Wi-Fi", "lima G", atau "gigabita", bukan simbol.`;
+
+            const userQuery = `Buatkan hook dan narasi_vo tentang topik berikut: "${topic}". Pastikan jumlah kata narasi_vo berada tepat di antara 115 sampai 130 kata, diawali persis dengan hook, diakhiri persis dengan kalimat penutup kanal, dan bersih dari simbol atau emoji.`;
+
+            try {
+                const apiKey = getApiKey();
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+                const payload = {
+                    contents: [{ parts: [{ text: userQuery }] }],
+                    systemInstruction: { parts: [{ text: systemInstruction }] },
+                    generationConfig: {
+                        responseMimeType: "application/json",
+                        responseSchema: {
+                            type: "OBJECT",
+                            properties: {
+                                hook: {
+                                    type: "STRING",
+                                    description: "Kalimat pembuka yang menarik perhatian, bebas emoji dan simbol."
+                                },
+                                narasi_vo: {
+                                    type: "STRING",
+                                    description: "Naskah lengkap 115-130 kata, kalimat pertama sama persis dengan hook, kalimat terakhir ditutup dengan kalimat khas kanal, bebas emoji/simbol."
+                                }
+                            },
+                            required: ["hook", "narasi_vo"]
+                        }
+                    }
+                };
+
+                const result = await fetchWithBackoff(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const rawText = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (!rawText) throw new Error('Respon AI kosong. Coba ulangi.');
+
+                const parsed = JSON.parse(rawText);
+                let cleanHook = sanitizeForTTS(parsed.hook);
+                let cleanNarasi = sanitizeForTTS(parsed.narasi_vo);
+
+                // Enforce rule 3: Ensure narasi starts with hook
+                if (!cleanNarasi.startsWith(cleanHook)) {
+                    cleanNarasi = `${cleanHook} ${cleanNarasi}`;
+                }
+
+                // Enforce rule 4: Ensure narasi ends with exact channel CTA
+                if (!cleanNarasi.endsWith(closingSentence)) {
+                    // Strip partial ending if model slightly altered it
+                    cleanNarasi = cleanNarasi.replace(/Sekarang kamu tau kan\?.*$/i, '').trim();
+                    cleanNarasi = `${cleanNarasi} ${closingSentence}`;
+                }
+
+                document.getElementById('output-hook').textContent = cleanHook;
+                document.getElementById('output-narasi').value = cleanNarasi;
+                updateWordCount(cleanNarasi);
+
+                document.getElementById('script-result-container').classList.remove('hidden');
+                saveStateToCache();
+                showToast('Narasi berhasil dibuat & disimpan di cache!', 'success');
+
+            } catch (error) {
+                console.error(error);
+                showToast(`Gagal membuat narasi: ${error.message}`, 'error');
+            } finally {
+                setButtonLoading(btn, false, 'Buatkan Narasi Sekarang', 'wand-2');
+            }
+        }
+
+        function handleNarasiEdit() {
+            const text = document.getElementById('output-narasi').value;
+            updateWordCount(text);
+            saveStateToCache();
+        }
+
+        function updateWordCount(text) {
+            const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+            // Average Indonesian TTS speaking rate ~2.5 words/sec (115-130 words = 46-52 sec)
+            const estSeconds = Math.round(words / 2.5);
+            const badge = document.getElementById('word-count-badge');
+            badge.textContent = `${words} kata (~${estSeconds} detik)`;
+
+            if (words >= 115 && words <= 130) {
+                badge.className = 'text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-300 border border-emerald-500/30';
+            } else {
+                badge.className = 'text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-300 border border-amber-500/30';
+            }
+        }
+
+        // =========================================================================
+        // STEP 2: GENERATE GEMINI TTS & CONVERT PCM16 TO WAV
+        // =========================================================================
+        async function generateVoiceOver() {
+            const rawNarasi = document.getElementById('output-narasi').value.trim();
+            if (!rawNarasi) {
+                showToast('Buat atau isi naskah narasi terlebih dahulu!', 'error');
+                return;
+            }
+
+            const cleanNarasi = sanitizeForTTS(rawNarasi);
+            const voiceName = document.getElementById('select-voice').value;
+            const tonePrompt = document.getElementById('select-tone').value;
+
+            const btn = document.getElementById('btn-generate-tts');
+            setButtonLoading(btn, true, `Merekam suara ${voiceName}...`);
+
+            try {
+                const apiKey = getApiKey();
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+
+                const payload = {
+                    contents: [{
+                        parts: [{ text: `${tonePrompt}\n\n${cleanNarasi}` }]
+                    }],
+                    generationConfig: {
+                        responseModalities: ["AUDIO"],
+                        speechConfig: {
+                            voiceConfig: {
+                                prebuiltVoiceConfig: { voiceName: voiceName }
+                            }
+                        }
+                    },
+                    model: "gemini-2.5-flash-preview-tts"
+                };
+
+                const result = await fetchWithBackoff(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const part = result?.candidates?.[0]?.content?.parts?.[0];
+                const audioData = part?.inlineData?.data;
+                const mimeType = part?.inlineData?.mimeType || "audio/L16;rate=24000";
+
+                if (!audioData) {
+                    throw new Error('Audio tidak ditemukan dalam respon Gemini TTS.');
+                }
+
+                // Extract sample rate from mimeType (default 24000Hz for Gemini TTS)
+                const rateMatch = mimeType.match(/rate=(\d+)/);
+                const sampleRate = rateMatch ? parseInt(rateMatch[1], 10) : 24000;
+
+                // Decode Base64 PCM16 to ArrayBuffer and wrap in valid RIFF WAV container
+                const pcmBuffer = base64ToArrayBuffer(audioData);
+                const pcm16 = new Int16Array(pcmBuffer);
+                const wavBlob = pcmToWav(pcm16, sampleRate);
+
+                // Calculate exact audio duration
+                const durationSec = Math.round(pcm16.length / sampleRate);
+                const mins = String(Math.floor(durationSec / 60)).padStart(2, '0');
+                const secs = String(durationSec % 60).padStart(2, '0');
+                const formattedDuration = `${mins}:${secs}`;
+
+                // Persist WAV Blob to IndexedDB
+                await saveAudioBlobToCache(wavBlob, { voice: voiceName, duration: formattedDuration });
+
+                displayAudioBlob(wavBlob, voiceName, formattedDuration);
+                showToast(`Voice Over (${voiceName}) siap didownload!`, 'success');
+
+            } catch (error) {
+                console.error(error);
+                showToast(`Gagal membuat Voice Over: ${error.message}`, 'error');
+            } finally {
+                setButtonLoading(btn, false, 'Langsung Jadikan Voice Over', 'mic');
+            }
+        }
+
+        function displayAudioBlob(wavBlob, voiceName, durationStr) {
+            if (currentAudioUrl) {
+                URL.revokeObjectURL(currentAudioUrl);
+            }
+            currentAudioUrl = URL.createObjectURL(wavBlob);
+
+            const player = document.getElementById('audio-player');
+            player.src = currentAudioUrl;
+
+            const downloadBtn = document.getElementById('btn-download-wav');
+            downloadBtn.href = currentAudioUrl;
+            const slug = (document.getElementById('input-topic').value || 'narasi')
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/(^-|-$)/g, '')
+                .slice(0, 30);
+            downloadBtn.download = `AutoShort-${voiceName}-${slug || 'vo'}.wav`;
+
+            document.getElementById('audio-voice-badge').textContent = `Suara: ${voiceName}`;
+            document.getElementById('audio-duration-badge').textContent = durationStr;
+            document.getElementById('audio-result-container').classList.remove('hidden');
+        }
+
+        function base64ToArrayBuffer(base64) {
+            const binaryString = atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        function pcmToWav(pcm16Data, sampleRate = 24000, numChannels = 1) {
+            const byteRate = sampleRate * numChannels * 2;
+            const blockAlign = numChannels * 2;
+            const dataSize = pcm16Data.length * 2;
+            const buffer = new ArrayBuffer(44 + dataSize);
+            const view = new DataView(buffer);
+
+            function writeString(offset, str) {
+                for (let i = 0; i < str.length; i++) {
+                    view.setUint8(offset + i, str.charCodeAt(i));
+                }
+            }
+
+            // RIFF chunk descriptor
+            writeString(0, 'RIFF');
+            view.setUint32(4, 36 + dataSize, true);
+            writeString(8, 'WAVE');
+
+            // fmt sub-chunk
+            writeString(12, 'fmt ');
+            view.setUint32(16, 16, true); // Subchunk1Size (16 for PCM)
+            view.setUint16(20, 1, true);  // AudioFormat (1 for PCM)
+            view.setUint16(22, numChannels, true);
+            view.setUint32(24, sampleRate, true);
+            view.setUint32(28, byteRate, true);
+            view.setUint16(32, blockAlign, true);
+            view.setUint16(34, 16, true); // BitsPerSample
+
+            // data sub-chunk
+            writeString(36, 'data');
+            view.setUint32(40, dataSize, true);
+
+            // Write PCM samples
+            let offset = 44;
+            for (let i = 0; i < pcm16Data.length; i++, offset += 2) {
+                view.setInt16(offset, pcm16Data[i], true);
+            }
+
+            return new Blob([buffer], { type: 'audio/wav' });
+        }
+
+        // =========================================================================
+        // STEP 3: GENERATE YOUTUBE SHORTS METADATA (TITLE, DESCRIPTION, TAGS)
+        // =========================================================================
+        async function generateMetadata() {
+            const narasi = document.getElementById('output-narasi').value.trim();
+            if (!narasi) {
+                showToast('Buat narasi terlebih dahulu agar judul & deskripsi sesuai isi video!', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('btn-generate-meta');
+            setButtonLoading(btn, true, 'Meracik SEO YouTube Shorts...');
+
+            const systemInstruction = `Kamu adalah pakar algoritma dan SEO YouTube Shorts berbahasa Indonesia untuk kanal edukasi teknologi "Sekarang Kamu Tau".
+Tugasmu membuat metadata YouTube Shorts yang sangat menarik klik (high CTR) dan relevan berdasarkan naskah narasi yang diberikan:
+1. "judul": Maksimal 65 karakter, memancing rasa penasaran, natural, dan diakhiri hashtag #shorts atau #teknologi.
+2. "deskripsi": Ringkasan menarik 2-3 kalimat tentang isi video, ajakan subscribe kanal Sekarang Kamu Tau, dan 5 hashtag relevan di bagian bawah.
+3. "tags": 12 sampai 15 kata kunci (keywords) relevan dipisahkan dengan koma untuk kolom tag YouTube.`;
+
+            try {
+                const apiKey = getApiKey();
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+                const payload = {
+                    contents: [{
+                        parts: [{ text: `Buatkan judul, deskripsi, dan tag YouTube Shorts yang disesuaikan dengan naskah narasi berikut:\n\n"${narasi}"` }]
+                    }],
+                    systemInstruction: { parts: [{ text: systemInstruction }] },
+                    generationConfig: {
+                        responseMimeType: "application/json",
+                        responseSchema: {
+                            type: "OBJECT",
+                            properties: {
+                                judul: { type: "STRING" },
+                                deskripsi: { type: "STRING" },
+                                tags: { type: "STRING" }
+                            },
+                            required: ["judul", "deskripsi", "tags"]
+                        }
+                    }
+                };
+
+                const result = await fetchWithBackoff(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const rawText = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (!rawText) throw new Error('Gagal mendapatkan metadata dari AI.');
+
+                const parsed = JSON.parse(rawText);
+                document.getElementById('output-yt-title').value = parsed.judul || '';
+                document.getElementById('output-yt-desc').value = parsed.deskripsi || '';
+                document.getElementById('output-yt-tags').value = parsed.tags || '';
+
+                document.getElementById('meta-result-container').classList.remove('hidden');
+                saveStateToCache();
+                showToast('Judul, deskripsi & tag YouTube Shorts siap!', 'success');
+
+            } catch (error) {
+                console.error(error);
+                showToast(`Gagal membuat metadata: ${error.message}`, 'error');
+            } finally {
+                setButtonLoading(btn, false, 'Buat Judul, Deskripsi & Tag YouTube Shorts', 'youtube');
+            }
+        }
+
+        // =========================================================================
+        // 5. UI UTILITIES (CLIPBOARD, MODALS, TOASTS, API KEY)
+        // =========================================================================
+        function setTopic(text) {
+            const input = document.getElementById('input-topic');
+            input.value = text;
+            saveStateToCache();
+            input.focus();
+        }
+
+        function copyText(elementId, successMessage) {
+            const el = document.getElementById(elementId);
+            const text = el.value !== undefined ? el.value : el.textContent;
+            if (!text.trim()) {
+                showToast('Tidak ada teks untuk disalin.', 'error');
+                return;
+            }
+
+            // Use fallback execCommand('copy') for universal iframe & mobile support
+            const tempTextarea = document.createElement('textarea');
+            tempTextarea.value = text;
+            tempTextarea.style.position = 'fixed';
+            tempTextarea.style.left = '-9999px';
+            document.body.appendChild(tempTextarea);
+            tempTextarea.select();
+            tempTextarea.setSelectionRange(0, 99999);
+
+            try {
+                document.execCommand('copy');
+                showToast(successMessage, 'success');
+            } catch (err) {
+                showToast('Gagal menyalin teks.', 'error');
+            } finally {
+                document.body.removeChild(tempTextarea);
+            }
+        }
+
+        function setButtonLoading(btn, isLoading, text, iconName = '') {
+            btn.disabled = isLoading;
+            if (isLoading) {
+                btn.innerHTML = `
+                    <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span>${text}</span>
+                `;
+            } else {
+                btn.innerHTML = `
+                    <i data-lucide="${iconName}" class="w-4 h-4"></i>
+                    <span>${text}</span>
+                `;
+                lucide.createIcons();
+            }
+        }
+
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // Close modal when clicking backdrop
+        document.querySelectorAll('[id^="modal-"]').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal(modal.id);
+            });
+        });
+
+        function saveApiKey() {
+            const val = document.getElementById('input-gemini-key').value.trim();
+            if (val) {
+                localStorage.setItem(STORAGE_KEY_API, val);
+                showToast('Gemini API Key berhasil disimpan!', 'success');
+            } else {
+                localStorage.removeItem(STORAGE_KEY_API);
+                showToast('Menggunakan API Key default sistem.', 'info');
+            }
+            updateApiKeyIndicator();
+            closeModal('modal-apikey');
+        }
+
+        function clearApiKey() {
+            localStorage.removeItem(STORAGE_KEY_API);
+            document.getElementById('input-gemini-key').value = '';
+            updateApiKeyIndicator();
+            showToast('API Key kustom dihapus.', 'info');
+        }
+
+        function updateApiKeyIndicator() {
+            const hasCustomKey = Boolean(localStorage.getItem(STORAGE_KEY_API));
+            const dot = document.getElementById('api-status-dot');
+            if (hasCustomKey) {
+                dot.className = 'w-2 h-2 rounded-full bg-indigo-400 ring-2 ring-indigo-400/30';
+                dot.title = 'Menggunakan API Key Pribadi';
+            } else {
+                dot.className = 'w-2 h-2 rounded-full bg-emerald-400';
+                dot.title = 'Siap Digunakan';
+            }
+        }
+
+        function toggleApiKeyVisibility() {
+            const input = document.getElementById('input-gemini-key');
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+
+            const styles = {
+                success: 'bg-emerald-950/95 border-emerald-500/50 text-emerald-200',
+                error: 'bg-rose-950/95 border-rose-500/50 text-rose-200',
+                info: 'bg-slate-900/95 border-indigo-500/50 text-slate-200'
+            };
+
+            const icons = {
+                success: 'check-circle-2',
+                error: 'alert-circle',
+                info: 'info'
+            };
+
+            toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-2xl border shadow-2xl backdrop-blur-md text-xs font-semibold transition-all duration-300 translate-y-2 opacity-0 ${styles[type] || styles.info}`;
+            toast.innerHTML = `
+                <i data-lucide="${icons[type] || 'info'}" class="w-4 h-4 shrink-0"></i>
+                <span>${message}</span>
+            `;
+
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            });
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-2', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3200);
+        }
+
+        // Initialize app state on load
+        window.addEventListener('DOMContentLoaded', () => {
+            restoreStateFromCache();
+        });
+    </script>
+</body>
+</html>
