@@ -372,27 +372,36 @@
             <div class="p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800/90 text-[11px] text-slate-300 leading-relaxed mb-4 space-y-1">
                 <p class="font-semibold text-indigo-300 flex items-center gap-1.5">
                     <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-                    <span>Otomatisasi Siap Tempel & Lampirkan:</span>
+                    <span>Langkah Pembuatan Video 3D:</span>
                 </p>
                 <p class="text-slate-400">
-                    Saat tombol diklik, aplikasi otomatis mengunduh file <strong class="text-slate-200">narasi (.md)</strong> &amp; <strong class="text-slate-200">audio (.wav)</strong> ke perangkatmu, menyalin prompt 3D ke clipboard, lalu membuka percakapan baru di browser (rekomendasi Chrome).
+                    1. Klik <strong class="text-slate-200">Download Narasi &amp; Audio</strong> untuk menyimpan file <strong class="text-slate-200">.md</strong> &amp; <strong class="text-slate-200">.wav</strong> ke perangkatmu.<br>
+                    2. Klik tombol <strong class="text-slate-200">Claude AI</strong> atau <strong class="text-slate-200">Gemini AI</strong> untuk menyalin prompt otomatis lalu lampirkan file yang sudah diunduh.
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <!-- Tombol 1: Buat Video via Claude AI -->
-                <a id="btn-video-claude" href="https://claude.ai/new" target="_blank" rel="noopener noreferrer" onclick="return launchVideoBuilder(event, 'claude')" class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white font-bold text-sm shadow-lg shadow-orange-600/20 flex items-center justify-center gap-2.5 transition-all active:scale-[0.98] cursor-pointer">
-                    <i data-lucide="bot" class="w-4 h-4 shrink-0"></i>
-                    <span>Buat Video (Claude AI)</span>
-                    <i data-lucide="external-link" class="w-3.5 h-3.5 opacity-80 shrink-0"></i>
-                </a>
+            <div class="space-y-3">
+                <!-- Tombol Terpisah: Download Narasi (.MD) & Audio (.WAV) -->
+                <button type="button" id="btn-download-bundle" onclick="downloadNarrationAndAudio()" class="w-full py-3.5 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-lg shadow-emerald-600/20 flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
+                    <i data-lucide="download" class="w-4 h-4 shrink-0"></i>
+                    <span>Download Narasi (.MD) &amp; Audio (.WAV)</span>
+                </button>
 
-                <!-- Tombol 2: Buat Video via Gemini AI -->
-                <a id="btn-video-gemini" href="https://gemini.google.com/app" target="_blank" rel="noopener noreferrer" onclick="return launchVideoBuilder(event, 'gemini')" class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 hover:from-blue-500 hover:via-indigo-500 hover:to-violet-500 text-white font-bold text-sm shadow-lg shadow-indigo-600/25 flex items-center justify-center gap-2.5 transition-all active:scale-[0.98] cursor-pointer">
-                    <i data-lucide="sparkles" class="w-4 h-4 shrink-0"></i>
-                    <span>Buat Video (Gemini AI)</span>
-                    <i data-lucide="external-link" class="w-3.5 h-3.5 opacity-80 shrink-0"></i>
-                </a>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <!-- Tombol 1: Salin Prompt & Buka Claude AI -->
+                    <a id="btn-video-claude" href="https://claude.ai/new" target="_blank" rel="noopener noreferrer" onclick="return openAIPlatform(event, 'claude')" class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white font-bold text-sm shadow-lg shadow-orange-600/20 flex items-center justify-center gap-2.5 transition-all active:scale-[0.98] cursor-pointer">
+                        <i data-lucide="bot" class="w-4 h-4 shrink-0"></i>
+                        <span>Buka Claude AI</span>
+                        <i data-lucide="external-link" class="w-3.5 h-3.5 opacity-80 shrink-0"></i>
+                    </a>
+
+                    <!-- Tombol 2: Salin Prompt & Buka Gemini AI -->
+                    <a id="btn-video-gemini" href="https://gemini.google.com/app" target="_blank" rel="noopener noreferrer" onclick="return openAIPlatform(event, 'gemini')" class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 hover:from-blue-500 hover:via-indigo-500 hover:to-violet-500 text-white font-bold text-sm shadow-lg shadow-indigo-600/25 flex items-center justify-center gap-2.5 transition-all active:scale-[0.98] cursor-pointer">
+                        <i data-lucide="sparkles" class="w-4 h-4 shrink-0"></i>
+                        <span>Buka Gemini AI</span>
+                        <i data-lucide="external-link" class="w-3.5 h-3.5 opacity-80 shrink-0"></i>
+                    </a>
+                </div>
             </div>
         </section>
 
@@ -514,15 +523,15 @@
 
     <!-- MODAL 2: Sawer Seikhlasnya -->
     <div id="modal-sawer" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
-        <div class="glass-card w-full max-w-md rounded-3xl p-6 shadow-2xl border border-amber-500/30 space-y-5">
+        <div class="glass-card w-full max-w-md rounded-3xl p-6 shadow-2xl border border-amber-500/30 space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2.5">
                     <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 text-slate-950 flex items-center justify-center shadow-lg shadow-amber-500/25">
-                        <i data-lucide="coffee" class="w-5 h-5"></i>
+                        <i data-lucide="qr-code" class="w-5 h-5"></i>
                     </div>
                     <div>
-                        <h3 class="font-bold text-base text-white">Sawer Seikhlasnya</h3>
-                        <p class="text-xs text-amber-300/90">Dukung server & pengembangan AutoShort</p>
+                        <h3 class="font-bold text-base text-white">Sawer Seikhlasnya via QRIS</h3>
+                        <p class="text-xs text-amber-300/90">Dukung server &amp; pengembangan AutoShort</p>
                     </div>
                 </div>
                 <button onclick="closeModal('modal-sawer')" class="p-1.5 rounded-xl hover:bg-slate-800 text-slate-400 hover:text-white">
@@ -531,38 +540,34 @@
             </div>
 
             <p class="text-xs text-slate-300 leading-relaxed">
-                Terima kasih telah menggunakan <strong class="text-white">AutoShort</strong> dari <strong class="text-indigo-300">sobatkarya.my.id</strong>! Dukungan kopi darimu sangat berarti agar alat ini terus gratis dan semakin canggih.
+                Terima kasih telah menggunakan <strong class="text-white">AutoShort</strong> dari <strong class="text-indigo-300">sobatkarya.my.id</strong>! Scan langsung QRIS di bawah atau simpan gambarnya untuk kirim dukungan seikhlasnya.
             </p>
 
+            <!-- Tampilan Gambar QRIS -->
+            <div class="p-4 rounded-2xl bg-white flex flex-col items-center justify-center shadow-inner border border-slate-200">
+                <img
+                    id="qris-image"
+                    src="facelessai/qris.jpeg"
+                    alt="QRIS Sawer SobatKarya"
+                    onerror="this.onerror=null; this.src='https://placehold.co/400x400/ffffff/0f172a?text=QRIS+sobatkarya.my.id';"
+                    class="w-full max-w-[260px] h-auto rounded-xl object-contain"
+                >
+                <span class="mt-2.5 text-[11px] font-semibold text-slate-600 tracking-wide">Mendukung semua e-Wallet &amp; Mobile Banking</span>
+            </div>
+
+            <!-- Tombol Simpan QRIS & Kunjungi Portal -->
             <div class="space-y-2.5">
-                <a href="https://saweria.co" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-3.5 rounded-2xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 transition-all group">
-                    <div class="flex items-center gap-3">
-                        <span class="w-8 h-8 rounded-xl bg-amber-500 text-slate-950 font-extrabold text-xs flex items-center justify-center">S</span>
-                        <div>
-                            <div class="text-sm font-bold text-white group-hover:text-amber-300 transition-colors">Saweria (QRIS / GoPay / OVO / Dana)</div>
-                            <div class="text-[11px] text-slate-400">Mulai dari Rp 5.000 seikhlasnya</div>
-                        </div>
-                    </div>
-                    <i data-lucide="external-link" class="w-4 h-4 text-amber-400"></i>
-                </a>
+                <button type="button" onclick="downloadQRIS()" class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-extrabold text-sm shadow-lg shadow-amber-500/25 flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
+                    <i data-lucide="download" class="w-4 h-4"></i>
+                    <span>Simpan Gambar QRIS</span>
+                </button>
 
-                <a href="https://trakteer.id" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-3.5 rounded-2xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 transition-all group">
-                    <div class="flex items-center gap-3">
-                        <span class="w-8 h-8 rounded-xl bg-rose-500 text-white font-extrabold text-xs flex items-center justify-center">T</span>
-                        <div>
-                            <div class="text-sm font-bold text-white group-hover:text-rose-300 transition-colors">Trakteer.id — SobatKarya</div>
-                            <div class="text-[11px] text-slate-400">Traktir cendol atau kopi untuk kreator</div>
-                        </div>
-                    </div>
-                    <i data-lucide="external-link" class="w-4 h-4 text-rose-400"></i>
-                </a>
-
-                <a href="https://sobatkarya.my.id" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-3.5 rounded-2xl bg-indigo-500/15 hover:bg-indigo-500/25 border border-indigo-500/30 transition-all group">
+                <a href="https://sobatkarya.my.id" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-3 rounded-2xl bg-indigo-500/15 hover:bg-indigo-500/25 border border-indigo-500/30 transition-all group">
                     <div class="flex items-center gap-3">
                         <span class="w-8 h-8 rounded-xl bg-indigo-500 text-white font-extrabold text-xs flex items-center justify-center">SK</span>
                         <div>
-                            <div class="text-sm font-bold text-white group-hover:text-indigo-300 transition-colors">Kunjungi Portal sobatkarya.my.id</div>
-                            <div class="text-[11px] text-slate-400">Lihat koleksi tools AI & kreator lainnya</div>
+                            <div class="text-xs font-bold text-white group-hover:text-indigo-300 transition-colors">Kunjungi Portal sobatkarya.my.id</div>
+                            <div class="text-[11px] text-slate-400">Lihat koleksi tools AI &amp; kreator lainnya</div>
                         </div>
                     </div>
                     <i data-lucide="arrow-up-right" class="w-4 h-4 text-indigo-400"></i>
@@ -605,6 +610,7 @@
         const AUDIO_RECORD_KEY = 'current_vo_wav';
 
         let currentAudioUrl = null;
+        let currentAudioBlob = null;
         let deferredInstallPrompt = null;
 
         // Initialize Lucide icons
@@ -788,6 +794,7 @@
                 URL.revokeObjectURL(currentAudioUrl);
                 currentAudioUrl = null;
             }
+            currentAudioBlob = null;
             const player = document.getElementById('audio-player');
             player.pause();
             player.removeAttribute('src');
@@ -1063,6 +1070,7 @@ ATURAN WAJIB NASKAH (narasi_vo) YANG HARUS DIPATUHI 100 PERSEN:
             if (currentAudioUrl) {
                 URL.revokeObjectURL(currentAudioUrl);
             }
+            currentAudioBlob = wavBlob;
             currentAudioUrl = URL.createObjectURL(wavBlob);
 
             const player = document.getElementById('audio-player');
@@ -1134,43 +1142,40 @@ ATURAN WAJIB NASKAH (narasi_vo) YANG HARUS DIPATUHI 100 PERSEN:
         }
 
         // =========================================================================
-        // STEP 2.5: LAUNCH CLAUDE AI / GEMINI AI FOR 3D VIDEO GENERATION
+        // STEP 2.5: SEPARATE DOWNLOAD BUNDLE & AI PLATFORM LAUNCHERS
         // =========================================================================
-        function launchVideoBuilder(event, platform) {
+        function triggerMobileSafeDownload(blob, filename) {
+            const blobUrl = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = filename;
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            // Delay revoking URL generously so mobile browsers complete background download
+            setTimeout(() => URL.revokeObjectURL(blobUrl), 60000);
+        }
+
+        async function downloadNarrationAndAudio() {
             const topic = document.getElementById('input-topic').value.trim() || 'Konten Teknologi';
             const hook = document.getElementById('output-hook').textContent.trim();
             const narasi = document.getElementById('output-narasi').value.trim();
             const watermark = getChannelWatermark();
 
             if (!narasi) {
-                if (event) event.preventDefault();
-                showToast('Buat narasi terlebih dahulu sebelum membuat video!', 'error');
+                showToast('Buat narasi terlebih dahulu sebelum mendownload!', 'error');
                 document.getElementById('input-topic').focus();
-                return false;
+                return;
             }
 
-            const videoPrompt = `buatkan menjadi video 3D menggunakan skill ini sesuai dengan narasi dan audio yang sudah aku lampirkan.dengan format 9:16 kasih watermark : ${watermark} dan lansung render menjadi mp4`;
-
-            // 1. Copy prompt instruksi otomatis ke clipboard secara sinkron
-            const tempTextarea = document.createElement('textarea');
-            tempTextarea.value = videoPrompt;
-            tempTextarea.style.position = 'fixed';
-            tempTextarea.style.left = '-9999px';
-            document.body.appendChild(tempTextarea);
-            tempTextarea.select();
-            tempTextarea.setSelectionRange(0, 99999);
-            try {
-                document.execCommand('copy');
-            } catch (e) {}
-            document.body.removeChild(tempTextarea);
-
-            // 2. Buat & unduh file narasi dalam format .md secara sinkron
             const slug = topic
                 .toLowerCase()
                 .replace(/[^a-z0-9]+/g, '-')
                 .replace(/(^-|-$)/g, '')
                 .slice(0, 30) || 'narasi';
 
+            // 1. Download file narasi (.md)
             const mdContent = [
                 `# Narasi Video Shorts: ${topic}`,
                 ``,
@@ -1185,47 +1190,63 @@ ATURAN WAJIB NASKAH (narasi_vo) YANG HARUS DIPATUHI 100 PERSEN:
             ].join('\n');
 
             const mdBlob = new Blob([mdContent], { type: 'text/markdown;charset=utf-8' });
-            const mdUrl = URL.createObjectURL(mdBlob);
-            const mdLink = document.createElement('a');
-            mdLink.href = mdUrl;
-            mdLink.download = `AutoShort-${slug}.md`;
-            document.body.appendChild(mdLink);
-            mdLink.click();
-            document.body.removeChild(mdLink);
-            setTimeout(() => URL.revokeObjectURL(mdUrl), 5000);
+            triggerMobileSafeDownload(mdBlob, `AutoShort-${slug}.md`);
 
-            // 3. Unduh otomatis file audio .wav jika sudah tersedia di sesi saat ini
-            if (currentAudioUrl) {
-                const voiceName = document.getElementById('select-voice').value || 'Kore';
-                const wavLink = document.createElement('a');
-                wavLink.href = currentAudioUrl;
-                wavLink.download = `AutoShort-${voiceName}-${slug}.wav`;
-                document.body.appendChild(wavLink);
-                wavLink.click();
-                document.body.removeChild(wavLink);
-            } else {
-                showToast('Catatan: Audio .WAV belum dibuat, hanya file .MD & prompt yang disiapkan.', 'info');
+            // 2. Pastikan audio blob tersedia (dari memori atau fallback IndexedDB untuk browser mobile)
+            let audioBlobToDownload = currentAudioBlob;
+            let voiceName = document.getElementById('select-voice').value || 'Kore';
+
+            if (!audioBlobToDownload) {
+                const cachedAudio = await loadAudioBlobFromCache();
+                if (cachedAudio && cachedAudio.blob) {
+                    audioBlobToDownload = cachedAudio.blob;
+                    voiceName = cachedAudio.meta?.voice || voiceName;
+                }
             }
 
-            // 4. Navigasi langsung tanpa terblokir pop-up blocker browser ponsel/Chrome
-            const encodedPrompt = encodeURIComponent(videoPrompt);
-            const targetUrl = platform === 'claude'
-                ? `https://claude.ai/new?q=${encodedPrompt}`
-                : `https://gemini.google.com/app?q=${encodedPrompt}`;
+            if (audioBlobToDownload) {
+                // Jeda 600ms agar browser ponsel tidak memblokir multiple simultaneous downloads
+                setTimeout(() => {
+                    triggerMobileSafeDownload(audioBlobToDownload, `AutoShort-${voiceName}-${slug}.wav`);
+                }, 600);
+                showToast('File Narasi (.MD) & Audio (.WAV) sedang diunduh!', 'success');
+            } else {
+                showToast('File Narasi (.MD) diunduh. Buat Voice Over dulu jika ingin mengunduh .WAV.', 'info');
+            }
+        }
 
-            showToast(`File .MD & .WAV diunduh + Prompt disalin! Membuka ${platform === 'claude' ? 'Claude AI' : 'Gemini AI'}...`, 'success');
+        function openAIPlatform(event, platform) {
+            const watermark = getChannelWatermark();
+            const videoPrompt = `buatkan menjadi video 3D menggunakan skill ini sesuai dengan narasi dan audio yang sudah aku lampirkan.dengan format 9:16 kasih watermark : ${watermark} dan lansung render menjadi mp4`;
+
+            // Salin prompt ke clipboard secara sinkron
+            const tempTextarea = document.createElement('textarea');
+            tempTextarea.value = videoPrompt;
+            tempTextarea.style.position = 'fixed';
+            tempTextarea.style.left = '-9999px';
+            document.body.appendChild(tempTextarea);
+            tempTextarea.select();
+            tempTextarea.setSelectionRange(0, 99999);
+            try {
+                document.execCommand('copy');
+            } catch (e) {}
+            document.body.removeChild(tempTextarea);
+
+            const targetUrl = platform === 'claude'
+                ? 'https://claude.ai/new'
+                : 'https://gemini.google.com/app';
+
+            showToast(`Prompt disalin! Membuka ${platform === 'claude' ? 'Claude AI' : 'Gemini AI'}...`, 'success');
 
             if (event && event.currentTarget) {
                 event.currentTarget.href = targetUrl;
             }
 
-            // Buka langsung di tab baru secara sinkron di dalam event klik pengguna
             const newTab = window.open(targetUrl, '_blank', 'noopener,noreferrer');
             if (newTab) {
                 if (event) event.preventDefault();
                 return false;
             }
-            // Jika browser memblokir window.open, biarkan default klik <a href="..." target="_blank"> berjalan
             return true;
         }
 
@@ -1408,6 +1429,25 @@ Tugasmu membuat metadata YouTube Shorts yang sangat menarik klik (high CTR) dan 
         function toggleApiKeyVisibility() {
             const input = document.getElementById('input-gemini-key');
             input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        async function downloadQRIS() {
+            const qrisPath = 'facelessai/qris.jpeg';
+            try {
+                const response = await fetch(qrisPath);
+                if (!response.ok) throw new Error('Gagal memuat file QRIS');
+                const blob = await response.blob();
+                triggerMobileSafeDownload(blob, 'QRIS-SobatKarya.jpeg');
+                showToast('Gambar QRIS berhasil disimpan!', 'success');
+            } catch (err) {
+                const link = document.createElement('a');
+                link.href = qrisPath;
+                link.download = 'QRIS-SobatKarya.jpeg';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                showToast('Mengunduh gambar QRIS...', 'info');
+            }
         }
 
         function showToast(message, type = 'info') {
