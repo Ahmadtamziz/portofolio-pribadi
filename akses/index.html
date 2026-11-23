@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Area Anggota | sobatkarya.my.id</title>
+<!--
+  PENTING (keamanan): halaman ini HTML biasa, jadi siapa pun yang tahu alamatnya bisa membukanya.
+  Jangan taruh file berbayar di folder publik repositori. Lindungi halaman ini dengan login
+  (cek sesi Supabase) dan sajikan PDF lewat signed URL dari bucket Supabase Storage yang private.
+-->
+<style>
+:root{--bg:#f8fafc;--card:#fff;--text:#0f172a;--muted:#475569;--line:#e2e8f0;--accent:#1d4ed8;--accent-t:#fff;--soft:#eff6ff}
+@media (prefers-color-scheme:dark){:root{--bg:#0b1220;--card:#111a2e;--text:#e2e8f0;--muted:#94a3b8;--line:#1e293b;--accent:#3b82f6;--accent-t:#fff;--soft:#13213f}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:920px;margin:0 auto;padding:20px 16px 56px}
+header{padding:28px 0 8px}
+header small{color:var(--accent);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+h1{font-size:clamp(1.6rem,5vw,2.2rem);line-height:1.2;margin:6px 0 8px}
+p{margin:0 0 10px}.muted{color:var(--muted)}
+section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin-top:18px}
+h2{font-size:1.2rem;margin:0 0 12px}
+ol.steps{margin:0;padding-left:20px}ol.steps li{margin-bottom:6px}
+.btn{display:inline-block;background:var(--accent);color:var(--accent-t);padding:11px 18px;border-radius:10px;text-decoration:none;font-weight:600}
+.btn.off{background:var(--line);color:var(--muted);pointer-events:none}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.card{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--bg)}
+.card .body{padding:12px 14px}.card h3{font-size:1rem;margin:0 0 4px}.card p{font-size:.92rem;margin:0}
+.thumb{position:relative;aspect-ratio:16/9;background:#000;cursor:pointer;display:block;width:100%;border:0;padding:0}
+.thumb img,.thumb iframe{width:100%;height:100%;object-fit:cover;border:0;display:block}
+.thumb .play{position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-size:2.4rem;text-shadow:0 2px 8px rgba(0,0,0,.6)}
+.empty{border:1px dashed var(--line);border-radius:12px;padding:16px;color:var(--muted);text-align:center}
+.tag{display:inline-block;font-size:.75rem;background:var(--soft);color:var(--accent);padding:2px 8px;border-radius:99px;margin-bottom:6px;font-weight:600}
+footer{margin-top:28px;text-align:center;font-size:.85rem;color:var(--muted)}
+a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <small>Area Anggota</small>
+    <h1>Panduan Video Konten dengan Claude</h1>
+    <p class="muted">Semua materi pembelianmu ada di sini: panduan PDF, video panduan, dan tools bonus.</p>
+  </header>
+
+  <section id="mulai">
+    <h2>Mulai dari sini</h2>
+    <ol class="steps">
+      <li>Unduh panduan PDF di bawah dan baca bagian 1 dan 2 (persiapan dan pemasangan skill).</li>
+      <li>Ikuti video panduan secara berurutan, sambil praktik di Claude.</li>
+      <li>Salin template prompt dari panduan, isi dengan topikmu, lalu buat video pertamamu.</li>
+    </ol>
+  </section>
+
+  <section id="pdf">
+    <h2>Panduan PDF</h2>
+    <p class="muted" id="pdf-info"></p>
+    <a id="pdf-btn" class="btn off" href="#">Unduh panduan (PDF)</a>
+  </section>
+
+  <section id="video">
+    <h2>Video panduan</h2>
+    <div id="video-list"></div>
+  </section>
+
+  <section id="bonus">
+    <h2>Bonus</h2>
+    <h3 style="font-size:1rem;margin:0 0 8px">Tools gratis</h3>
+    <div id="tool-list" style="margin-bottom:16px"></div>
+    <h3 style="font-size:1rem;margin:0 0 8px">Skill bonus</h3>
+    <div class="empty">Segera hadir. Pembaruan akan diumumkan di halaman ini.</div>
+  </section>
+
+  <section id="komunitas">
+    <h2>Bagikan skill-mu</h2>
+    <p class="muted">Punya skill buatan sendiri? Kirim untuk ditinjau. Hanya skill yang lolos peninjauan yang akan dipublikasikan.</p>
+    <a id="share-btn" class="btn off" href="#">Masuk dan kirim skill</a>
+  </section>
+
+  <footer>&copy; sobatkarya.my.id &middot; Materi ini untuk pemakaian pribadi pembeli. Mohon tidak dibagikan ulang.</footer>
+</div>
+
+<script>
+/* ===== EDIT BAGIAN INI SAJA ===== */
+const CONFIG = {
+  pdfUrl: "",            // alamat PDF (idealnya signed URL dari Supabase Storage yang private)
+  pdfInfo: "Versi 1.0 &middot; 5 halaman",
+  loginUrl: "",          // alamat halaman login/kirim skill (Supabase) milikmu
+  videos: [
+    // { title: "Judul video", id: "KODE_VIDEO_YOUTUBE", note: "Deskripsi singkat" },
+  ],
+  tools: [
+    // { name: "Nama tool", desc: "Fungsi singkat", url: "https://sobatkarya.my.id/..." },
+  ]
+};
+/* ================================ */
+
+const $ = id => document.getElementById(id);
+const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; };
+const empty = msg => el("div", "empty", msg);
+
+function setLink(btn, url, label){
+  if (url){ btn.href = url; btn.classList.remove("off"); btn.target = "_blank"; btn.rel = "noopener"; }
+  else btn.textContent = label + " (belum diatur)";
+}
+$("pdf-info").innerHTML = CONFIG.pdfInfo;
+setLink($("pdf-btn"), CONFIG.pdfUrl, "Unduh panduan (PDF)");
+setLink($("share-btn"), CONFIG.loginUrl, "Masuk dan kirim skill");
+
+const vl = $("video-list");
+if (!CONFIG.videos.length) vl.appendChild(empty("Video panduan segera hadir."));
+else {
+  const grid = el("div", "grid");
+  CONFIG.videos.forEach((v, i) => {
+    const card = el("div", "card");
+    const t = el("button", "thumb"); t.type = "button"; t.setAttribute("aria-label", "Putar: " + v.title);
+    const img = el("img"); img.loading = "lazy"; img.alt = v.title;
+    img.src = "https://i.ytimg.com/vi/" + encodeURIComponent(v.id) + "/hqdefault.jpg";
+    t.appendChild(img); t.appendChild(el("span", "play", "\u25B6"));
+    t.addEventListener("click", () => {
+      const f = el("iframe");
+      f.src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(v.id) + "?autoplay=1&rel=0";
+      f.allow = "autoplay; encrypted-media; picture-in-picture"; f.allowFullscreen = true; f.title = v.title;
+      t.replaceWith(f);
+    });
+    const body = el("div", "body");
+    body.appendChild(el("span", "tag", "Video " + (i + 1)));
+    body.appendChild(el("h3", "", v.title));
+    if (v.note) body.appendChild(el("p", "muted", v.note));
+    card.appendChild(t); card.appendChild(body); grid.appendChild(card);
+  });
+  vl.appendChild(grid);
+}
+
+const tl = $("tool-list");
+if (!CONFIG.tools.length) tl.appendChild(empty("Tools gratis segera ditambahkan."));
+else {
+  const grid = el("div", "grid");
+  CONFIG.tools.forEach(t => {
+    const card = el("div", "card"); const body = el("div", "body");
+    body.appendChild(el("h3", "", t.name));
+    if (t.desc) body.appendChild(el("p", "muted", t.desc));
+    const a = el("a", "", "Buka tool"); a.href = t.url; a.target = "_blank"; a.rel = "noopener";
+    const p = el("p"); p.style.marginTop = "8px"; p.appendChild(a); body.appendChild(p);
+    card.appendChild(body); grid.appendChild(card);
+  });
+  tl.appendChild(grid);
+}
+</script>
+</body>
+</html>
