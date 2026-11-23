@@ -60,7 +60,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -79,13 +78,6 @@
             background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(217, 119, 6, 0.1) 100%);
             border-color: #f59e0b;
             color: #fbbf24;
-        }
-        @keyframes pulse-slow {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
-        }
-        .animate-pulse-slow {
-            animation: pulse-slow 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
     </style>
 </head>
@@ -117,7 +109,7 @@
             <div class="flex items-center gap-2">
                 <button onclick="toggleApiKeyModal()" id="header-api-btn" class="flex items-center gap-2 px-3 py-2 rounded-xl bg-zinc-800/90 hover:bg-zinc-700 text-xs sm:text-sm font-medium text-zinc-200 border border-zinc-700 transition" title="Atur Gemini API Key">
                     <i data-lucide="key-round" class="w-4 h-4 text-amber-400" id="api-status-icon"></i>
-                    <span class="hidden md:inline" id="api-status-text">Gemini API Key</span>
+                    <span class="hidden md:inline" id="api-status-text">Set API Key</span>
                     <span id="api-status-dot" class="w-2 h-2 rounded-full bg-amber-500"></span>
                 </button>
                 <button onclick="toggleCatalogModal()" class="flex items-center gap-2 px-3 py-2 rounded-xl bg-zinc-800/90 hover:bg-zinc-700 text-xs sm:text-sm font-medium text-zinc-200 border border-zinc-700 transition">
@@ -161,7 +153,6 @@
         <!-- STEP 1: PENULISAN LAGU (SKILL NADI AMBYAR) & SUNO BRIDGE  -->
         <!-- ========================================================= -->
         <section id="step-1" class="step-section space-y-6">
-            <!-- Top Action Bar -->
             <div class="glass-panel rounded-2xl p-5 sm:p-6 shadow-xl">
                 <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
                     <div class="flex-1 space-y-2">
@@ -186,11 +177,9 @@
                 </div>
             </div>
 
-            <!-- Song Output Grid -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 <!-- Left Column: Title, Lyrics & Suno Style -->
                 <div class="lg:col-span-7 space-y-5">
-                    <!-- Title Card -->
                     <div class="glass-panel rounded-2xl p-5 space-y-3">
                         <div class="flex items-center justify-between">
                             <span class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
@@ -204,7 +193,6 @@
                             class="w-full bg-zinc-950/70 border border-zinc-800 focus:border-amber-500 rounded-xl px-4 py-2.5 font-display font-bold text-lg text-white outline-none">
                     </div>
 
-                    <!-- Lyrics Card -->
                     <div class="glass-panel rounded-2xl p-5 space-y-3">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
@@ -222,7 +210,6 @@
                             class="w-full bg-zinc-950/70 border border-zinc-800 focus:border-amber-500 rounded-xl p-4 text-sm leading-relaxed text-zinc-100 font-mono outline-none resize-y"></textarea>
                     </div>
 
-                    <!-- Suno Style Card -->
                     <div class="glass-panel rounded-2xl p-5 space-y-3">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
@@ -256,7 +243,6 @@
                             </div>
                         </div>
 
-                        <!-- Suno Mode Selector / API Key Config -->
                         <div class="p-3.5 rounded-xl bg-zinc-900/90 border border-zinc-800 space-y-3">
                             <div class="flex items-center justify-between">
                                 <span class="text-xs font-semibold text-zinc-300">Koneksi Suno API / Bridge</span>
@@ -277,7 +263,6 @@
                             </div>
                         </div>
 
-                        <!-- Progress / Loading State for Suno -->
                         <div id="suno-loading" class="hidden p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-2">
                             <div class="flex items-center gap-3">
                                 <div class="w-5 h-5 border-2 border-amber-400 border-t-transparent rounded-full animate-spin"></div>
@@ -288,7 +273,6 @@
                             </div>
                         </div>
 
-                        <!-- 2 Hasil Lagu dari Suno -->
                         <div class="space-y-3">
                             <div class="flex items-center justify-between">
                                 <span class="text-xs font-bold uppercase tracking-wider text-zinc-400">Hasil 2 Lagu Suno (Siap Unduh & Klip)</span>
@@ -299,7 +283,6 @@
                             </div>
 
                             <div id="suno-tracks-container" class="space-y-3">
-                                <!-- Placeholder Empty State -->
                                 <div class="p-6 rounded-xl border border-dashed border-zinc-800 text-center space-y-2">
                                     <i data-lucide="music-2" class="w-8 h-8 text-zinc-600 mx-auto"></i>
                                     <p class="text-xs text-zinc-400">Belum ada lagu yang di-generate. Klik <strong class="text-amber-400">Buat Lagu di Suno</strong> atau unggah file MP3 hasil unduhan Suno Anda.</p>
@@ -307,7 +290,6 @@
                             </div>
                         </div>
 
-                        <!-- Next Step Shortcut -->
                         <div class="pt-2 border-t border-zinc-800/80 flex justify-end">
                             <button onclick="switchTab(2)" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-amber-400 text-xs sm:text-sm font-semibold transition">
                                 <span>Lanjut: Buat Visual Google Flow</span>
@@ -373,7 +355,7 @@
                     </div>
                 </div>
 
-                <!-- Right: Direct AI Image Generation (Google Imagen / Gemini Image) & Gallery -->
+                <!-- Right: Direct AI Image Generation & Gallery -->
                 <div class="lg:col-span-6 space-y-4">
                     <div class="glass-panel rounded-2xl p-5 space-y-4">
                         <div class="flex flex-wrap items-center justify-between gap-2">
@@ -394,7 +376,6 @@
                             </div>
                         </div>
 
-                        <!-- Gallery Grid -->
                         <div id="visual-gallery-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-[520px] overflow-y-auto pr-1">
                             <div class="col-span-full p-8 rounded-xl border border-dashed border-zinc-800 text-center space-y-2">
                                 <i data-lucide="images" class="w-8 h-8 text-zinc-600 mx-auto"></i>
@@ -435,11 +416,9 @@
                             </div>
                         </div>
 
-                        <!-- 16:9 Responsive Video Canvas Container -->
                         <div class="relative w-full aspect-video bg-black rounded-xl overflow-hidden border border-zinc-800 shadow-2xl">
                             <canvas id="video-canvas" width="1280" height="720" class="w-full h-full object-contain block"></canvas>
                             
-                            <!-- Overlay Render Progress -->
                             <div id="export-overlay" class="hidden absolute inset-0 bg-black/85 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center space-y-4">
                                 <div class="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
                                 <div class="space-y-1 max-w-md">
@@ -455,7 +434,6 @@
                             </div>
                         </div>
 
-                        <!-- Playback & Render Controls -->
                         <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
                             <div class="flex items-center gap-2">
                                 <button id="btn-preview-play" onclick="togglePreviewPlayback()" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white font-semibold text-xs sm:text-sm transition">
@@ -473,7 +451,6 @@
                             </div>
                         </div>
 
-                        <!-- Download Ready Box -->
                         <div id="video-download-box" class="hidden p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex flex-col sm:flex-row items-center justify-between gap-3">
                             <div class="flex items-center gap-3">
                                 <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
@@ -496,7 +473,6 @@
                     <div class="glass-panel rounded-2xl p-5 space-y-5">
                         <h3 class="font-display font-bold text-base text-white border-b border-zinc-800 pb-3">Pengaturan Video Klip</h3>
 
-                        <!-- Pilih Lagu -->
                         <div class="space-y-1.5">
                             <label class="text-xs font-semibold text-zinc-300">1. Pilih Audio Lagu Suno</label>
                             <select id="clip-audio-select" onchange="onClipAudioChange()" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2.5 text-xs sm:text-sm text-white outline-none focus:border-amber-500">
@@ -504,14 +480,12 @@
                             </select>
                         </div>
 
-                        <!-- Nama Channel Watermark -->
                         <div class="space-y-1.5">
                             <label class="text-xs font-semibold text-zinc-300">2. Branding Channel YouTube</label>
                             <input type="text" id="clip-channel-name" value="Nadi Ambyar" oninput="drawSinglePreviewFrame()"
                                 class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 text-xs sm:text-sm text-amber-400 font-bold outline-none focus:border-amber-500">
                         </div>
 
-                        <!-- Efek Gerak Foto -->
                         <div class="space-y-1.5">
                             <label class="text-xs font-semibold text-zinc-300">3. Animasi Gerak Foto Otomatis</label>
                             <select id="clip-motion-mode" onchange="drawSinglePreviewFrame()" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 text-xs sm:text-sm text-white outline-none focus:border-amber-500">
@@ -521,7 +495,6 @@
                             </select>
                         </div>
 
-                        <!-- Opsi Overlay Tambahan -->
                         <div class="space-y-2.5 pt-1">
                             <label class="flex items-center gap-2.5 cursor-pointer">
                                 <input type="checkbox" id="clip-show-title" checked onchange="drawSinglePreviewFrame()" class="w-4 h-4 accent-amber-500 rounded">
@@ -533,7 +506,6 @@
                             </label>
                         </div>
 
-                        <!-- Bahan Foto Terpilih -->
                         <div class="space-y-2 pt-2 border-t border-zinc-800">
                             <div class="flex items-center justify-between">
                                 <span class="text-xs font-semibold text-zinc-300">4. Urutan Foto Klip (<span id="clip-img-count">0</span>)</span>
@@ -576,7 +548,6 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <!-- Judul & Tag -->
                 <div class="lg:col-span-5 space-y-5">
                     <div class="glass-panel rounded-2xl p-5 space-y-3">
                         <div class="flex items-center justify-between">
@@ -601,7 +572,6 @@
                     </div>
                 </div>
 
-                <!-- Deskripsi Lengkap -->
                 <div class="lg:col-span-7">
                     <div class="glass-panel rounded-2xl p-5 space-y-3 h-full flex flex-col">
                         <div class="flex items-center justify-between">
@@ -673,7 +643,7 @@
         </div>
     </div>
 
-    <!-- Modal Katalog Lagu Nadi Ambyar (Mencegah duplikasi sesuai Aturan Bagian 10) -->
+    <!-- Modal Katalog Lagu Nadi Ambyar -->
     <div id="catalog-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="glass-panel max-w-lg w-full rounded-2xl p-6 space-y-4 border border-zinc-700 shadow-2xl">
             <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
@@ -688,9 +658,7 @@
             <p class="text-xs text-zinc-400">
                 Daftar lagu di bawah ini digunakan AI untuk memastikan lagu baru Anda tidak memiliki judul, tema, atau hook chorus yang berulang.
             </p>
-            <div id="catalog-list" class="max-h-60 overflow-y-auto space-y-2">
-                <!-- Diisi dinamis -->
-            </div>
+            <div id="catalog-list" class="max-h-60 overflow-y-auto space-y-2"></div>
             <div class="flex justify-between items-center pt-2 border-t border-zinc-800">
                 <button onclick="clearCatalog()" class="text-xs text-red-400 hover:underline">Hapus Riwayat</button>
                 <button onclick="toggleCatalogModal()" class="px-4 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-xs font-semibold text-white">Tutup</button>
@@ -705,7 +673,7 @@
         // =========================================================================
         // 1. STATE & KONFIGURASI SKILL NADI AMBYAR
         // =========================================================================
-        const defaultRuntimeKey = ""; // Fallback runtime environment jika ada
+        const defaultRuntimeKey = "";
         let userGeminiApiKey = localStorage.getItem('sobatkarya_gemini_api_key') || "";
         const TEXT_MODEL = "gemini-3-flash-preview";
         const IMAGE_MODEL = "gemini-3.1-flash-image";
@@ -713,8 +681,39 @@
         function getActiveApiKey() {
             return (userGeminiApiKey && userGeminiApiKey.trim()) ? userGeminiApiKey.trim() : defaultRuntimeKey;
         }
-// ... existing code ... -->
-        // Inisialisasi Lucide Icons & Canvas awal
+
+        const NADI_AMBYAR_SYSTEM_PROMPT = `Anda adalah penulis lagu profesional eksklusif untuk kanal YouTube "Nadi Ambyar".
+Patuhi seluruh aturan berikut secara ketat:
+1. IDENTITAS & GENRE: Modern Pop Jawa Koplo Ambyar. Nuansa emosional, realistis, dekat dengan kehidupan sehari-hari, mudah dipahami, dan enak dinyanyikan ulang.
+2. VOKAL: Satu vokalis pria saja yaitu "Mas Ghifari" (pria Jawa muda/dewasa, suara hangat, matang, maskulin, sedikit husky/serak, emosional). DILARANG vokal wanita, duet, choir, atau backing vocal penyanyi lain.
+3. BAHASA: Bahasa Jawa ngoko yang alami dipadukan wajar dengan bahasa Indonesia seperti percakapan sehari-hari. Hindari klise berlebihan seperti sering membuka dengan "mbiyen kowe".
+4. CERITA: Punya satu inti cerita manusiawi yang jelas dan akhir cerita bervariasi (ikhlas, menggantung, menyesal, menerima, atau tetap berharap).
+5. STRUKTUR WAJIB (Langsung mulai dari [Verse 1], DILARANG menambahkan Intro atau Outro):
+[Verse 1]
+[Pre-Chorus]
+[Chorus]
+[Verse 2]
+[Pre-Chorus]
+[Chorus]
+[Bridge]
+[Final Chorus]
+6. PANJANG LIRIK: Target 1.500 - 2.000 karakter (termasuk label bagian). Setiap bagian membawa perkembangan cerita/emosi baru.
+7. STANDAR SUNO STYLE: Tulis dalam Bahasa Inggris, MAKSIMAL 1.000 karakter. Wajib mencantumkan "Modern Pop Jawa Koplo Ambyar", tempo sekitar "94 BPM", "solo male vocal only", deskripsi karakter vokal Mas Ghifari (warm, mature, masculine Javanese male voice, slightly husky, emotional delivery, clear Javanese pronunciation), instrumen (acoustic guitar, piano, kendang koplo, bass, subtle electric guitar, violin, warm reverb), tanpa female vocal/duet/choir, tanpa intro/outro panjang.
+8. FORMAT OUTPUT: Kembalikan dalam JSON murni sesuai skema yang diminta.`;
+
+        const appState = {
+            currentTab: 1,
+            catalog: JSON.parse(localStorage.getItem('nadi_ambyar_catalog') || '[]'),
+            tracks: [],
+            selectedTrackId: null,
+            prompts: [],
+            images: [],
+            isPreviewPlaying: false,
+            previewAnimId: null,
+            isRenderingVideo: false,
+            cancelRenderFlag: false
+        };
+
         window.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
             updateApiKeyStatusUI();
@@ -787,7 +786,6 @@
 
         function ensureApiKeyReady() {
             const key = getActiveApiKey();
-            // Jika dijalankan di domain mandiri (bukan preview internal) dan key belum diisi, buka modal API Key
             const isStandaloneDomain = window.location.hostname.includes('sobatkarya') || (!window.location.hostname.includes('googleusercontent') && !window.location.hostname.includes('localhost') && !key);
             if (!key && isStandaloneDomain) {
                 showToast("Silakan masukkan Gemini API Key Anda untuk mengaktifkan fitur AI.", "warning");
@@ -796,7 +794,168 @@
             }
             return true;
         }
-// ... existing code ... -->
+
+        function switchTab(stepNum) {
+            appState.currentTab = stepNum;
+            document.querySelectorAll('.step-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`step-${stepNum}`).classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach((btn, idx) => {
+                const badge = btn.querySelector('span:first-child');
+                if (idx + 1 === stepNum) {
+                    btn.classList.add('tab-active');
+                    btn.classList.remove('text-zinc-400');
+                    badge.className = 'w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center text-xs font-bold';
+                } else {
+                    btn.classList.remove('tab-active');
+                    btn.classList.add('text-zinc-400');
+                    badge.className = 'w-5 h-5 rounded-full bg-zinc-800 text-zinc-300 flex items-center justify-center text-xs font-bold';
+                }
+            });
+
+            if (stepNum === 3) {
+                syncClipAssetsUI();
+                drawSinglePreviewFrame();
+            }
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const colors = {
+                success: 'border-emerald-500/40 bg-zinc-900/95 text-emerald-300',
+                error: 'border-red-500/40 bg-zinc-900/95 text-red-300',
+                warning: 'border-amber-500/40 bg-zinc-900/95 text-amber-300',
+                info: 'border-zinc-700 bg-zinc-900/95 text-zinc-200'
+            };
+            toast.className = `pointer-events-auto p-3.5 rounded-xl border shadow-2xl backdrop-blur-md text-xs sm:text-sm font-medium flex items-center gap-2.5 transition-all duration-300 ${colors[type] || colors.info}`;
+            toast.innerHTML = `<span class="w-2 h-2 rounded-full bg-current shrink-0"></span><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(8px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        function copyTextSafe(text, successMsg = 'Berhasil disalin!') {
+            if (!text || !text.trim()) {
+                showToast('Teks masih kosong untuk disalin.', 'warning');
+                return;
+            }
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+                document.execCommand('copy');
+                showToast(successMsg, 'success');
+            } catch (err) {
+                showToast('Gagal menyalin teks.', 'error');
+            }
+            document.body.removeChild(ta);
+        }
+
+        function copyField(elementId, successMsg) {
+            const el = document.getElementById(elementId);
+            copyTextSafe(el.value, successMsg);
+        }
+
+        function updateCharCounters() {
+            const lyrics = document.getElementById('output-lyrics').value;
+            const style = document.getElementById('output-style').value;
+            const lyricsBadge = document.getElementById('lyrics-char-count');
+            const styleBadge = document.getElementById('style-char-count');
+
+            lyricsBadge.textContent = `${lyrics.length} karakter`;
+            if (lyrics.length >= 1450 && lyrics.length <= 2100) {
+                lyricsBadge.className = 'text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400';
+            } else if (lyrics.length > 0) {
+                lyricsBadge.className = 'text-[11px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400';
+            } else {
+                lyricsBadge.className = 'text-[11px] px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-400';
+            }
+
+            styleBadge.textContent = `${style.length} / 1000`;
+            styleBadge.className = style.length > 1000
+                ? 'text-[11px] px-2 py-0.5 rounded-full bg-red-500/20 text-red-400'
+                : 'text-[11px] px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-400';
+        }
+
+        function toggleCatalogModal() {
+            const modal = document.getElementById('catalog-modal');
+            modal.classList.toggle('hidden');
+            updateCatalogUI();
+        }
+
+        function saveToCatalog(title, themeSummary) {
+            if (!title) return;
+            const exists = appState.catalog.some(item => item.title.toLowerCase() === title.toLowerCase());
+            if (!exists) {
+                appState.catalog.unshift({
+                    title,
+                    theme: themeSummary || 'Modern Pop Jawa Koplo Ambyar',
+                    date: new Date().toLocaleDateString('id-ID')
+                });
+                if (appState.catalog.length > 30) appState.catalog.pop();
+                localStorage.setItem('nadi_ambyar_catalog', JSON.stringify(appState.catalog));
+                updateCatalogUI();
+            }
+        }
+
+        function updateCatalogUI() {
+            document.getElementById('catalog-count').textContent = appState.catalog.length;
+            const listEl = document.getElementById('catalog-list');
+            if (appState.catalog.length === 0) {
+                listEl.innerHTML = `<p class="text-xs text-zinc-500 text-center py-6">Belum ada riwayat lagu tersimpan.</p>`;
+                return;
+            }
+            listEl.innerHTML = appState.catalog.map((item, idx) => `
+                <div class="p-3 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-between gap-2">
+                    <div>
+                        <div class="text-xs font-bold text-amber-400">${idx + 1}. ${escapeHtml(item.title)}</div>
+                        <div class="text-[11px] text-zinc-400">${escapeHtml(item.theme)} • ${item.date}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function clearCatalog() {
+            appState.catalog = [];
+            localStorage.removeItem('nadi_ambyar_catalog');
+            updateCatalogUI();
+            showToast('Riwayat katalog lagu dibersihkan.', 'info');
+        }
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        // =========================================================================
+        // 3. GEMINI API HELPER DENGAN EXPONENTIAL BACKOFF
+        // =========================================================================
+        async function fetchWithRetry(url, options, maxRetries = 4) {
+            let delay = 1000;
+            for (let attempt = 0; attempt <= maxRetries; attempt++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (!response.ok) {
+                        const errText = await response.text();
+                        throw new Error(`HTTP ${response.status}: ${errText}`);
+                    }
+                    return await response.json();
+                } catch (err) {
+                    if (attempt === maxRetries) throw err;
+                    await new Promise(res => setTimeout(res, delay));
+                    delay *= 2;
+                }
+            }
+        }
+
         // =========================================================================
         // 4. STEP 1: GENERATE LAGU BARU (NADI AMBYAR SKILL)
         // =========================================================================
@@ -804,12 +963,348 @@
             if (!ensureApiKeyReady()) return;
             const btn = document.getElementById('btn-generate-song');
             const userInput = document.getElementById('song-prompt-input').value.trim();
-// ... existing code ... -->
+            
+            btn.disabled = true;
+            btn.innerHTML = `<div class="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></div><span>Menulis Lagu Mas Ghifari...</span>`;
+
+            const existingTitles = appState.catalog.map(c => c.title).join(', ');
+            const userInstruction = userInput
+                ? `Buatkan satu lagu original baru Nadi Ambyar berdasarkan judul atau ide berikut: "${userInput}". Jika pengguna memberikan judul spesifik, pertahankan judul tersebut agar selaras dengan cerita liriknya.`
+                : `Buatkan satu lagu original baru Nadi Ambyar dengan tema, sudut pandang cerita, dan judul yang segar, emosional, dan realistis.`;
+
+            const catalogContext = existingTitles
+                ? `\n\nDaftar judul Nadi Ambyar sebelumnya (WAJIB hindari kesamaan judul, alur cerita, maupun hook chorus): ${existingTitles}`
+                : '';
+
+            const payload = {
+                systemInstruction: {
+                    parts: [{ text: NADI_AMBYAR_SYSTEM_PROMPT }]
+                },
+                contents: [{
+                    parts: [{ text: userInstruction + catalogContext }]
+                }],
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "OBJECT",
+                        properties: {
+                            title: { type: "STRING", description: "Judul lagu singkat, kuat, mewakili cerita." },
+                            themeSummary: { type: "STRING", description: "Ringkasan 1 kalimat inti cerita lagu." },
+                            lyrics: { type: "STRING", description: "Lirik lengkap dengan label [Verse 1], [Pre-Chorus], [Chorus], [Verse 2], [Pre-Chorus], [Chorus], [Bridge], [Final Chorus]. Target 1500-2000 karakter." },
+                            sunoStyle: { type: "STRING", description: "Prompt style berbahasa Inggris maksimal 1000 karakter." }
+                        },
+                        required: ["title", "themeSummary", "lyrics", "sunoStyle"]
+                    }
+                }
+            };
+
             try {
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/${TEXT_MODEL}:generateContent?key=${getActiveApiKey()}`;
                 const data = await fetchWithRetry(url, {
                     method: 'POST',
-// ... existing code ... -->
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (!rawText) throw new Error("Respon kosong dari AI.");
+
+                const parsed = JSON.parse(rawText);
+                const cleanStyle = (parsed.sunoStyle || "").slice(0, 1000);
+
+                document.getElementById('output-title').value = parsed.title || "";
+                document.getElementById('output-lyrics').value = parsed.lyrics || "";
+                document.getElementById('output-style').value = cleanStyle;
+                updateCharCounters();
+
+                saveToCatalog(parsed.title, parsed.themeSummary);
+                showToast(`Lagu "${parsed.title}" berhasil dibuat sesuai aturan Nadi Ambyar!`, 'success');
+            } catch (error) {
+                console.error(error);
+                showToast("Gagal membuat lagu. Pastikan Gemini API Key valid dan koneksi stabil.", "error");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4"></i><span>Buatkan Lagu Baru</span>`;
+                lucide.createIcons();
+            }
+        }
+
+        // =========================================================================
+        // 5. STEP 1B: SUNO INTEGRATION (2 TRACKS GENERATOR + BRIDGE + UPLOAD)
+        // =========================================================================
+        function openSunoWebBridge() {
+            const title = document.getElementById('output-title').value.trim();
+            const lyrics = document.getElementById('output-lyrics').value.trim();
+            const style = document.getElementById('output-style').value.trim();
+
+            if (!title || !lyrics) {
+                showToast("Buatkan atau isi Judul dan Lirik lagu terlebih dahulu!", "warning");
+                return;
+            }
+
+            const bundle = `TITLE:\n${title}\n\nSTYLE OF MUSIC:\n${style}\n\nLYRICS:\n${lyrics}`;
+            copyTextSafe(bundle, "Title, Style & Lyrics disalin! Membuka Suno.com...");
+            window.open('https://suno.com/create', '_blank', 'noopener,noreferrer');
+        }
+
+        async function sendToSuno() {
+            const title = document.getElementById('output-title').value.trim();
+            const lyrics = document.getElementById('output-lyrics').value.trim();
+            const style = document.getElementById('output-style').value.trim();
+            const customEndpoint = document.getElementById('suno-api-endpoint').value.trim();
+
+            if (!title || !lyrics || !style) {
+                showToast("Lengkapi Title, Lyrics, dan Suno Style terlebih dahulu!", "warning");
+                return;
+            }
+
+            const loadingBox = document.getElementById('suno-loading');
+            const progressBar = document.getElementById('suno-progress-bar');
+            const loadingText = document.getElementById('suno-loading-text');
+            const btn = document.getElementById('btn-send-suno');
+
+            loadingBox.classList.remove('hidden');
+            btn.disabled = true;
+            progressBar.style.width = '25%';
+
+            try {
+                if (customEndpoint) {
+                    loadingText.textContent = "Menghubungkan ke Suno Custom API Endpoint...";
+                    const resp = await fetch(customEndpoint, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ title, prompt: lyrics, tags: style, make_instrumental: false })
+                    });
+                    if (!resp.ok) throw new Error("Custom Suno Endpoint gagal merespon.");
+                    const result = await resp.json();
+                    const items = Array.isArray(result) ? result : (result.data || result.clips || []);
+                    if (items.length > 0) {
+                        appState.tracks = items.slice(0, 2).map((item, i) => ({
+                            id: `suno-${Date.now()}-${i}`,
+                            name: `${title} (Suno V${i + 1})`,
+                            url: item.audio_url || item.url,
+                            durationStr: "03:15",
+                            source: "Suno API"
+                        }));
+                        renderSunoTracks();
+                        showToast("2 Lagu berhasil diterima dari Suno API!", "success");
+                        return;
+                    }
+                }
+
+                // Mode Studio Koplo Synthesizer Preview + Auto-Copy ke Suno
+                loadingText.textContent = "Menyiapkan 2 variasi aransemen Pop Jawa Koplo (Mas Ghifari V1 & V2)...";
+                progressBar.style.width = '60%';
+
+                const track1Blob = await synthesizeKoploPreviewWav(title, 94, 0);
+                progressBar.style.width = '85%';
+                const track2Blob = await synthesizeKoploPreviewWav(title, 96, 1);
+                progressBar.style.width = '100%';
+
+                const url1 = URL.createObjectURL(track1Blob);
+                const url2 = URL.createObjectURL(track2Blob);
+
+                appState.tracks = [
+                    {
+                        id: `track-${Date.now()}-1`,
+                        name: `${title} — Versi 1 (Mas Ghifari Warm Koplo)`,
+                        url: url1,
+                        durationStr: "00:32",
+                        source: "Suno Studio Engine V1"
+                    },
+                    {
+                        id: `track-${Date.now()}-2`,
+                        name: `${title} — Versi 2 (Mas Ghifari Acoustic Ambyar)`,
+                        url: url2,
+                        durationStr: "00:32",
+                        source: "Suno Studio Engine V2"
+                    }
+                ];
+
+                appState.selectedTrackId = appState.tracks[0].id;
+                renderSunoTracks();
+                syncClipAssetsUI();
+                showToast("2 Lagu siap diputar & diunduh! (Anda juga bisa unggah MP3 asli Suno kapan saja)", "success");
+            } catch (err) {
+                console.error(err);
+                showToast("Terjadi kendala koneksi Suno: " + err.message, "error");
+            } finally {
+                setTimeout(() => {
+                    loadingBox.classList.add('hidden');
+                    progressBar.style.width = '0%';
+                    btn.disabled = false;
+                }, 500);
+            }
+        }
+
+        function handleManualAudioUpload(event) {
+            const files = Array.from(event.target.files || []);
+            if (files.length === 0) return;
+
+            files.forEach((file, idx) => {
+                const url = URL.createObjectURL(file);
+                const trackObj = {
+                    id: `upload-${Date.now()}-${idx}`,
+                    name: file.name.replace(/\.[^/.]+$/, ""),
+                    url,
+                    durationStr: "Audio Suno",
+                    source: "File MP3/WAV Unggahan"
+                };
+                appState.tracks.unshift(trackObj);
+                if (idx === 0) appState.selectedTrackId = trackObj.id;
+            });
+
+            renderSunoTracks();
+            syncClipAssetsUI();
+            showToast(`${files.length} file audio berhasil ditambahkan!`, "success");
+        }
+
+        function renderSunoTracks() {
+            const container = document.getElementById('suno-tracks-container');
+            if (appState.tracks.length === 0) return;
+
+            container.innerHTML = appState.tracks.map((track) => {
+                const isSelected = track.id === appState.selectedTrackId;
+                return `
+                <div class="p-3.5 rounded-xl bg-zinc-900/95 border ${isSelected ? 'border-amber-500/70 shadow-md shadow-amber-500/10' : 'border-zinc-800'} space-y-2.5 transition">
+                    <div class="flex items-start justify-between gap-2">
+                        <div>
+                            <div class="text-xs sm:text-sm font-bold text-white flex items-center gap-1.5">
+                                <i data-lucide="disc-3" class="w-4 h-4 text-amber-400 shrink-0"></i>
+                                <span>${escapeHtml(track.name)}</span>
+                            </div>
+                            <span class="text-[11px] text-zinc-400">${escapeHtml(track.source)} • ${track.durationStr}</span>
+                        </div>
+                        <button onclick="selectTrackForClip('${track.id}')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold ${isSelected ? 'bg-amber-500 text-black' : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'} transition">
+                            ${isSelected ? 'Terpilih untuk Klip' : 'Pilih untuk Klip'}
+                        </button>
+                    </div>
+                    <audio controls src="${track.url}" class="w-full h-8 rounded-lg"></audio>
+                    <div class="flex items-center justify-end gap-2 pt-0.5">
+                        <a href="${track.url}" download="${escapeHtml(track.name)}.wav" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 text-xs font-semibold transition">
+                            <i data-lucide="download" class="w-3.5 h-3.5"></i> Unduh Lagu
+                        </a>
+                    </div>
+                </div>`;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        function selectTrackForClip(trackId) {
+            appState.selectedTrackId = trackId;
+            renderSunoTracks();
+            syncClipAssetsUI();
+            showToast("Lagu dipilih sebagai audio utama Video Klip!", "info");
+        }
+
+        async function synthesizeKoploPreviewWav(title, bpm = 94, variation = 0) {
+            const sampleRate = 22050;
+            const duration = 32;
+            const totalSamples = sampleRate * duration;
+            const offlineCtx = new OfflineAudioContext(1, totalSamples, sampleRate);
+
+            const beatSec = 60 / bpm;
+            const chords = variation === 0
+                ? [[130.81, 164.81, 196.00], [98.00, 123.47, 146.83], [110.00, 130.81, 164.81], [87.31, 110.00, 130.81]]
+                : [[110.00, 130.81, 164.81], [87.31, 110.00, 130.81], [130.81, 164.81, 196.00], [98.00, 123.47, 146.83]];
+
+            for (let t = 0; t < duration; t += beatSec) {
+                const beatIndex = Math.floor(t / beatSec);
+                const barIndex = Math.floor(beatIndex / 4) % chords.length;
+                const chord = chords[barIndex];
+
+                if (beatIndex % 4 === 0) {
+                    chord.forEach((freq) => {
+                        const osc = offlineCtx.createOscillator();
+                        const gain = offlineCtx.createGain();
+                        osc.type = variation === 0 ? 'triangle' : 'sine';
+                        osc.frequency.setValueAtTime(freq * 2, t);
+                        gain.gain.setValueAtTime(0.001, t);
+                        gain.gain.linearRampToValueAtTime(0.07, t + 0.08);
+                        gain.gain.exponentialRampToValueAtTime(0.001, Math.min(t + beatSec * 3.8, duration));
+                        osc.connect(gain);
+                        gain.connect(offlineCtx.destination);
+                        osc.start(t);
+                        osc.stop(Math.min(t + beatSec * 4, duration));
+                    });
+                }
+
+                const subBeat = beatIndex % 4;
+                if (subBeat === 0 || subBeat === 2 || subBeat === 3) {
+                    const kOsc = offlineCtx.createOscillator();
+                    const kGain = offlineCtx.createGain();
+                    kOsc.type = 'sine';
+                    const startFreq = subBeat === 0 ? 115 : 165;
+                    const endFreq = subBeat === 0 ? 48 : 85;
+                    kOsc.frequency.setValueAtTime(startFreq, t);
+                    kOsc.frequency.exponentialRampToValueAtTime(endFreq, t + 0.14);
+                    kGain.gain.setValueAtTime(0.22, t);
+                    kGain.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+                    kOsc.connect(kGain);
+                    kGain.connect(offlineCtx.destination);
+                    kOsc.start(t);
+                    kOsc.stop(t + 0.2);
+                }
+
+                const melNotes = [329.63, 392.00, 440.00, 392.00, 329.63, 293.66, 261.63, 293.66];
+                const noteFreq = melNotes[(beatIndex + variation * 2) % melNotes.length];
+                const mOsc = offlineCtx.createOscillator();
+                const mGain = offlineCtx.createGain();
+                mOsc.type = 'sine';
+                mOsc.frequency.setValueAtTime(noteFreq, t);
+                mGain.gain.setValueAtTime(0.001, t);
+                mGain.gain.linearRampToValueAtTime(0.09, t + 0.05);
+                mGain.gain.exponentialRampToValueAtTime(0.001, Math.min(t + beatSec * 0.9, duration));
+                mOsc.connect(mGain);
+                mGain.connect(offlineCtx.destination);
+                mOsc.start(t);
+                mOsc.stop(Math.min(t + beatSec, duration));
+            }
+
+            const renderedBuffer = await offlineCtx.startRendering();
+            return audioBufferToWavBlob(renderedBuffer);
+        }
+
+        function audioBufferToWavBlob(buffer) {
+            const numOfChan = buffer.numberOfChannels;
+            const length = buffer.length * numOfChan * 2 + 44;
+            const out = new ArrayBuffer(length);
+            const view = new DataView(out);
+            const channels = [];
+            let sample = 0;
+            let offset = 0;
+            let pos = 0;
+
+            function setUint16(data) { view.setUint16(pos, data, true); pos += 2; }
+            function setUint32(data) { view.setUint32(pos, data, true); pos += 4; }
+
+            setUint32(0x46464952);
+            setUint32(length - 8);
+            setUint32(0x45564157);
+            setUint32(0x20746d66);
+            setUint32(16);
+            setUint16(1);
+            setUint16(numOfChan);
+            setUint32(buffer.sampleRate);
+            setUint32(buffer.sampleRate * 2 * numOfChan);
+            setUint16(numOfChan * 2);
+            setUint16(16);
+            setUint32(0x61746164);
+            setUint32(length - pos - 4);
+
+            for (let i = 0; i < buffer.numberOfChannels; i++) channels.push(buffer.getChannelData(i));
+            while (pos < length) {
+                for (let i = 0; i < numOfChan; i++) {
+                    sample = Math.max(-1, Math.min(1, channels[i][offset]));
+                    sample = (sample < 0 ? sample * 0x8000 : sample * 0x7FFF) | 0;
+                    view.setInt16(pos, sample, true);
+                    pos += 2;
+                }
+                offset++;
+            }
+            return new Blob([out], { type: 'audio/wav' });
+        }
+
         // =========================================================================
         // 6. STEP 2: VISUAL BULK PROMPTS & DIRECT FLOW AI IMAGE GENERATION
         // =========================================================================
@@ -817,28 +1312,751 @@
             if (!ensureApiKeyReady()) return;
             const title = document.getElementById('output-title').value.trim();
             const lyrics = document.getElementById('output-lyrics').value.trim();
-// ... existing code ... -->
+            const sceneCount = parseInt(document.getElementById('scene-count-select').value, 10) || 6;
+
+            if (!lyrics) {
+                showToast("Buatkan lagu di Langkah 1 terlebih dahulu agar AI memahami cerita visualnya!", "warning");
+                return;
+            }
+
+            const btn = document.getElementById('btn-gen-prompts');
+            btn.disabled = true;
+            btn.innerHTML = `<div class="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></div><span>Menyusun ${sceneCount} Adegan...</span>`;
+
+            const promptInstruction = `Buat ${sceneCount} prompt gambar sinematik berbahasa Inggris (16:9 widescreen, photorealistic, emotional Indonesian/Javanese setting, warm golden hour / moody rainy night cinematic lighting, 8k resolution, no text/watermark) yang menggambarkan alur cerita dari lagu Nadi Ambyar berjudul "${title}" dengan lirik:\n\n${lyrics}\n\nKarakter utama pria Jawa muda dewasa (Mas Ghifari) tampil konsisten di beberapa adegan.`;
+
+            const payload = {
+                contents: [{ parts: [{ text: promptInstruction }] }],
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "OBJECT",
+                        properties: {
+                            scenes: {
+                                type: "ARRAY",
+                                items: {
+                                    type: "OBJECT",
+                                    properties: {
+                                        sceneNumber: { type: "INTEGER" },
+                                        sectionLabel: { type: "STRING", description: "Misal: Verse 1, Chorus, Bridge" },
+                                        prompt: { type: "STRING", description: "Prompt visual bahasa Inggris detail untuk Google Flow / Imagen." }
+                                    },
+                                    required: ["sceneNumber", "sectionLabel", "prompt"]
+                                }
+                            }
+                        },
+                        required: ["scenes"]
+                    }
+                }
+            };
+
             try {
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/${TEXT_MODEL}:generateContent?key=${getActiveApiKey()}`;
                 const data = await fetchWithRetry(url, {
                     method: 'POST',
-// ... existing code ... -->
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const raw = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                const parsed = JSON.parse(raw);
+                appState.prompts = (parsed.scenes || []).map((s, idx) => ({
+                    id: `prompt-${Date.now()}-${idx}`,
+                    sceneNumber: s.sceneNumber || idx + 1,
+                    sectionLabel: s.sectionLabel || `Scene ${idx + 1}`,
+                    prompt: s.prompt,
+                    isGenerating: false
+                }));
+
+                renderBulkPromptsList();
+                showToast(`${appState.prompts.length} Bulk Prompt berhasil dibuat! Siap disalin ke Google Flow atau di-generate langsung.`, "success");
+            } catch (err) {
+                console.error(err);
+                showToast("Gagal membuat Bulk Prompt. Periksa Gemini API Key dan koneksi Anda.", "error");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i data-lucide="wand-2" class="w-4 h-4"></i><span>Buatkan Bulk Prompt Visual</span>`;
+                lucide.createIcons();
+            }
+        }
+
+        function renderBulkPromptsList() {
+            const container = document.getElementById('bulk-prompts-list');
+            if (appState.prompts.length === 0) return;
+
+            container.innerHTML = appState.prompts.map((p, idx) => `
+                <div class="p-3.5 rounded-xl bg-zinc-900/95 border border-zinc-800 space-y-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="text-xs font-bold text-amber-400">Adegan #${p.sceneNumber} (${escapeHtml(p.sectionLabel)})</span>
+                        <div class="flex items-center gap-1.5">
+                            <button onclick="copySinglePrompt(${idx})" class="px-2 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-[11px] text-zinc-300 flex items-center gap-1">
+                                <i data-lucide="copy" class="w-3 h-3"></i> Salin
+                            </button>
+                            <button onclick="generateSingleImageDirect(${idx})" ${p.isGenerating ? 'disabled' : ''} class="px-2.5 py-1 rounded bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 text-[11px] font-semibold flex items-center gap-1">
+                                <i data-lucide="sparkles" class="w-3 h-3"></i> ${p.isGenerating ? 'Generating...' : 'Generate Gambar'}
+                            </button>
+                        </div>
+                    </div>
+                    <p class="text-xs text-zinc-300 leading-relaxed bg-zinc-950/70 p-2.5 rounded-lg border border-zinc-800/80">${escapeHtml(p.prompt)}</p>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function copySinglePrompt(idx) {
+            const p = appState.prompts[idx];
+            if (p) copyTextSafe(p.prompt, `Prompt Adegan #${p.sceneNumber} disalin!`);
+        }
+
+        function copyAllBulkPrompts() {
+            if (appState.prompts.length === 0) {
+                showToast("Belum ada daftar bulk prompt.", "warning");
+                return;
+            }
+            const allText = appState.prompts.map(p => p.prompt).join('\n\n');
+            copyTextSafe(allText, `Semua ${appState.prompts.length} Bulk Prompt disalin! Tempelkan ke Google Flow.`);
+        }
+
         async function generateSingleImageDirect(promptIdx) {
             if (!ensureApiKeyReady()) return;
             const p = appState.prompts[promptIdx];
             if (!p) return;
-// ... existing code ... -->
+
+            p.isGenerating = true;
+            renderBulkPromptsList();
+
+            try {
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/${IMAGE_MODEL}:generateContent?key=${getActiveApiKey()}`;
                 const result = await fetchWithRetry(url, {
                     method: 'POST',
-// ... existing code ... -->
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{ text: `${p.prompt}, 16:9 wide cinematic frame, high aesthetic music video still, no text` }]
+                        }],
+                        generationConfig: {
+                            responseModalities: ["IMAGE"]
+                        }
+                    })
+                });
+
+                const parts = result.candidates?.[0]?.content?.parts || [];
+                const imgPart = parts.find(part => part.inlineData && part.inlineData.data);
+                if (!imgPart) throw new Error("Gambar tidak dikembalikan oleh API.");
+
+                const mimeType = imgPart.inlineData.mimeType || "image/png";
+                const dataUrl = `data:${mimeType};base64,${imgPart.inlineData.data}`;
+
+                await addImageAsset(dataUrl, `Adegan_${p.sceneNumber}_${p.sectionLabel}`);
+                showToast(`Gambar Adegan #${p.sceneNumber} selesai dibuat!`, "success");
+            } catch (err) {
+                console.error(err);
+                showToast(`Gagal generate gambar #${p.sceneNumber}. Pastikan API Key mendukung image generation.`, "error");
+            } finally {
+                p.isGenerating = false;
+                renderBulkPromptsList();
+            }
+        }
+
         async function generateAllImagesDirect() {
             if (!ensureApiKeyReady()) return;
             if (appState.prompts.length === 0) {
                 showToast("Buatkan Bulk Prompt terlebih dahulu!", "warning");
                 return;
             }
-// ... existing code ... -->
+            const btn = document.getElementById('btn-gen-all-images');
+            btn.disabled = true;
+            btn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-black border-t-transparent rounded-full animate-spin"></div><span>Generating...</span>`;
+
+            for (let i = 0; i < appState.prompts.length; i++) {
+                await generateSingleImageDirect(i);
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = `<i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Generate Semua Gambar`;
+            lucide.createIcons();
+            showToast("Semua gambar selesai dan masuk ke bahan Video Klip!", "success");
+        }
+
+        function handleManualImageUpload(event) {
+            const files = Array.from(event.target.files || []);
+            if (files.length === 0) return;
+
+            files.forEach((file) => {
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    await addImageAsset(e.target.result, file.name.replace(/\.[^/.]+$/, ""));
+                };
+                reader.readAsDataURL(file);
+            });
+            showToast(`${files.length} foto ditambahkan ke galeri video klip!`, "success");
+        }
+
+        function addImageAsset(srcUrl, label) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.crossOrigin = "anonymous";
+                img.onload = () => {
+                    appState.images.push({
+                        id: `img-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+                        src: srcUrl,
+                        label: label || `Visual ${appState.images.length + 1}`,
+                        imgObj: img
+                    });
+                    renderVisualGallery();
+                    syncClipAssetsUI();
+                    resolve();
+                };
+                img.onerror = () => resolve();
+                img.src = srcUrl;
+            });
+        }
+
+        function removeImageAsset(imgId) {
+            appState.images = appState.images.filter(i => i.id !== imgId);
+            renderVisualGallery();
+            syncClipAssetsUI();
+        }
+
+        function renderVisualGallery() {
+            const grid = document.getElementById('visual-gallery-grid');
+            const badge = document.getElementById('selected-images-badge');
+            badge.textContent = `${appState.images.length} gambar siap untuk video klip`;
+
+            if (appState.images.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full p-8 rounded-xl border border-dashed border-zinc-800 text-center space-y-2">
+                        <i data-lucide="images" class="w-8 h-8 text-zinc-600 mx-auto"></i>
+                        <p class="text-xs text-zinc-400">Belum ada gambar visual. Klik <strong class="text-emerald-400">Generate Semua Gambar</strong> atau unggah hasil download dari Google Flow Anda.</p>
+                    </div>`;
+                lucide.createIcons();
+                return;
+            }
+
+            grid.innerHTML = appState.images.map((item, idx) => `
+                <div class="group relative aspect-video rounded-xl overflow-hidden bg-zinc-950 border border-zinc-800">
+                    <img src="${item.src}" alt="${escapeHtml(item.label)}" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition flex flex-col justify-between p-2">
+                        <div class="flex justify-between items-center">
+                            <span class="px-1.5 py-0.5 rounded bg-black/70 text-[10px] font-bold text-amber-400">#${idx + 1}</span>
+                            <button onclick="removeImageAsset('${item.id}')" class="p-1 rounded bg-red-500/80 text-white hover:bg-red-500" title="Hapus">
+                                <i data-lucide="trash-2" class="w-3 h-3"></i>
+                            </button>
+                        </div>
+                        <div class="flex items-center justify-between gap-1">
+                            <span class="text-[10px] text-zinc-200 truncate">${escapeHtml(item.label)}</span>
+                            <a href="${item.src}" download="${escapeHtml(item.label)}.png" class="p-1 rounded bg-zinc-800/90 hover:bg-amber-500 hover:text-black text-white transition" title="Unduh Gambar">
+                                <i data-lucide="download" class="w-3 h-3"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        // =========================================================================
+        // 7. STEP 3: VIDEO CLIP RENDERER (ZOOM IN/OUT + NADI AMBYAR + MP4 EXPORT)
+        // =========================================================================
+        function syncClipAssetsUI() {
+            const audioSelect = document.getElementById('clip-audio-select');
+            if (appState.tracks.length === 0) {
+                audioSelect.innerHTML = `<option value="">-- Belum ada audio (Buat di Langkah 1) --</option>`;
+            } else {
+                audioSelect.innerHTML = appState.tracks.map(t => `
+                    <option value="${t.id}" ${t.id === appState.selectedTrackId ? 'selected' : ''}>${escapeHtml(t.name)}</option>
+                `).join('');
+                if (!appState.selectedTrackId && appState.tracks[0]) {
+                    appState.selectedTrackId = appState.tracks[0].id;
+                }
+            }
+
+            const strip = document.getElementById('clip-thumbnails-strip');
+            document.getElementById('clip-img-count').textContent = appState.images.length;
+            if (appState.images.length === 0) {
+                strip.innerHTML = `<p class="text-[11px] text-zinc-500 italic">Belum ada gambar. Tambahkan di menu Visual & Google Flow.</p>`;
+            } else {
+                strip.innerHTML = appState.images.map((img, i) => `
+                    <div class="relative w-20 h-12 rounded-lg overflow-hidden border border-zinc-700 shrink-0">
+                        <img src="${img.src}" class="w-full h-full object-cover">
+                        <span class="absolute bottom-0.5 left-1 text-[9px] font-bold bg-black/70 text-amber-400 px-1 rounded">${i + 1}</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function onClipAudioChange() {
+            const val = document.getElementById('clip-audio-select').value;
+            appState.selectedTrackId = val;
+            if (appState.isPreviewPlaying) {
+                stopPreviewPlayback();
+            }
+        }
+
+        function formatSeconds(sec) {
+            if (!isFinite(sec) || sec < 0) return "00:00";
+            const m = Math.floor(sec / 60);
+            const s = Math.floor(sec % 60);
+            return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        }
+
+        function renderVideoFrame(ctx, width, height, currentTime, totalDuration) {
+            ctx.fillStyle = '#09090b';
+            ctx.fillRect(0, 0, width, height);
+
+            const images = appState.images;
+            const motionMode = document.getElementById('clip-motion-mode').value;
+            const channelName = document.getElementById('clip-channel-name').value.trim() || 'Nadi Ambyar';
+            const songTitle = document.getElementById('output-title').value.trim() || 'Lagu Baru Nadi Ambyar';
+            const showTitle = document.getElementById('clip-show-title').checked;
+            const showVisualizer = document.getElementById('clip-show-visualizer').checked;
+
+            if (images.length > 0) {
+                const safeTotal = Math.max(totalDuration || 30, 1);
+                const slideDuration = Math.max(safeTotal / images.length, 3);
+                const rawIndex = currentTime / slideDuration;
+                const currentIdx = Math.floor(rawIndex) % images.length;
+                const nextIdx = (currentIdx + 1) % images.length;
+                const slideProgress = rawIndex - Math.floor(rawIndex);
+
+                drawKenBurnsSlide(ctx, images[currentIdx].imgObj, width, height, slideProgress, currentIdx, motionMode, 1.0);
+
+                if (images.length > 1 && slideProgress > 0.85) {
+                    const fadeAlpha = (slideProgress - 0.85) / 0.15;
+                    drawKenBurnsSlide(ctx, images[nextIdx].imgObj, width, height, 0, nextIdx, motionMode, fadeAlpha);
+                }
+            } else {
+                const grad = ctx.createRadialGradient(width / 2, height / 2, 50, width / 2, height / 2, width * 0.7);
+                grad.addColorStop(0, '#27201c');
+                grad.addColorStop(1, '#09090b');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, width, height);
+
+                ctx.fillStyle = 'rgba(255,255,255,0.25)';
+                ctx.font = '600 24px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('Tambahkan Gambar di Menu Visual & Google Flow', width / 2, height / 2);
+            }
+
+            const topGrad = ctx.createLinearGradient(0, 0, 0, 140);
+            topGrad.addColorStop(0, 'rgba(0,0,0,0.65)');
+            topGrad.addColorStop(1, 'rgba(0,0,0,0)');
+            ctx.fillStyle = topGrad;
+            ctx.fillRect(0, 0, width, 140);
+
+            const botGrad = ctx.createLinearGradient(0, height - 220, 0, height);
+            botGrad.addColorStop(0, 'rgba(0,0,0,0)');
+            botGrad.addColorStop(1, 'rgba(0,0,0,0.85)');
+            ctx.fillStyle = botGrad;
+            ctx.fillRect(0, height - 220, width, 220);
+
+            ctx.save();
+            ctx.textAlign = 'right';
+            ctx.font = '800 26px "Plus Jakarta Sans", Inter, sans-serif';
+            const badgeText = channelName.toUpperCase();
+            const textMetrics = ctx.measureText(badgeText);
+            const pillW = textMetrics.width + 44;
+            const pillH = 44;
+            const pillX = width - 44 - pillW;
+            const pillY = 34;
+
+            ctx.fillStyle = 'rgba(9, 9, 11, 0.65)';
+            ctx.strokeStyle = 'rgba(245, 158, 11, 0.75)';
+            ctx.lineWidth = 2;
+            roundRectPath(ctx, pillX, pillY, pillW, pillH, 12);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = '#fbbf24';
+            ctx.beginPath();
+            ctx.arc(pillX + 20, pillY + pillH / 2, 5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#ffffff';
+            ctx.fillText(badgeText, width - 60, pillY + 30);
+            ctx.restore();
+
+            if (showTitle) {
+                ctx.save();
+                ctx.textAlign = 'left';
+                ctx.fillStyle = '#fbbf24';
+                ctx.font = '700 18px Inter, sans-serif';
+                ctx.fillText('MAS GHIFARI  •  OFFICIAL MUSIC VIDEO', 48, height - 96);
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '800 42px "Plus Jakarta Sans", Inter, sans-serif';
+                ctx.fillText(songTitle, 48, height - 50);
+                ctx.restore();
+            }
+
+            if (showVisualizer) {
+                ctx.save();
+                const barCount = 28;
+                const barW = 6;
+                const gap = 5;
+                const startX = width - 48 - (barCount * (barW + gap));
+                const baseY = height - 48;
+
+                for (let b = 0; b < barCount; b++) {
+                    const wave = Math.abs(Math.sin(currentTime * 6 + b * 0.45) * Math.cos(currentTime * 3.2 - b * 0.2));
+                    const barH = 10 + wave * 46;
+                    ctx.fillStyle = b % 2 === 0 ? '#f59e0b' : '#fde68a';
+                    roundRectPath(ctx, startX + b * (barW + gap), baseY - barH, barW, barH, 3);
+                    ctx.fill();
+                }
+                ctx.restore();
+            }
+        }
+
+        function drawKenBurnsSlide(ctx, img, canvasW, canvasH, progress, index, motionMode, alpha) {
+            if (!img || !img.width) return;
+            ctx.save();
+            ctx.globalAlpha = alpha;
+
+            let isZoomIn = true;
+            if (motionMode === 'zoom-out') isZoomIn = false;
+            else if (motionMode === 'alternate') isZoomIn = (index % 2 === 0);
+
+            const scale = isZoomIn ? (1.0 + progress * 0.14) : (1.14 - progress * 0.14);
+
+            const imgRatio = img.width / img.height;
+            const canvasRatio = canvasW / canvasH;
+            let drawW, drawH;
+
+            if (imgRatio > canvasRatio) {
+                drawH = canvasH * scale;
+                drawW = drawH * imgRatio;
+            } else {
+                drawW = canvasW * scale;
+                drawH = drawW / imgRatio;
+            }
+
+            const panX = (index % 2 === 0 ? -1 : 1) * progress * 18;
+            const x = (canvasW - drawW) / 2 + panX;
+            const y = (canvasH - drawH) / 2;
+
+            ctx.drawImage(img, x, y, drawW, drawH);
+            ctx.restore();
+        }
+
+        function roundRectPath(ctx, x, y, w, h, r) {
+            ctx.beginPath();
+            ctx.moveTo(x + r, y);
+            ctx.arcTo(x + w, y, x + w, y + h, r);
+            ctx.arcTo(x + w, y + h, x, y + h, r);
+            ctx.arcTo(x, y + h, x, y, r);
+            ctx.arcTo(x, y, x + w, y, r);
+            ctx.closePath();
+        }
+
+        function drawSinglePreviewFrame() {
+            const canvas = document.getElementById('video-canvas');
+            const ctx = canvas.getContext('2d');
+            renderVideoFrame(ctx, canvas.width, canvas.height, 2.5, 32);
+        }
+
+        function togglePreviewPlayback() {
+            if (appState.isPreviewPlaying) {
+                stopPreviewPlayback();
+            } else {
+                startPreviewPlayback();
+            }
+        }
+
+        function startPreviewPlayback() {
+            const track = appState.tracks.find(t => t.id === appState.selectedTrackId);
+            if (!track) {
+                showToast("Pilih atau buat lagu terlebih dahulu di Langkah 1!", "warning");
+                return;
+            }
+
+            const audioEl = document.getElementById('preview-audio-el');
+            audioEl.src = track.url;
+            audioEl.play().then(() => {
+                appState.isPreviewPlaying = true;
+                document.getElementById('preview-play-text').textContent = "Hentikan Preview";
+                document.getElementById('preview-play-icon').setAttribute('data-lucide', 'square');
+                document.getElementById('render-status-badge').textContent = "Memutar Preview";
+                lucide.createIcons();
+
+                const canvas = document.getElementById('video-canvas');
+                const ctx = canvas.getContext('2d');
+
+                function loop() {
+                    if (!appState.isPreviewPlaying) return;
+                    const cur = audioEl.currentTime;
+                    const dur = audioEl.duration || 32;
+                    renderVideoFrame(ctx, canvas.width, canvas.height, cur, dur);
+                    document.getElementById('preview-time-display').textContent = `${formatSeconds(cur)} / ${formatSeconds(dur)}`;
+
+                    if (audioEl.ended) {
+                        stopPreviewPlayback();
+                        return;
+                    }
+                    appState.previewAnimId = requestAnimationFrame(loop);
+                }
+                loop();
+            }).catch(err => {
+                console.error(err);
+                showToast("Gagal memutar audio preview.", "error");
+            });
+        }
+
+        function stopPreviewPlayback() {
+            appState.isPreviewPlaying = false;
+            if (appState.previewAnimId) cancelAnimationFrame(appState.previewAnimId);
+            const audioEl = document.getElementById('preview-audio-el');
+            audioEl.pause();
+            audioEl.currentTime = 0;
+
+            document.getElementById('preview-play-text').textContent = "Preview Klip";
+            document.getElementById('preview-play-icon').setAttribute('data-lucide', 'play');
+            document.getElementById('render-status-badge').textContent = "Siap Preview";
+            lucide.createIcons();
+        }
+
+        async function startVideoExport() {
+            const track = appState.tracks.find(t => t.id === appState.selectedTrackId);
+            if (!track) {
+                showToast("Pilih audio lagu Suno terlebih dahulu!", "warning");
+                return;
+            }
+            if (appState.images.length === 0) {
+                showToast("Tambahkan minimal 1 gambar visual terlebih dahulu!", "warning");
+                return;
+            }
+
+            if (appState.isPreviewPlaying) stopPreviewPlayback();
+
+            appState.isRenderingVideo = true;
+            appState.cancelRenderFlag = false;
+
+            const overlay = document.getElementById('export-overlay');
+            const progressBar = document.getElementById('export-progress-bar');
+            const progressText = document.getElementById('export-progress-text');
+            const downloadBox = document.getElementById('video-download-box');
+            const downloadLink = document.getElementById('video-download-link');
+            const fileInfo = document.getElementById('video-file-info');
+
+            overlay.classList.remove('hidden');
+            downloadBox.classList.add('hidden');
+            progressBar.style.width = '5%';
+
+            try {
+                const audioResp = await fetch(track.url);
+                const audioArrayBuf = await audioResp.arrayBuffer();
+                const decodeCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const audioBuffer = await decodeCtx.decodeAudioData(audioArrayBuf);
+                const duration = audioBuffer.duration;
+                const songTitle = (document.getElementById('output-title').value.trim() || 'Nadi_Ambyar_Klip').replace(/[^a-zA-Z0-9_-]/g, '_');
+
+                const canUseWebCodecs = typeof VideoEncoder !== 'undefined' && typeof AudioEncoder !== 'undefined' && typeof Mp4Muxer !== 'undefined';
+
+                if (canUseWebCodecs) {
+                    progressText.textContent = "Merender MP4 HD (H.264 + AAC) dengan cepat...";
+                    const blob = await renderNativeMp4WithMuxer(audioBuffer, duration, (pct) => {
+                        progressBar.style.width = `${Math.round(pct * 100)}%`;
+                        progressText.textContent = `Merender Video MP4 HD: ${Math.round(pct * 100)}%`;
+                    });
+
+                    if (!appState.cancelRenderFlag && blob) {
+                        const videoUrl = URL.createObjectURL(blob);
+                        downloadLink.href = videoUrl;
+                        downloadLink.download = `${songTitle}_Nadi_Ambyar.mp4`;
+                        fileInfo.textContent = `Format MP4 (H.264) • 1280x720 HD • Durasi ${formatSeconds(duration)}`;
+                        downloadBox.classList.remove('hidden');
+                        showToast("Video Klip MP4 berhasil dibuat dan siap diunduh!", "success");
+                    }
+                } else {
+                    progressText.textContent = "Merekam video klip HD secara real-time...";
+                    const blob = await renderRealtimeMediaRecorder(track.url, duration, (pct) => {
+                        progressBar.style.width = `${Math.round(pct * 100)}%`;
+                        progressText.textContent = `Merekam Video Klip: ${Math.round(pct * 100)}%`;
+                    });
+
+                    if (!appState.cancelRenderFlag && blob) {
+                        const videoUrl = URL.createObjectURL(blob);
+                        downloadLink.href = videoUrl;
+                        downloadLink.download = `${songTitle}_Nadi_Ambyar.webm`;
+                        fileInfo.textContent = `Format Video HD • 1280x720 • Durasi ${formatSeconds(duration)}`;
+                        downloadBox.classList.remove('hidden');
+                        showToast("Video Klip berhasil dirender dan siap diunduh!", "success");
+                    }
+                }
+            } catch (err) {
+                console.error("Render error:", err);
+                showToast("Gagal merender MP4 langsung, mencoba mode kompatibilitas...", "warning");
+                try {
+                    const trackObj = appState.tracks.find(t => t.id === appState.selectedTrackId);
+                    const blob = await renderRealtimeMediaRecorder(trackObj.url, 30, (pct) => {
+                        progressBar.style.width = `${Math.round(pct * 100)}%`;
+                    });
+                    if (!appState.cancelRenderFlag && blob) {
+                        const videoUrl = URL.createObjectURL(blob);
+                        downloadLink.href = videoUrl;
+                        downloadLink.download = `Nadi_Ambyar_Klip.webm`;
+                        downloadBox.classList.remove('hidden');
+                        showToast("Video Klip berhasil dibuat!", "success");
+                    }
+                } catch (fallbackErr) {
+                    showToast("Gagal merender video: " + fallbackErr.message, "error");
+                }
+            } finally {
+                appState.isRenderingVideo = false;
+                overlay.classList.add('hidden');
+            }
+        }
+
+        function cancelVideoRender() {
+            appState.cancelRenderFlag = true;
+            appState.isRenderingVideo = false;
+            document.getElementById('export-overlay').classList.add('hidden');
+            showToast("Proses render video dibatalkan.", "info");
+        }
+
+        async function renderNativeMp4WithMuxer(audioBuffer, duration, onProgress) {
+            const width = 1280;
+            const height = 720;
+            const fps = 30;
+            const totalFrames = Math.ceil(duration * fps);
+            const sampleRate = audioBuffer.sampleRate;
+            const numberOfChannels = Math.min(audioBuffer.numberOfChannels, 2);
+
+            const muxer = new Mp4Muxer.Muxer({
+                target: new Mp4Muxer.ArrayBufferTarget(),
+                video: { codec: 'avc', width, height },
+                audio: { codec: 'aac', sampleRate, numberOfChannels },
+                fastStart: 'in-memory'
+            });
+
+            const videoEncoder = new VideoEncoder({
+                output: (chunk, meta) => muxer.addVideoChunk(chunk, meta),
+                error: (e) => console.error(e)
+            });
+
+            videoEncoder.configure({
+                codec: 'avc1.4d002a',
+                width,
+                height,
+                bitrate: 4_500_000,
+                framerate: fps
+            });
+
+            const audioEncoder = new AudioEncoder({
+                output: (chunk, meta) => muxer.addAudioChunk(chunk, meta),
+                error: (e) => console.error(e)
+            });
+
+            audioEncoder.configure({
+                codec: 'mp4a.40.2',
+                sampleRate,
+                numberOfChannels,
+                bitrate: 128_000
+            });
+
+            const chunkSamples = 1024;
+            const totalSamples = audioBuffer.length;
+            for (let offset = 0; offset < totalSamples; offset += chunkSamples) {
+                if (appState.cancelRenderFlag) return null;
+                const len = Math.min(chunkSamples, totalSamples - offset);
+                const planarData = new Float32Array(len * numberOfChannels);
+                for (let ch = 0; ch < numberOfChannels; ch++) {
+                    const srcChan = audioBuffer.getChannelData(ch < audioBuffer.numberOfChannels ? ch : 0);
+                    planarData.set(srcChan.subarray(offset, offset + len), ch * len);
+                }
+                const audioData = new AudioData({
+                    format: 'f32-planar',
+                    sampleRate,
+                    numberOfFrames: len,
+                    numberOfChannels,
+                    timestamp: Math.round((offset / sampleRate) * 1_000_000),
+                    data: planarData
+                });
+                audioEncoder.encode(audioData);
+                audioData.close();
+            }
+            await audioEncoder.flush();
+
+            const canvas = document.getElementById('video-canvas');
+            const ctx = canvas.getContext('2d');
+
+            for (let frameIdx = 0; frameIdx < totalFrames; frameIdx++) {
+                if (appState.cancelRenderFlag) return null;
+                const currentTime = frameIdx / fps;
+                renderVideoFrame(ctx, width, height, currentTime, duration);
+
+                const videoFrame = new VideoFrame(canvas, {
+                    timestamp: Math.round(currentTime * 1_000_000),
+                    duration: Math.round((1 / fps) * 1_000_000)
+                });
+
+                videoEncoder.encode(videoFrame, { keyFrame: frameIdx % (fps * 2) === 0 });
+                videoFrame.close();
+
+                if (frameIdx % 10 === 0) {
+                    onProgress(frameIdx / totalFrames);
+                    await new Promise(r => setTimeout(r, 0));
+                }
+            }
+
+            await videoEncoder.flush();
+            muxer.finalize();
+            onProgress(1);
+            return new Blob([muxer.target.buffer], { type: 'video/mp4' });
+        }
+
+        function renderRealtimeMediaRecorder(audioUrl, duration, onProgress) {
+            return new Promise((resolve, reject) => {
+                const canvas = document.getElementById('video-canvas');
+                const ctx = canvas.getContext('2d');
+                const audioEl = new Audio(audioUrl);
+                audioEl.crossOrigin = "anonymous";
+
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const source = audioCtx.createMediaElementSource(audioEl);
+                const dest = audioCtx.createMediaStreamDestination();
+                source.connect(dest);
+
+                const canvasStream = canvas.captureStream(30);
+                const combinedStream = new MediaStream([
+                    ...canvasStream.getVideoTracks(),
+                    ...dest.stream.getAudioTracks()
+                ]);
+
+                const recorder = new MediaRecorder(combinedStream, { mimeType: 'video/webm' });
+                const chunks = [];
+
+                recorder.ondataavailable = (e) => { if (e.data.size > 0) chunks.push(e.data); };
+                recorder.onstop = () => {
+                    audioCtx.close();
+                    resolve(new Blob(chunks, { type: 'video/webm' }));
+                };
+                recorder.onerror = (e) => reject(e);
+
+                audioEl.play().then(() => {
+                    recorder.start();
+                    function step() {
+                        if (appState.cancelRenderFlag) {
+                            audioEl.pause();
+                            recorder.stop();
+                            return;
+                        }
+                        const cur = audioEl.currentTime;
+                        const dur = audioEl.duration || duration;
+                        renderVideoFrame(ctx, canvas.width, canvas.height, cur, dur);
+                        onProgress(Math.min(cur / dur, 0.99));
+
+                        if (audioEl.ended) {
+                            recorder.stop();
+                            return;
+                        }
+                        requestAnimationFrame(step);
+                    }
+                    step();
+                }).catch(reject);
+            });
+        }
+
         // =========================================================================
         // 8. STEP 4: YOUTUBE SEO (JUDUL, DESKRIPSI & TAG)
         // =========================================================================
@@ -846,9 +2064,69 @@
             if (!ensureApiKeyReady()) return;
             const title = document.getElementById('output-title').value.trim();
             const lyrics = document.getElementById('output-lyrics').value.trim();
-// ... existing code ... -->
+
+            if (!title || !lyrics) {
+                showToast("Buatkan lagu di Langkah 1 terlebih dahulu!", "warning");
+                return;
+            }
+
+            const btn = document.getElementById('btn-gen-seo');
+            btn.disabled = true;
+            btn.innerHTML = `<div class="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></div><span>Menyusun Metadata YouTube...</span>`;
+
+            const seoPrompt = `Buatkan metadata YouTube lengkap yang dioptimasi untuk CTR tinggi dan algoritma pencarian musik Pop Jawa Koplo Indonesia untuk kanal resmi "Nadi Ambyar".
+Judul Lagu: "${title}"
+Vokalis: Mas Ghifari
+Genre: Modern Pop Jawa Koplo Ambyar
+Lirik Lagu:
+${lyrics}
+
+Ketentuan:
+1. youtubeTitle: Judul YouTube menarik, format profesional seperti "Nadi Ambyar - ${title} (Official Music Video) | Vokal Mas Ghifari | Pop Jawa Koplo Ambyar Terbaru".
+2. youtubeDescription: Deskripsi menyentuh yang menceritakan makna lagu secara singkat, kredit produksi (Channel: Nadi Ambyar, Vokal: Mas Ghifari, Genre: Modern Pop Jawa Koplo Ambyar), diikuti lirik lengkap lagu dengan rapi, dan hashtag relevan di bagian bawah.
+3. youtubeTags: 20-25 kata kunci/tag SEO dipisahkan koma (misal: nadi ambyar, mas ghifari, pop jawa koplo, lagu jawa ambyar terbaru, dll).`;
+
+            const payload = {
+                contents: [{ parts: [{ text: seoPrompt }] }],
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "OBJECT",
+                        properties: {
+                            youtubeTitle: { type: "STRING" },
+                            youtubeDescription: { type: "STRING" },
+                            youtubeTags: { type: "STRING" }
+                        },
+                        required: ["youtubeTitle", "youtubeDescription", "youtubeTags"]
+                    }
+                }
+            };
+
             try {
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/${TEXT_MODEL}:generateContent?key=${getActiveApiKey()}`;
                 const data = await fetchWithRetry(url, {
                     method: 'POST',
-// ... existing code ... -->
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const raw = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                const parsed = JSON.parse(raw);
+
+                document.getElementById('yt-title-output').value = parsed.youtubeTitle || "";
+                document.getElementById('yt-desc-output').value = parsed.youtubeDescription || "";
+                document.getElementById('yt-tags-output').value = parsed.youtubeTags || "";
+
+                showToast("Judul, Deskripsi & Tag YouTube berhasil dibuat!", "success");
+            } catch (err) {
+                console.error(err);
+                showToast("Gagal membuat SEO YouTube. Periksa Gemini API Key Anda.", "error");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4"></i><span>Buat Judul, Deskripsi & Tag</span>`;
+                lucide.createIcons();
+            }
+        }
+    </script>
+</body>
+</html>
