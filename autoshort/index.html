@@ -301,15 +301,21 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <!-- Voice Selector -->
                     <div>
-                        <label for="select-voice" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Pilih Karakter Suara</label>
+                        <label for="select-voice" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Pilih Karakter Suara (Pria / Wanita)</label>
                         <div class="relative">
                             <select id="select-voice" onchange="saveStateToCache()" class="w-full appearance-none rounded-2xl bg-slate-950/90 border border-slate-700 focus:border-pink-500 text-sm text-white px-4 py-3 pr-10 outline-none transition-all">
-                                <option value="Kore">Kore — Tegas, Jelas & Profesional (Rekomendasi)</option>
-                                <option value="Puck">Puck — Ceria, Enerjik & Santai</option>
-                                <option value="Fenrir">Fenrir — Antusias, Bersemangat & Dinamis</option>
-                                <option value="Zephyr">Zephyr — Cerah, Ramah & Hangat</option>
-                                <option value="Charon">Charon — Informatif, Berat & Berwibawa</option>
-                                <option value="Aoede">Aoede — Mengalir, Ringan & Natural</option>
+                                <optgroup label="Suara Pria (Male)">
+                                    <option value="Fenrir">Fenrir [Pria] — Antusias, Bersemangat &amp; Dinamis</option>
+                                    <option value="Puck">Puck [Pria] — Ceria, Enerjik &amp; Santai</option>
+                                    <option value="Charon">Charon [Pria] — Informatif, Berat &amp; Berwibawa</option>
+                                    <option value="Orus">Orus [Pria] — Tegas, Jelas &amp; Meyakinkan</option>
+                                </optgroup>
+                                <optgroup label="Suara Wanita (Female)">
+                                    <option value="Kore">Kore [Wanita] — Tegas, Jelas &amp; Profesional</option>
+                                    <option value="Zephyr">Zephyr [Wanita] — Cerah, Ramah &amp; Hangat</option>
+                                    <option value="Aoede">Aoede [Wanita] — Mengalir, Ringan &amp; Natural</option>
+                                    <option value="Leda">Leda [Wanita] — Muda, Segar &amp; Ekspresif</option>
+                                </optgroup>
                             </select>
                             <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
                         </div>
@@ -320,9 +326,9 @@
                         <label for="select-tone" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Gaya Bicara</label>
                         <div class="relative">
                             <select id="select-tone" onchange="saveStateToCache()" class="w-full appearance-none rounded-2xl bg-slate-950/90 border border-slate-700 focus:border-pink-500 text-sm text-white px-4 py-3 pr-10 outline-none transition-all">
-                                <option value="Bacakan dengan gaya bercerita santai seperti mengobrol dengan teman, artikulasi Bahasa Indonesia yang jelas, natural, dan tempo yang pas untuk konten edukasi singkat:">Santai & Bercerita ke Teman (Default)</option>
-                                <option value="Bacakan dengan nada antusias, penuh rasa penasaran, dan energik seperti kreator konten teknologi populer di Indonesia:">Antusias & Energik (Kreator Tech)</option>
-                                <option value="Bacakan dengan nada tenang, meyakinkan, dan informatif dalam Bahasa Indonesia yang fasih:">Tenang & Informatif</option>
+                                <option value="dengan gaya bercerita santai seperti mengobrol dengan teman, artikulasi Bahasa Indonesia yang jelas, natural, dan tempo pas">Santai &amp; Bercerita ke Teman (Default)</option>
+                                <option value="dengan nada antusias, penuh rasa penasaran, dan energik seperti kreator konten teknologi populer di Indonesia">Antusias &amp; Energik (Kreator Tech)</option>
+                                <option value="dengan nada tenang, meyakinkan, dan informatif dalam Bahasa Indonesia yang fasih">Tenang &amp; Informatif</option>
                             </select>
                             <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
                         </div>
@@ -771,7 +777,7 @@
             // Load Audio Blob from IndexedDB
             const cachedAudio = await loadAudioBlobFromCache();
             if (cachedAudio && cachedAudio.blob) {
-                displayAudioBlob(cachedAudio.blob, cachedAudio.meta?.voice || 'Kore', cachedAudio.meta?.duration || '00:48');
+                displayAudioBlob(cachedAudio.blob, cachedAudio.meta?.voice || 'Fenrir', cachedAudio.meta?.duration || '00:48');
             }
         }
 
@@ -990,6 +996,17 @@ ATURAN WAJIB NASKAH (narasi_vo) YANG HARUS DIPATUHI 100 PERSEN:
         // =========================================================================
         // STEP 2: GENERATE GEMINI TTS & CONVERT PCM16 TO WAV
         // =========================================================================
+        const VOICE_GENDER_MAP = {
+            Fenrir: 'Pria',
+            Puck: 'Pria',
+            Charon: 'Pria',
+            Orus: 'Pria',
+            Kore: 'Wanita',
+            Zephyr: 'Wanita',
+            Aoede: 'Wanita',
+            Leda: 'Wanita'
+        };
+
         async function generateVoiceOver() {
             const rawNarasi = document.getElementById('output-narasi').value.trim();
             if (!rawNarasi) {
@@ -999,18 +1016,23 @@ ATURAN WAJIB NASKAH (narasi_vo) YANG HARUS DIPATUHI 100 PERSEN:
 
             const cleanNarasi = sanitizeForTTS(rawNarasi);
             const voiceName = document.getElementById('select-voice').value;
-            const tonePrompt = document.getElementById('select-tone').value;
+            const voiceGender = VOICE_GENDER_MAP[voiceName] || 'Narator';
+            const toneStyle = document.getElementById('select-tone').value;
 
             const btn = document.getElementById('btn-generate-tts');
-            setButtonLoading(btn, true, `Merekam suara ${voiceName}...`);
+            setButtonLoading(btn, true, `Merekam suara ${voiceName} [${voiceGender}]...`);
 
             try {
                 const apiKey = getApiKey();
+                // Menggunakan model Gemini TTS terbaru (gemini-2.5-flash-preview-tts)
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+
+                // Kunci sebagai satu narator tunggal agar karakter & gender suara konsisten 100% dari awal sampai akhir
+                const ttsPrompt = `Bacakan seluruh naskah Bahasa Indonesia berikut secara konsisten menggunakan satu suara narator tunggal (${voiceGender}) ${toneStyle}, tanpa mengubah karakter maupun gender suara di tengah kalimat:\n"${cleanNarasi}"`;
 
                 const payload = {
                     contents: [{
-                        parts: [{ text: `${tonePrompt}\n\n${cleanNarasi}` }]
+                        parts: [{ text: ttsPrompt }]
                     }],
                     generationConfig: {
                         responseModalities: ["AUDIO"],
@@ -1056,7 +1078,7 @@ ATURAN WAJIB NASKAH (narasi_vo) YANG HARUS DIPATUHI 100 PERSEN:
                 await saveAudioBlobToCache(wavBlob, { voice: voiceName, duration: formattedDuration });
 
                 displayAudioBlob(wavBlob, voiceName, formattedDuration);
-                showToast(`Voice Over (${voiceName}) siap didownload!`, 'success');
+                showToast(`Voice Over ${voiceName} [${voiceGender}] siap didownload!`, 'success');
 
             } catch (error) {
                 console.error(error);
@@ -1085,7 +1107,8 @@ ATURAN WAJIB NASKAH (narasi_vo) YANG HARUS DIPATUHI 100 PERSEN:
                 .slice(0, 30);
             downloadBtn.download = `AutoShort-${voiceName}-${slug || 'vo'}.wav`;
 
-            document.getElementById('audio-voice-badge').textContent = `Suara: ${voiceName}`;
+            const genderLabel = VOICE_GENDER_MAP[voiceName] ? ` (${VOICE_GENDER_MAP[voiceName]})` : '';
+            document.getElementById('audio-voice-badge').textContent = `Suara: ${voiceName}${genderLabel}`;
             document.getElementById('audio-duration-badge').textContent = durationStr;
             document.getElementById('audio-result-container').classList.remove('hidden');
         }
