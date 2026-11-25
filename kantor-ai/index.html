@@ -80,6 +80,45 @@ canvas{display:block;margin:0 auto;max-width:100%;border-radius:8px;touch-action
 .log .e{color:var(--err)} .log .g{color:var(--ok)}
 .log .empty{display:block;color:var(--muted)}
 .note{font-size:12px;color:var(--muted)}
+.tok{display:grid;gap:12px}
+.tok-head{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.tok-head h2{margin:0}
+.tok-head select{width:auto}
+.tok-body{display:grid;gap:14px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px}
+.kpi{background:var(--tint);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-width:0}
+.kpi span{display:block;color:var(--muted);font-size:12px}
+.kpi b{display:block;font:700 21px/1.2 var(--font-head);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.kpi small{display:block;color:var(--muted);font-size:12px;overflow-wrap:anywhere}
+.tgrid{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+@media (min-width:900px){.tgrid{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}}
+.sh{font:700 12px var(--font-head);letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+.bars{display:flex;align-items:flex-end;gap:4px;height:150px;border-bottom:1px solid var(--line)}
+.bcol{flex:1 1 0;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end}
+.bcol i{display:block;width:100%}
+.bcol .bo{background:var(--warn);border-radius:3px 3px 0 0}
+.bcol .bi{background:var(--accent)}
+.bcol.empty .bi{height:2px!important;background:var(--line)}
+.blabels{display:flex;gap:4px;font-size:11px;color:var(--muted);margin-top:3px}
+.blabels span{flex:1 1 0;min-width:0;text-align:center;overflow:hidden;font-variant-numeric:tabular-nums}
+.blabels span.today{color:var(--ink);font-weight:700}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--muted);margin-top:6px;flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.trow{display:grid;grid-template-columns:minmax(0,9.5em) minmax(0,1fr) auto;gap:8px;align-items:center;font-size:12.5px;padding:3px 0}
+.trow .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:6px}
+.trow .nm .dot{flex:none}
+.trow .tr{height:8px;background:var(--tint);border-radius:4px;overflow:hidden;border:1px solid var(--line)}
+.trow .tr i{display:block;height:100%;background:var(--accent);border-radius:4px}
+.trow .v{font-variant-numeric:tabular-nums;color:var(--muted);text-align:right;white-space:nowrap}
+.pr{display:flex;flex-wrap:wrap;gap:8px}
+.pr .field{flex:1 1 110px}
+.scen{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:10px}
+.scen th{text-align:left;color:var(--muted);font-weight:500;padding:4px 6px 4px 0;border-bottom:1px solid var(--line)}
+.scen td{padding:5px 6px 5px 0;border-bottom:1px solid var(--line);vertical-align:middle}
+.scen td.r,.scen th.r{text-align:right;font-variant-numeric:tabular-nums}
+.scen input{padding:4px 6px;width:5.2em;font-size:12.5px}
+.tok .log{max-height:180px}
+.tok .warn{color:var(--warn)}
 @media (prefers-reduced-motion: reduce){*{scroll-behavior:auto!important}}
 </style>
 
@@ -87,7 +126,7 @@ canvas{display:block;margin:0 auto;max-width:100%;border-radius:8px;touch-action
   <header>
     <div>
       <h1>Kantor AI v3</h1>
-      <div class="sub">Sembilan agen n8n dalam satu gedung</div>
+      <div class="sub">Sembilan agen n8n dalam satu gedung, lengkap dengan pemakaian token</div>
     </div>
     <div class="grow"></div>
     <span class="clock" id="clock" aria-label="Jam WIB">--:--:-- WIB</span>
@@ -103,7 +142,7 @@ canvas{display:block;margin:0 auto;max-width:100%;border-radius:8px;touch-action
       </div>
       <div class="field">
         <label for="inKey">Kata sandi (opsional)</label>
-        <input id="inKey" type="text" placeholder="sama dengan TOKEN di node Susun Status" autocomplete="off" spellcheck="false">
+        <input id="inKey" type="text" placeholder="sama dengan TOKEN di node Cari Eksekusi Baru" autocomplete="off" spellcheck="false">
       </div>
       <div class="field" style="flex:0 1 130px">
         <label for="inEvery">Cek tiap</label>
@@ -116,7 +155,7 @@ canvas{display:block;margin:0 auto;max-width:100%;border-radius:8px;touch-action
     </div>
     <div class="msg" id="setMsg" role="status"></div>
     <ol>
-      <li>Import <b>18 Monitor Kantor.json</b> ke n8n, pilih credential <i>n8n API</i> di dua node n8n, lalu aktifkan.</li>
+      <li>Import <b>18 Monitor Kantor.json</b> (versi baru dengan penghitung token) ke n8n, pilih credential <i>n8n API</i> di tiga node (Ambil Workflow, Ambil Eksekusi, Ambil Detail), lalu aktifkan.</li>
       <li>Salin Production URL dari node <i>Webhook Status</i> dan tempel di atas.</li>
       <li>Buka file HTML ini dari komputer atau hosting Anda. Di dalam jendela Claude, panggilan ke server luar diblokir, jadi hanya demo yang jalan.</li>
     </ol>
@@ -125,8 +164,62 @@ canvas{display:block;margin:0 auto;max-width:100%;border-radius:8px;touch-action
   <div class="stats" aria-live="off">
     <div class="stat"><b id="sWork">0</b><span>sedang bekerja</span></div>
     <div class="stat"><b id="sDone">0</b><span>eksekusi hari ini</span></div>
+    <div class="stat"><b id="sTok">–</b><span>token hari ini</span></div>
     <div class="stat bad" id="sBadBox"><b id="sBad">0</b><span>gagal hari ini</span></div>
   </div>
+
+  <section class="card tok" id="tok" aria-labelledby="tokH">
+    <div class="tok-head">
+      <h2 id="tokH">Penggunaan token</h2>
+      <span class="note" id="tokSince"></span>
+      <div class="grow"></div>
+      <label class="note" for="tokRange">Rentang</label>
+      <select id="tokRange"><option value="1">Hari ini</option><option value="7">7 hari</option><option value="30">30 hari</option></select>
+      <button id="tokToggle" type="button" aria-expanded="true" aria-controls="tokBody">Sembunyikan</button>
+    </div>
+    <div class="tok-body" id="tokBody">
+      <div class="kpis" id="tokKpis"></div>
+      <div class="tgrid">
+        <div>
+          <h3 class="sh">Token per hari (14 hari terakhir)</h3>
+          <div class="bars" id="tokBars" role="img" aria-label="Grafik batang token per hari"></div>
+          <div class="blabels" id="tokLabels" aria-hidden="true"></div>
+          <div class="legend"><span><i style="background:var(--accent)"></i>Masuk (prompt)</span><span><i style="background:var(--warn)"></i>Keluar (jawaban + berpikir)</span></div>
+        </div>
+        <div>
+          <h3 class="sh">Per agen</h3>
+          <div id="tokAgents"></div>
+        </div>
+      </div>
+      <div class="tgrid">
+        <div>
+          <h3 class="sh">Per model</h3>
+          <div id="tokModels"></div>
+          <h3 class="sh" style="margin-top:12px">Panggilan AI terakhir</h3>
+          <ol class="log" id="tokCalls"><li class="empty">Belum ada data.</li></ol>
+        </div>
+        <div>
+          <h3 class="sh">Harga dan perbandingan model</h3>
+          <div class="pr">
+            <div class="field"><label for="pIn">Masuk, USD per 1 jt token</label><input id="pIn" type="number" min="0" step="0.01" inputmode="decimal"></div>
+            <div class="field"><label for="pOut">Keluar, USD per 1 jt token</label><input id="pOut" type="number" min="0" step="0.01" inputmode="decimal"></div>
+            <div class="field"><label for="pFx">Kurs Rp per USD</label><input id="pFx" type="number" min="1" step="1" inputmode="numeric"></div>
+          </div>
+          <table class="scen">
+            <thead><tr><th>Skenario (30 hari, pola rata-rata)</th><th class="r">USD</th><th class="r">Rupiah</th></tr></thead>
+            <tbody>
+              <tr><td>Harga yang diisi di atas</td><td class="r" id="sc0u"></td><td class="r" id="sc0r"></td></tr>
+              <tr><td>Gemini 3.6 Flash, promo ($0,75 / $3,75) s/d 31 Des 2026</td><td class="r" id="sc1u"></td><td class="r" id="sc1r"></td></tr>
+              <tr><td>Gemini 3.6 Flash, standar ($1,50 / $7,50) mulai 1 Jan 2027</td><td class="r" id="sc2u"></td><td class="r" id="sc2r"></td></tr>
+              <tr><td>Model lain: <input id="sIn" type="number" min="0" step="0.01" aria-label="Harga masuk model lain" inputmode="decimal"> / <input id="sOut" type="number" min="0" step="0.01" aria-label="Harga keluar model lain" inputmode="decimal"></td><td class="r" id="sc3u"></td><td class="r" id="sc3r"></td></tr>
+            </tbody>
+          </table>
+          <div class="note" style="margin-top:6px">Harga bisa berubah dan paket gratis Google tidak dihitung. Cek halaman harga resmi sebelum memutuskan, lalu isi harga model yang ingin dibandingkan.</div>
+        </div>
+      </div>
+      <div class="note" id="tokNote" role="status"></div>
+    </div>
+  </section>
 
   <div class="main">
     <div class="stage" id="stage">
@@ -927,13 +1020,148 @@ function update(dt){
     moveAgent(k,dt);
   });
 }
+/* ---------- token ---------- */
+var tokData=null,tokRange=store('kantor.tokRange')||'1',tokOpen=store('kantor.tokOpen')!=='0';
+var PRICE={pin:0,pout:0,fx:16500,sin:1,sout:5};
+function tokToday(){return new Date(Date.now()+7*3600e3).toISOString().slice(0,10)}
+function numStore(k,def){var v=store(k);if(v===null||v===undefined||v==='')return def;var n=parseFloat(v);return isFinite(n)&&n>=0?n:def}
+function loadPrice(){
+  var promo=tokToday()<'2027-01-01';
+  PRICE.pin=numStore('kantor.pin',promo?0.75:1.5);PRICE.pout=numStore('kantor.pout',promo?3.75:7.5);
+  PRICE.fx=numStore('kantor.fx',16500)||16500;PRICE.sin=numStore('kantor.sin',1);PRICE.sout=numStore('kantor.sout',5);
+}
+function outOf(r){return Math.max(r.c||0,(r.t||0)-(r.p||0))}
+function fmtTok(n){n=Math.round(n||0);if(n>=1e6)return(n/1e6).toFixed(2).replace('.',',')+' jt';if(n>=1e4)return(n/1e3).toFixed(1).replace('.',',')+' rb';return n.toLocaleString('id-ID')}
+function fmtUsd(x){return'$'+(x<1?x.toFixed(3):x.toFixed(2)).replace('.',',')}
+function fmtRp(x){return'Rp'+Math.round(x*PRICE.fx).toLocaleString('id-ID')}
+function costOf(p,o,pin,pout){return p/1e6*pin+o/1e6*pout}
+function dayKeys(n){var out=[],base=Date.now();for(var i=n-1;i>=0;i--)out.push(new Date(base-i*86400e3+7*3600e3).toISOString().slice(0,10));return out}
+function sumDays(n){
+  var keys=dayKeys(n),map={};(tokData&&tokData.days||[]).forEach(function(d){map[d.d]=d});
+  var s={p:0,o:0,t:0,calls:0,est:0,agents:{},models:{},days:0};
+  keys.forEach(function(k){var d=map[k];if(!d)return;s.days++;s.p+=d.p;s.o+=outOf(d);s.t+=d.t;s.calls+=d.calls;s.est+=d.est||0;
+    [['agents',d.agents],['models',d.models]].forEach(function(pair){var tgt=s[pair[0]];Object.keys(pair[1]||{}).forEach(function(m){var r=pair[1][m],x=tgt[m]=tgt[m]||{p:0,o:0,t:0,calls:0};x.p+=r.p;x.o+=outOf(r);x.t+=r.t;x.calls+=r.calls})})});
+  return s;
+}
+function tokLine(k){
+  if(!tokData)return'';var d=null;(tokData.days||[]).forEach(function(x){if(x.d===tokToday())d=x});
+  var r=d&&d.agents&&d.agents[k];return r?'Token hari ini: '+fmtTok(r.t)+' ('+r.calls+' panggilan)':'';
+}
+function mk(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e}
+function ingestTok(t){tokData=t&&t.days?t:null;renderTok()}
+function buildTok(){
+  loadPrice();
+  $('pIn').value=PRICE.pin;$('pOut').value=PRICE.pout;$('pFx').value=PRICE.fx;$('sIn').value=PRICE.sin;$('sOut').value=PRICE.sout;
+  $('tokRange').value=tokRange;
+  [['pIn','kantor.pin','pin'],['pOut','kantor.pout','pout'],['pFx','kantor.fx','fx'],['sIn','kantor.sin','sin'],['sOut','kantor.sout','sout']].forEach(function(c){
+    $(c[0]).addEventListener('input',function(){var v=parseFloat(this.value);if(isFinite(v)&&v>=0){PRICE[c[2]]=v;if(c[2]==='fx'&&!v)PRICE.fx=16500;store(c[1],String(v));renderTok()}});
+  });
+  $('tokRange').addEventListener('change',function(){tokRange=this.value;store('kantor.tokRange',tokRange);renderTok()});
+  $('tokToggle').addEventListener('click',function(){tokOpen=!tokOpen;store('kantor.tokOpen',tokOpen?'1':'0');renderTok();setTimeout(layoutAndDraw,0)});
+  renderTok();
+}
+function rowsInto(box,obj,colorFn,labelFn){
+  box.textContent='';var keys=Object.keys(obj).sort(function(a,b){return obj[b].t-obj[a].t});
+  if(!keys.length){box.appendChild(mk('div','note','Belum ada data pada rentang ini.'));return}
+  var max=obj[keys[0]].t||1;
+  keys.forEach(function(k){
+    var r=obj[k],row=mk('div','trow'),nm=mk('span','nm'),dot=mk('span','dot');dot.style.background=colorFn(k);
+    nm.appendChild(dot);nm.appendChild(mk('span','',labelFn(k)));nm.title=labelFn(k);
+    var tr=mk('span','tr'),bar=mk('i');bar.style.width=Math.max(2,r.t/max*100)+'%';tr.appendChild(bar);
+    row.appendChild(nm);row.appendChild(tr);row.appendChild(mk('span','v',fmtTok(r.t)+' · '+fmtUsd(costOf(r.p,r.o,PRICE.pin,PRICE.pout))));
+    row.title=labelFn(k)+': masuk '+r.p.toLocaleString('id-ID')+', keluar '+r.o.toLocaleString('id-ID')+', '+r.calls+' panggilan';
+    box.appendChild(row);
+  });
+}
+function renderTok(){
+  var body=$('tokBody');if(!body)return;
+  body.hidden=!tokOpen;$('tokToggle').textContent=tokOpen?'Sembunyikan':'Tampilkan';$('tokToggle').setAttribute('aria-expanded',tokOpen?'true':'false');
+  var td=sumDays(1);$('sTok').textContent=tokData?fmtTok(td.t):'–';
+  if(!tokOpen)return;
+  $('tokSince').textContent=tokData?(tokData.since?'Dihitung sejak '+tokData.since:''):'';
+  var kp=$('tokKpis');kp.textContent='';
+  if(!tokData){
+    kp.appendChild(mk('div','note','Belum ada data token. Import ulang workflow 18 Monitor Kantor (versi baru), aktifkan, lalu tunggu satu agen selesai bekerja.'));
+    ['tokBars','tokLabels','tokAgents','tokModels'].forEach(function(id){$(id).textContent=''});
+    $('tokNote').textContent='';return;
+  }
+  var rg=sumDays(parseInt(tokRange,10)||1),rl={'1':'hari ini','7':'7 hari','30':'30 hari'}[tokRange]||'';
+  var w7=sumDays(7),keys7=dayKeys(7),today=tokToday(),use=[];
+  keys7.forEach(function(k){(tokData.days||[]).forEach(function(d){if(d.d===k&&d.t>0&&(k!==today||keys7.length<2))use.push(d)})});
+  if(!use.length)(tokData.days||[]).forEach(function(d){if(d.d===today&&d.t>0)use.push(d)});
+  var ap=0,ao=0;use.forEach(function(d){ap+=d.p;ao+=outOf(d)});var n=use.length||1;ap/=n;ao/=n;
+  var cRg=costOf(rg.p,rg.o,PRICE.pin,PRICE.pout),avgT=ap+ao,cAvg=costOf(ap,ao,PRICE.pin,PRICE.pout);
+  [
+    ['Token '+rl,fmtTok(rg.t),'masuk '+fmtTok(rg.p)+' · keluar '+fmtTok(rg.o)+' · '+rg.calls+' panggilan'],
+    ['Perkiraan biaya '+rl,fmtUsd(cRg),fmtRp(cRg)],
+    ['Rata-rata per hari',fmtTok(avgT),use.length?'dari '+use.length+' hari data · '+fmtUsd(cAvg)+'/hari':'belum ada data'],
+    ['Proyeksi 30 hari',fmtUsd(cAvg*30),fmtRp(cAvg*30)+' · '+fmtTok(avgT*30)+' token']
+  ].forEach(function(k){var c=mk('div','kpi');c.appendChild(mk('span','',k[0]));c.appendChild(mk('b','',k[1]));c.appendChild(mk('small','',k[2]));kp.appendChild(c)});
+  /* grafik 14 hari */
+  var bars=$('tokBars'),lab=$('tokLabels');bars.textContent='';lab.textContent='';
+  var keys=dayKeys(14),map={},mx=1;(tokData.days||[]).forEach(function(d){map[d.d]=d;if(keys.indexOf(d.d)>=0)mx=Math.max(mx,d.p+outOf(d))});
+  var sum14=0;
+  keys.forEach(function(k){
+    var d=map[k],col=mk('div','bcol'+(d&&d.t?'':' empty')),bo=mk('i','bo'),bi=mk('i','bi'),o=d?outOf(d):0,p=d?d.p:0;sum14+=p+o;
+    bo.style.height=(o/mx*100)+'%';bi.style.height=(p/mx*100)+'%';col.appendChild(bo);col.appendChild(bi);
+    col.title=k+': '+(d?fmtTok(d.t)+' token (masuk '+p.toLocaleString('id-ID')+', keluar '+o.toLocaleString('id-ID')+'), '+d.calls+' panggilan':'tidak ada data');
+    bars.appendChild(col);
+    var sp=mk('span',k===today?'today':'',k.slice(8));lab.appendChild(sp);
+  });
+  bars.setAttribute('aria-label','Grafik batang token per hari. Total 14 hari: '+fmtTok(sum14)+' token.');
+  rowsInto($('tokAgents'),rg.agents,function(k){return ROOMS[k]?ROOMS[k].color:'var(--muted)'},function(k){return ROOMS[k]?ROOMS[k].name:k});
+  rowsInto($('tokModels'),rg.models,function(){return'var(--accent)'},function(k){return k});
+  var ol=$('tokCalls');ol.textContent='';
+  var calls=tokData.calls||[];
+  if(!calls.length){var li0=mk('li','empty','Belum ada data.');ol.appendChild(li0)}
+  calls.slice(0,10).forEach(function(c){
+    var li=document.createElement('li'),tm=document.createElement('time'),dt=document.createElement('span');
+    tm.textContent=hms(new Date(c.t).getTime());dt.className='dot';dt.style.background=ROOMS[c.a]?ROOMS[c.a].color:'var(--muted)';
+    var tx=mk('span','',(ROOMS[c.a]?ROOMS[c.a].sn:c.a)+' · '+fmtTok(c.tt)+' token (masuk '+c.p.toLocaleString('id-ID')+', keluar '+Math.max(c.c,c.tt-c.p).toLocaleString('id-ID')+')'+(c.est?' · perkiraan':''));
+    li.appendChild(tm);li.appendChild(dt);li.appendChild(tx);ol.appendChild(li);
+  });
+  /* skenario */
+  var sc=[[PRICE.pin,PRICE.pout],[0.75,3.75],[1.5,7.5],[PRICE.sin,PRICE.sout]];
+  sc.forEach(function(p,i){var c=costOf(ap,ao,p[0],p[1])*30;$('sc'+i+'u').textContent=fmtUsd(c);$('sc'+i+'r').textContent=fmtRp(c)});
+  /* catatan */
+  var notes=[];
+  if(tokData.nodata>0)notes.push(tokData.nodata+' eksekusi tidak menyimpan data, jadi tokennya tidak terhitung. Cek pengaturan n8n agar eksekusi produksi yang berhasil menyimpan data.');
+  if(rg.est>0)notes.push(rg.est+' panggilan pada rentang ini berupa perkiraan n8n (bukan angka resmi Gemini); token berpikir bisa kurang terhitung.');
+  if((tokData.pending||0)>0)notes.push('Masih menghitung '+tokData.pending+' eksekusi lama, angka akan bertambah beberapa detik lagi.');
+  if((tokData.failed||0)>0)notes.push('Ada '+tokData.failed+' eksekusi yang gagal dibaca. Cek credential n8n API di node Ambil Detail.');
+  var ne=$('tokNote');ne.textContent=notes.join(' ');ne.className='note'+(notes.length?' warn':'');
+}
+/* data contoh untuk mode demo */
+function seedDemoTok(){
+  var days=[],keys=dayKeys(14);
+  keys.forEach(function(k,i){
+    var ag={},ps=0,cs=0,calls=0,rnd=function(a,b){return Math.round(a+Math.random()*(b-a))};
+    ['nadi','tamziz','make','bisnis','analis','trader','target'].forEach(function(a){
+      if(Math.random()<.18&&i<keys.length-1)return;var n=rnd(1,a==='trader'?6:3),p=rnd(900,3200)*n,c=rnd(250,1100)*n;
+      ag[a]={p:p,c:c,t:p+c,calls:n};ps+=p;cs+=c;calls+=n;
+    });
+    days.push({d:k,p:ps,c:cs,t:ps+cs,calls:calls,est:0,agents:ag,models:{'gemini-3.6-flash':{p:ps,c:cs,t:ps+cs,calls:calls}}});
+  });
+  tokData={since:keys[0],today:tokToday(),days:days,calls:[],nodata:0,pending:0,failed:0};renderTok();
+}
+function demoTokAdd(k){
+  if(!tokData||k==='ketua'||k==='jadwal')return;
+  var d=tokData.days[tokData.days.length-1];if(!d||d.d!==tokToday())return;
+  var p=900+Math.round(Math.random()*2300),c=250+Math.round(Math.random()*900);
+  d.p+=p;d.c+=c;d.t+=p+c;d.calls++;
+  var a=d.agents[k]=d.agents[k]||{p:0,c:0,t:0,calls:0};a.p+=p;a.c+=c;a.t+=p+c;a.calls++;
+  var m=d.models['gemini-3.6-flash'];m.p+=p;m.c+=c;m.t+=p+c;m.calls++;
+  tokData.calls.unshift({t:new Date().toISOString(),a:k,m:'gemini-3.6-flash',p:p,c:c,tt:p+c,est:0});if(tokData.calls.length>15)tokData.calls.pop();
+  renderTok();
+}
+
 /* ---------- demo ---------- */
 var timers=[];
 function later(fn,ms){var id=setTimeout(function(){timers=timers.filter(function(x){return x!==id});fn()},ms);timers.push(id)}
 function clearDemo(){timers.forEach(clearTimeout);timers=[]}
 function pick(arr){return arr[Math.floor(Math.random()*arr.length)]}
 function dStart(k){var a=A[k];if(a.running)return false;a.running=true;return true}
-function dEnd(k,o){endWork(k,o)}
+function dEnd(k,o){endWork(k,o);demoTokAdd(k)}
 function runSolo(k,dur){if(!dStart(k))return;later(function(){dEnd(k,Math.random()<.1?'error':'success')},dur||4000+Math.random()*3000)}
 function runCommand(k){if(!dStart('ketua'))return;later(function(){runSolo(k)},1400);later(function(){dEnd('ketua','success')},2600)}
 function runChain(){
@@ -948,13 +1176,13 @@ function demoLoop(){
   later(demoLoop,2600+Math.random()*3400);
 }
 function startDemo(){
-  clearDemo();resetAll();cfg.mode='demo';setConn('demo');
+  clearDemo();resetAll();cfg.mode='demo';setConn('demo');seedDemoTok();
   later(function(){runCommand('trader')},700);
   later(demoLoop,4200);
 }
 function resetAll(){
   KEYS.forEach(function(k){var a=A[k];a.running=false;a.workUntil=0;a.mode='idle';a.pending=null;a.errSticky=false;a.active=true;a.found=true;a.today=0;a.errors=0;a.lastStart=null;a.particles=[];a.hasRun=false;a.reporting=false});
-  initMove();flyers=[];logs=[];seen={};firstPoll=true;renderLog();
+  initMove();flyers=[];logs=[];seen={};firstPoll=true;renderLog();tokData=null;renderTok();
 }
 /* ---------- live (n8n) ---------- */
 var pollTimer=null,fails=0;
@@ -1010,7 +1238,7 @@ async function poll(){
     if(!res.ok)throw new Error('HTTP '+res.status);
     var data=await res.json();
     if(!data||!data.ok||!data.agents)throw new Error(data&&data.error==='unauthorized'?'Kata sandi salah':'Balasan bukan status kantor');
-    ingest(data);fails=0;ok=true;ledUntil=T+350;setConn('live');setMsg('Terhubung. Terakhir diperbarui '+hms(Date.now())+' WIB.','ok');
+    ingest(data);ingestTok(data.tokens);fails=0;ok=true;ledUntil=T+350;setConn('live');setMsg('Terhubung. Terakhir diperbarui '+hms(Date.now())+' WIB.','ok');
   }catch(e){
     fails++;var m=explain(e);setConn('error',m);setMsg(m,'err');
   }finally{clearTimeout(to)}
@@ -1064,7 +1292,7 @@ function refreshList(){
     if(selected===k){
       var nx=nextRun(k);
       r.dt.textContent='';
-      [ROOMS[k].role,'Terakhir jalan: '+(a.lastStart?ago(a.lastStart):'belum ada'),'Hari ini: '+a.today+'×'+(a.errors?', gagal '+a.errors+'×':''),nx?'Berikutnya: '+nx+' WIB':'Dijalankan lewat perintah Telegram'].forEach(function(t){var sp=document.createElement('span');sp.textContent=t;r.dt.appendChild(sp)});
+      [ROOMS[k].role,'Terakhir jalan: '+(a.lastStart?ago(a.lastStart):'belum ada'),'Hari ini: '+a.today+'×'+(a.errors?', gagal '+a.errors+'×':''),tokLine(k),nx?'Berikutnya: '+nx+' WIB':'Dijalankan lewat perintah Telegram'].filter(Boolean).forEach(function(t){var sp=document.createElement('span');sp.textContent=t;r.dt.appendChild(sp)});
     }
   });
   var work=0,done=0,bad=0;
@@ -1117,7 +1345,7 @@ var ro;try{ro=new ResizeObserver(function(){layoutAndDraw()});ro.observe(stage)}
 try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',readPalette)}catch(e){}
 try{new MutationObserver(readPalette).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']})}catch(e){}
 
-initMove();readPalette();buildList();layout();tickClock();setInterval(tickClock,1000);
+initMove();readPalette();buildList();buildTok();layout();tickClock();setInterval(tickClock,1000);
 if(cfg.mode==='live'){goLive()}else{startDemo()}
 requestAnimationFrame(frame);
 window.__kantor={A:A,ingest:ingest,cfg:cfg};
